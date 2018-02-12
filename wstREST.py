@@ -65,5 +65,6 @@ if __name__ == "__main__":
     )
     logger.setLevel(logging.DEBUG)
     rest_server = wstREST(False,logger)
+    rest_server.start()
     while True:
         time.sleep(1)
