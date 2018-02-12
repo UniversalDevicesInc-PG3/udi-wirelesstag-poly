@@ -30,7 +30,8 @@ class wstREST():
         eh = EchoRequestHandler
         eh.parent = self
         self.server  = socketserver.TCPServer(self.address, eh)
-        self.logger.info("wstREST: Running on: %s:%s" % self.server.server_address)
+        self.url     = 'http://{0}:{1}'.format(self.server.server_address)
+        self.logger.info("wstREST: Running on: {0}".format(self.url)
         self.thread  = threading.Thread(target=self.server.serve_forever)
         #t.setDaemon(True) # don't hang on exit
         self.thread.start()
