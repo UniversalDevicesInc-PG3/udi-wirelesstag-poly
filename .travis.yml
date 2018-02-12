@@ -1,0 +1,14 @@
+language:
+    - python
+
+python:
+    - '3.6'
+
+install:
+    - pip install -r requirements.txt
+    - sudo apt-get install libxml2-utils libxml2-dev
+
+script:
+    - xmllint --noout profile/*/*.xml
+    - /usr/bin/make profile.zip
+    - ./wst-poly.py

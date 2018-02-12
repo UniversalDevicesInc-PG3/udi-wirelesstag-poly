@@ -5,8 +5,7 @@ __pycache__/
 
 # Project Specific
 logs/
-polyglot.py
-build.txt
+profile.zip
 
 # C extensions
 *.so
@@ -71,3 +70,5 @@ target/
 
 #Project specific
 polyinterface
+*~
+
