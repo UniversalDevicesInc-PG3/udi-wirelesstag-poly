@@ -6,7 +6,7 @@ import polyinterface
 import sys
 import time
 
-class wstTagManager(polyinterface.Node):
+class wst12(polyinterface.Node):
     """
     This is the class that all the Nodes will be represented by. You will add this to
     Polyglot/ISY with the controller.addNode method.
@@ -36,7 +36,7 @@ class wstTagManager(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
-        super(wstTagManager, self).__init__(controller, primary, address, name)
+        super(wst12, self).__init__(controller, primary, address, name)
 
     def start(self):
         """
@@ -90,9 +90,67 @@ class wstTagManager(polyinterface.Node):
         self.setDriver('ST', 0)
 
     
-    id = 'wstTagManager'
+    """
+    {"d":[
+    {
+      "__type":"MyTagList.Tag2",
+      "managerName":"Rangwood",
+      "mac":"0E994A04A300",
+      "dbid":1,
+      "mirrors":[],
+      "notificationJS":"",
+      "name":"Garage Freezer",
+      "uuid":"7911937f-c758-4b88-a33a-0761ed284f29",
+      "comment":"",
+      "slaveId":0,
+      "tagType":12,
+      "lastComm":131628820472086602,
+      "alive":true,
+      "signaldBm":-64,
+      "batteryVolt":3.3048022377777824,
+      "beeping":false,
+      "lit":false,
+      "migrationPending":false,
+      "beepDurationDefault":15,
+      "eventState":0,
+      "tempEventState":1,
+      "OutOfRange":false,
+      "lux":0,
+      "temperature":-21.421393532917921,
+      "tempCalOffset":0,
+      "capCalOffset":0,
+      "image_md5":null,
+      "cap":0,
+      "capRaw":0,
+      "az2":0,
+      "capEventState":0,
+      "lightEventState":0,
+      "shorted":false,
+      "thermostat":null,
+      "playback":null,
+      "postBackInterval":3600,
+      "rev":12,
+      "version1":1,
+      "freqOffset":12828,
+      "freqCalApplied":0,
+      "reviveEvery":4,
+      "oorGrace":2,
+      "LBTh":2.5,
+      "enLBN":true,
+      "txpwr":204,
+      "rssiMode":false,
+      "ds18":false,
+      "v2flag":16,
+      "batteryRemaining":1.13
+    }]}
+    """
+    id = 'wst12'
     drivers = [
-        {'driver': 'ST',  'value': 0, 'uom': 2},
+        {'driver': 'ST',      'value': 0, 'uom': 2},
+        {'driver': 'GV1',     'value': 0, 'uom': 78}, # 78=Off/On
+        {'driver': 'CLITEMP', 'value': 0, 'uom': 17}, # 17=F 4=C
+        {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # 51=percent
+        {'driver': 'CV',      'value': 0, 'uom': 72}  # 72=Volt
     ]
     commands = {
         'DON': cmd_set_on,

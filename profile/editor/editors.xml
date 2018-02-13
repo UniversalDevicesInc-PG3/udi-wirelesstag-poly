@@ -1,6 +1,9 @@
 <editors>
     <!-- Boolean -->
-    <editor id="bool">
+    <editor id="BOOL">
         <range uom="2" subset="0,1" />
     </editor>
+    <editor id="FLOAT">
+       <range uom="56" min="0.1" max="999.999"/>
+   </editor>
 </editors>
