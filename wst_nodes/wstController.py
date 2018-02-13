@@ -3,9 +3,11 @@ import polyinterface
 import sys
 import time
 
+from wst_nodes import wstTagManager
+
 LOGGER = polyinterface.LOGGER
 
-class Controller(polyinterface.Controller):
+class wstController(polyinterface.Controller):
     """
     The Controller Class is the primary node from an ISY perspective. It is a Superclass
     of polyinterface.Node so all methods from polyinterface.Node are available to this
@@ -39,7 +41,7 @@ class Controller(polyinterface.Controller):
         Super runs all the parent class necessities. You do NOT have
         to override the __init__ method, but if you do, you MUST call super.
         """
-        super(Controller, self).__init__(polyglot)
+        super(wstController, self).__init__(polyglot)
 
     def start(self):
         """
@@ -50,7 +52,7 @@ class Controller(polyinterface.Controller):
         this is where you should start. No need to Super this method, the parent
         version does nothing.
         """
-        LOGGER.info('Started MyNodeServer')
+        self.l_info('Started WirelessSensorTags Polyglot...')
         self.discover()
 
     def shortPoll(self):
@@ -87,8 +89,7 @@ class Controller(polyinterface.Controller):
         Do discovery here. Does not have to be called discovery. Called from example
         controller start method and from DISCOVER command recieved from ISY as an exmaple.
         """
-        time.sleep(1)
-        self.addNode(MyNode(self, self.address, 'myaddress', 'My Node Name'))
+        self.addNode(wstTagManager(self, 'testtagmanager', 'testtagmanager', 'Test Tag Manager'))
 
     def delete(self):
         """
@@ -101,15 +102,27 @@ class Controller(polyinterface.Controller):
 
     def stop(self):
         LOGGER.debug('NodeServer stopped.')
+
+    """
+    """
+    
+    def l_info(self, name, string):
+        LOGGER.info("%s:%s: %s" %  (self.id,name,string))
+        
+    def l_error(self, name, string):
+        LOGGER.error("%s:%s: %s" % (self.id,name,string))
+        
+    def l_warning(self, name, string):
+        LOGGER.warning("%s:%s: %s" % (self.id,name,string))
+        
+    def l_debug(self, name, string):
+        LOGGER.debug("%s:%s: %s" % (self.id,name,string))
+        
     """
     Optional.
-    Since the controller is the parent node in ISY, it will actual show up as a node.
-    So it needs to know the drivers and what id it will use. The drivers are
-    the defaults in the parent Class, so you don't need them unless you want to add to
-    them. The ST and GV1 variables are for reporting status through Polyglot to ISY,
-    DO NOT remove them. UOM 2 is boolean.
     """
-    id = 'controller'
+    id = 'wstcntl'
     commands = {'DISCOVER': discover}
-    drivers = [{'driver': 'ST', 'value': 0, 'uom': 2}]
-
+    drivers = [
+        {'driver': 'ST', 'value': 0, 'uom': 2}
+    ]

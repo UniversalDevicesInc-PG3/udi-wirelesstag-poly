@@ -6,7 +6,7 @@ import polyinterface
 import sys
 import time
 
-class MyNode(polyinterface.Node):
+class wstTagManager(polyinterface.Node):
     """
     This is the class that all the Nodes will be represented by. You will add this to
     Polyglot/ISY with the controller.addNode method.
@@ -47,22 +47,6 @@ class MyNode(polyinterface.Node):
         self.setDriver('ST', 1)
         pass
 
-    def setOn(self, command):
-        """
-        Example command received from ISY.
-        Set DON on MyNode.
-        Sets the ST (status) driver to 1 or 'True'
-        """
-        self.setDriver('ST', 1)
-
-    def setOff(self, command):
-        """
-        Example command received from ISY.
-        Set DOF on MyNode
-        Sets the ST (status) driver to 0 or 'False'
-        """
-        self.setDriver('ST', 0)
-
     def query(self):
         """
         Called by ISY to report all drivers for this node. This is done in
@@ -71,24 +55,50 @@ class MyNode(polyinterface.Node):
         """
         self.reportDrivers()
 
+    """
+    """
+    
+    def l_info(self, name, string):
+        LOGGER.info("%s:%s:%s: %s" %  (self.id,self.name,name,string))
+        
+    def l_error(self, name, string):
+        LOGGER.error("%s:%s:%s: %s" % (self.id,self.name,name,string))
+        
+    def l_warning(self, name, string):
+        LOGGER.warning("%s:%s:%s: %s" % (self.id,self.name,name,string))
+        
+    def l_debug(self, name, string):
+        LOGGER.debug("%s:%s:%s: %s" % (self.id,self.name,name,string))
 
-    drivers = [{'driver': 'ST', 'value': 0, 'uom': 2}]
     """
-    Optional.
-    This is an array of dictionary items containing the variable names(drivers)
-    values and uoms(units of measure) from ISY. This is how ISY knows what kind
-    of variable to display. Check the UOM's in the WSDK for a complete list.
-    UOM 2 is boolean so the ISY will display 'True/False'
     """
-    id = 'mynodetype'
-    """
-    id of the node from the nodedefs.xml that is in the profile.zip. This tells
-    the ISY what fields and commands this node has.
-    """
+
+    def cmd_set_on(self, command):
+        """
+        Example command received from ISY.
+        Set DON on MyNode.
+        Sets the ST (status) driver to 1 or 'True'
+        """
+        self.setDriver('ST', 1)
+
+    def cmd_set_off(self, command):
+        """
+        Example command received from ISY.
+        Set DOF on MyNode
+        Sets the ST (status) driver to 0 or 'False'
+        """
+        self.setDriver('ST', 0)
+
+    
+    id = 'wstTagManager'
+    drivers = [
+        {'driver': 'ST',  'value': 0, 'uom': 2},
+        {'driver': 'GV1', 'value': 0, 'uom': 56}, # Version Major
+        {'driver': 'GV2', 'value': 0, 'uom': 56}, # Version Minor
+        {'driver': 'GV3', 'value': 0, 'uom': 56}, # Temperature
+        {'driver': 'GV4', 'value': 0, 'uom': 56}, # Humidity
+    ]
     commands = {
-                    'DON': setOn, 'DOF': setOff
-                }
-    """
-    This is a dictionary of commands. If ISY sends a command to the NodeServer,
-    this tells it which method to call. DON calls setOn, etc.
-    """
+        'DON': cmd_set_on,
+        'DOF': cmd_set_off,
+    }
