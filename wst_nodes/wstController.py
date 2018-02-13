@@ -4,6 +4,7 @@ import sys
 import time
 
 from wst_nodes import wstTagManager
+from wst_nodes import wst12
 
 LOGGER = polyinterface.LOGGER
 
@@ -52,7 +53,7 @@ class wstController(polyinterface.Controller):
         this is where you should start. No need to Super this method, the parent
         version does nothing.
         """
-        self.l_info('Started WirelessSensorTags Polyglot...')
+        self.l_info('start','WirelessSensorTags Polyglot...')
         self.discover()
 
     def shortPoll(self):
@@ -90,6 +91,7 @@ class wstController(polyinterface.Controller):
         controller start method and from DISCOVER command recieved from ISY as an exmaple.
         """
         self.addNode(wstTagManager(self, 'testtagmanager', 'testtagmanager', 'Test Tag Manager'))
+        self.addNode(wst12(self, 'testtagmanager', 'test12', 'Test 12'))
 
     def delete(self):
         """
@@ -121,8 +123,10 @@ class wstController(polyinterface.Controller):
     """
     Optional.
     """
-    id = 'wstcntl'
+    id = 'wstCntl'
     commands = {'DISCOVER': discover}
     drivers = [
-        {'driver': 'ST', 'value': 0, 'uom': 2}
+        {'driver': 'ST',  'value': 0, 'uom': 2},
+        {'driver': 'GV1', 'value': 0, 'uom': 56}, # Version Major
+        {'driver': 'GV2', 'value': 0, 'uom': 56}, # Version Minor
     ]

@@ -1,10 +1,14 @@
 <nodeDefs>
     <!-- NODE DEF from 5.0 document http://wiki.universal-devices.com/index.php?title=V50_MAIN -->
     <!-- controller -->
-    <nodeDef id="controller" nls="ctl">
+    <nodeDef id="wstcntl" nls="cntl">
         <editors />
         <sts>
-			<st id="ST" editor="bool" />
+			<st id="ST" editor="BOOL" />
+            <!-- Version Major -->
+            <st id="GV1" editor="FLOAT" />
+            <!-- Version Minor -->
+            <st id="GV2" editor="FLOAT" />
 		</sts>
         <cmds>
             <sends />
@@ -13,8 +17,8 @@
             </accepts>
         </cmds>
     </nodeDef>
-	<!-- mynodetype -->
-    <nodeDef id="mynodetype" nls="mynode">
+	<!-- Tag Manager -->
+    <nodeDef id="wstTagManager" nls="tagmgr">
         <editors />
         <sts>
             <st id="ST" editor="bool" />
@@ -27,4 +31,23 @@
             </accepts>
         </cmds>
     </nodeDef>
+    <!-- Tag 12 -->
+    <nodeDef id="wst12" nls="tagmgr">
+        <editors />
+        <sts>
+            <st id="ST" editor="BOOL" />
+            <st id="GV1" editor="ONOFF" />
+            <st id="CLITEMP" editor="CLITEMP" />
+            <st id="BATLVL" editor="BATLVL" />
+            <st id="CV" editor="CV" />
+        </sts>
+        <cmds>
+            <sends />
+            <accepts>
+                <cmd id="DON" />
+                <cmd id="DOF" />
+            </accepts>
+        </cmds>
+    </nodeDef>
+
 </nodeDefs>

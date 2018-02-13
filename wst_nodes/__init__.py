@@ -3,5 +3,6 @@
 
 import polyinterface
 
-from .wstTag import wstTag
+from .wst12         import wst12
+from .wstTagManager import wstTagManager
 from .wstController import wstController

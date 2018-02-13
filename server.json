@@ -1,5 +1,5 @@
 {
-    "name": "WirelessSensorTags",
+    "name": "WSTags",
     "docs": "https://github.com/jimboca/udi-WirelessSensorTags-poly",
     "type": "python3",
     "executable": "wst-poly.py",
