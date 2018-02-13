@@ -4,9 +4,9 @@
 Simple Wireless Sensor Tags Object
 """
 
-import logging
-import requests
-import json
+import logging, json, requests, threading, socketserver, re, socket, time
+from http.client import BadStatusLine  # Python 3.x
+from urllib.parse import urlparse,parse_qsl
 
 logging.basicConfig(
     level=10,
@@ -17,19 +17,23 @@ LOGGER.setLevel(logging.DEBUG)
 
 class wst():
 
-    def __init__(self):
+    def __init__(self,client_id,client_secret,):
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.code = False
         pass
 
     def start(self):
-        # TODO: This will optionally start a rest server to be the re-direct to read the oauth code.
+        self.rest = wstREST(self,LOGGER)
+        self.rest.start()
         pass
 
-    def get_access_token(self,client_id,client_secret,oauth_code):
+    def get_access_token(self):
         aret = self.http_post('oauth2/access_token.aspx',
                               {
-                                  'client_id': client_id,
-                                  'client_secret': client_secret,
-                                  'code': code
+                                  'client_id': self.client_id,
+                                  'client_secret': self.client_secret,
+                                  'code': self.oauth2_code
                               }, use_token=False)
         # This gives us:
         # {'token_type': 'Bearer', 'access_token': '...', 'expires_in': 9999999}
@@ -37,7 +41,18 @@ class wst():
         self.token_type    = aret['token_type']
         self.l_debug('start',"token_type={} access_token={}".format(self.token_type,self.access_token))
 
-        
+    def get_handler(self,command,params):
+        """
+        This is passed the incoming http get's to processes
+        """
+        self.l_debug('get_handler','command={}'.format(command))
+        # This is from the oauth2 redirect with our code.
+        if command == "code":
+            self.oauth2_code = params['code']
+            self.l_info('get_handler','Got code: {}'.format(self.code))
+            obj.get_access_token()
+        return True
+    
     def http_post(self,path,payload,use_token=True):
         #url = "http://www.mytaglist.com/{}".format(path)
         url = "http://wirelesstag.net/{}".format(path)
@@ -101,15 +116,74 @@ class wst():
         mgrs = list()
         for mgr in aret['d']:
             mgrs.append(mgr)
+
+class EchoRequestHandler(socketserver.BaseRequestHandler):
+    
+    def handle(self):
+        try:
+            # Echo the back to the client
+            data = self.request.recv(1024)
+            # Don't worry about a status for now, just echo back.
+            self.request.sendall(data)
+            # Then parse it.
+            self.parent.handler(data.decode('utf-8','ignore'))
+        except (Exception) as err:
+            self.parent.logger.error("request_handler failed {0}".format(err), exc_info=True)
+        return
+
+class wstREST():
+
+    def __init__(self,parent,logger):
+        self.parent  = parent
+        self.logger  = logger
+
+    def start(self):
+        self.myip    = self.get_network_ip('8.8.8.8')
+        self.address = (self.myip, 0) # let the kernel give us a port
+        self.logger.debug("wstREST: address={0}".format(self.address))
+        eh = EchoRequestHandler
+        eh.parent = self
+        self.server  = socketserver.TCPServer(self.address, eh)
+        self.url     = 'http://{0}:{1}'.format(self.server.server_address[0],self.server.server_address[1])
+        self.logger.info("wstREST: Running on: {0}".format(self.url))
+        self.thread  = threading.Thread(target=self.server.serve_forever)
+        #t.setDaemon(True) # don't hang on exit
+        self.thread.start()
+
+    def get_network_ip(self,rhost):
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect((rhost, 0))
+        except:
+            self.logger.error("wstREST:get_network_ip: Failed to open socket to " + rhost)
+            return False
+        rt = s.getsockname()[0]
+        s.close()
+        return rt
+
+    def handler(self, data):
+        up = urlparse(data.strip())
+        self.logger.debug("wstRESTServer:handler: Got {0}".format(up))
+        match = re.match( r'GET /(.*)', up.path, re.I)
+        command = match.group(1)
+        query = re.match( r'(.*) ', up.query, re.I)
+        qs = dict(parse_qsl(query.group(1)))
+        self.logger.debug("wstRESTServer:handler: {0}".format(qs))
+        #self.logger.debug("code={}".format(qs['code']))
+        return self.parent.get_handler(command=command,params=qs)
+                                
         
 if __name__ == "__main__":
     client_id     = "3b08b242-f0f8-41c0-ba29-6b0478cd0b77"
     client_secret = "0b947853-1676-4a63-a384-72769c88f3b1"
     code          = "d967868a-144e-49ed-921f-c27b65dda06a"
-    obj = wst()
+    obj = wst(client_id,client_secret)
     obj.start()
     # Manually get the access token
-    obj.get_access_token(client_id,client_secret,code)
+    #obj.get_access_token(client_id,client_secret,code)
+    LOGGER.info("Waiting for code...");
+    while obj.code == False:
+        time.sleep(1)
     obj.GetTagManagers()
-    
-    
+    while True:
+        time.sleep(1)
