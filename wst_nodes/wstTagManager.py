@@ -6,6 +6,8 @@ import polyinterface
 import sys
 import time
 
+from wst_nodes import wst12
+
 class wstTagManager(polyinterface.Node):
     """
     This is the class that all the Nodes will be represented by. You will add this to
@@ -25,7 +27,7 @@ class wstTagManager(polyinterface.Node):
     reportDrivers(): Forces a full update of all drivers to Polyglot/ISY.
     query(): Called when ISY sends a query request to Polyglot for this specific node
     """
-    def __init__(self, controller, primary, address, name):
+    def __init__(self, controller, address, name):
         """
         Optional.
         Super runs all the parent class necessities. You do NOT have
@@ -36,7 +38,7 @@ class wstTagManager(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
-        super(wstTagManager, self).__init__(controller, primary, address, name)
+        super(wstTagManager, self).__init__(controller, address, address, name)
 
     def start(self):
         """
@@ -44,7 +46,8 @@ class wstTagManager(polyinterface.Node):
         This method is run once the Node is successfully added to the ISY
         and we get a return result from Polyglot. Only happens once.
         """
-        self.setDriver('ST', 1)
+        self.set_st(True)
+        self.controller.addNode(wst12(self.controller, self.address, 'test12', 'Test 12'))
         pass
 
     def query(self):
@@ -69,6 +72,24 @@ class wstTagManager(polyinterface.Node):
         
     def l_debug(self, name, string):
         LOGGER.debug("%s:%s:%s: %s" % (self.id,self.name,name,string))
+
+    """
+    Set Functions
+    """
+    def set_params(self,params):
+        """
+        Set params from the getTagManager data
+        """
+        self.set_st(params['online'])
+
+    def set_st(self,value,force=False):
+        if not force and hasattr(self,"st") and self.st == value:
+            return True
+        self.st = value
+        if value:
+            self.setDriver('ST', 1)
+        else:
+            self.setDriver('ST', 0)
 
     """
     """

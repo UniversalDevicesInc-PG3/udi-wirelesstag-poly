@@ -4,29 +4,31 @@
 Simple Wireless Sensor Tags Object
 """
 
-import logging, json, requests, threading, socketserver, re, socket, time
+import polyinterface
+
+import json, requests, threading, socketserver, re, socket, time
 from http.client import BadStatusLine  # Python 3.x
 from urllib.parse import urlparse,parse_qsl
 
-logging.basicConfig(
-    level=10,
-    format='%(levelname)s:\t%(name)s\t%(message)s'
-)
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
+#logging.basicConfig(
+#    level=10,
+#    format='%(levelname)s:\t%(name)s\t%(message)s'
+#)
+WST_LOGGER = polyinterface.LOGGER
 
 class wst():
 
-    def __init__(self,client_id,client_secret,):
+    def __init__(self,client_id,client_secret,oauth2_code=False):
         self.client_id = client_id
         self.client_secret = client_secret
-        self.code = False
-        pass
+        self.oauth2_code = oauth2_code
 
     def start(self):
-        self.rest = wstREST(self,LOGGER)
+        self.rest = wstREST(self,WST_LOGGER)
         self.rest.start()
-        pass
+        self.url = self.rest.url
+        if self.oauth2_code != False:
+            self.get_access_token()
 
     def get_access_token(self):
         aret = self.http_post('oauth2/access_token.aspx',
@@ -49,8 +51,8 @@ class wst():
         # This is from the oauth2 redirect with our code.
         if command == "code":
             self.oauth2_code = params['code']
-            self.l_info('get_handler','Got code: {}'.format(self.code))
-            obj.get_access_token()
+            self.l_info('get_handler','Got code: {}'.format(self.oauth2_code))
+            self.get_access_token()
         return True
     
     def http_post(self,path,payload,use_token=True):
@@ -81,7 +83,7 @@ class wst():
             try:
                 d = json.loads(response.text)
             except (Exception) as err:
-                LOGGER.error('http_post: Failed to convert to json {0}: {1}'.format(response.text,err), exc_info=True)
+                WST_LOGGER.error('http_post: Failed to convert to json {0}: {1}'.format(response.text,err), exc_info=True)
                 return False
             return d
         elif response.status_code == 400:
@@ -97,16 +99,16 @@ class wst():
         return False
 
     def l_info(self, name, string):
-        LOGGER.info("%s: %s" %  (name,string))
+        WST_LOGGER.info("%s: %s" %  (name,string))
         
     def l_error(self, name, string):
-        LOGGER.error("%s: %s" % (name,string))
+        WST_LOGGER.error("%s: %s" % (name,string))
         
     def l_warning(self, name, string):
-        LOGGER.warning("%s: %s" % (name,string))
+        WST_LOGGER.warning("%s: %s" % (name,string))
         
     def l_debug(self, name, string):
-        LOGGER.debug("%s: %s" % (name,string))
+        WST_LOGGER.debug("%s: %s" % (name,string))
 
     # These match the names used in the API:
     # http://wirelesstag.net/ethAccount.asmx?op=GetTagManagers
@@ -116,6 +118,7 @@ class wst():
         mgrs = list()
         for mgr in aret['d']:
             mgrs.append(mgr)
+        return mgrs
 
 class EchoRequestHandler(socketserver.BaseRequestHandler):
     
@@ -181,8 +184,8 @@ if __name__ == "__main__":
     obj.start()
     # Manually get the access token
     #obj.get_access_token(client_id,client_secret,code)
-    LOGGER.info("Waiting for code...");
-    while obj.code == False:
+    WST_LOGGER.info("Waiting for code...");
+    while obj.oauth2_code == False:
         time.sleep(1)
     obj.GetTagManagers()
     while True:

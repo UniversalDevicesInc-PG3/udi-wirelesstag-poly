@@ -7,7 +7,7 @@
     "description": "Node Server for CAO Gadgets Wireless Sensor Tags",
     "notice": "No disclaimer here",
     "shortPoll": "5",
-    "longPoll": "60",
+    "longPoll": "15",
     "credits": [
         {
             "title": "udi-WirelessSensorTags-poly: A NodeServer for CAO Gadgets Wireless Sensor Tags",

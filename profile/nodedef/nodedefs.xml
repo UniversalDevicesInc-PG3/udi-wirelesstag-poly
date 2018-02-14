@@ -1,7 +1,7 @@
 <nodeDefs>
     <!-- NODE DEF from 5.0 document http://wiki.universal-devices.com/index.php?title=V50_MAIN -->
     <!-- controller -->
-    <nodeDef id="wstcntl" nls="cntl">
+    <nodeDef id="wstCntl" nls="cntl">
         <editors />
         <sts>
 			<st id="ST" editor="BOOL" />
@@ -13,7 +13,9 @@
         <cmds>
             <sends />
             <accepts>
+                <cmd id="QUERY" />
                 <cmd id="DISCOVER" />
+                <cmd id="INSTALL_PROFILE" />
             </accepts>
         </cmds>
     </nodeDef>
@@ -32,7 +34,7 @@
         </cmds>
     </nodeDef>
     <!-- Tag 12 -->
-    <nodeDef id="wst12" nls="tagmgr">
+    <nodeDef id="wst12" nls="tag12">
         <editors />
         <sts>
             <st id="ST" editor="BOOL" />

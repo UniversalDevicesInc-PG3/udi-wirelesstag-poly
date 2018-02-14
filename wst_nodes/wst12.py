@@ -141,7 +141,7 @@ class wst12(polyinterface.Node):
       "rssiMode":false,
       "ds18":false,
       "v2flag":16,
-      "batteryRemaining":1.13
+      "batteryRemaining":1.13 # = 113% ?
     }]}
     """
     id = 'wst12'

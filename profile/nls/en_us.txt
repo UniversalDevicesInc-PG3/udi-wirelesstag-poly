@@ -1,9 +1,19 @@
 # controller
-ND-wstcntl-NAME = Wireless Sensor Tags Controller
+ND-wstCntl-NAME = Wireless Sensor Tags Controller
 CMD-cntl-DISCOVER-NAME = Discover
+CMD-cntl-QUERY-NAME = Query
+CMD-cntl-INSTALL_PROFILE-NAME = Install Profile
 ST-cntl-ST-NAME = NodeServer Online
+ST-cntl-GV1-NAME = Version Major
+ST-cntl-GV2-NAME = Version Minor
 
 # Tag Manager
 ND-wstTagManager-NAME = Wireless Sensor Tag Manager
 ST-wstTagManager-ST-NAME = Status
 
+# Tag
+ND-wst12-NAME = Wireless Sensor Tag 12
+
+ST-tag12-ST-NAME = Tag Status
+ST-tag12-GV1-NAME = Light
+ST-tag12-CV-NAME = Battery Voltage
