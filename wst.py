@@ -1,35 +1,143 @@
-#!/usr/local/bin/python3.6
+#!/usr/bin/env python3
 
 """
-Simple Wireless Sensor Tags Object
+  Simple GET handler with BaseHTTPServer
 """
 
-import polyinterface
-
-import json, requests, threading, socketserver, re, socket, time
-from http.client import BadStatusLine  # Python 3.x
-from urllib.parse import urlparse,parse_qsl
+from http.server import HTTPServer,BaseHTTPRequestHandler
+from urllib import parse
+from urllib.parse import parse_qsl
+import socket, threading, sys, requests, json
 
 #logging.basicConfig(
 #    level=10,
 #    format='%(levelname)s:\t%(name)s\t%(message)s'
 #)
-WST_LOGGER = polyinterface.LOGGER
+#WST_LOGGER = polyinterface.LOGGER
+
+class wstHandler(BaseHTTPRequestHandler):
+
+    def do_GET(self):
+        parsed_path = parse.urlparse(self.path)
+        self.query = dict(parse_qsl(parsed_path.query))
+        if 'debug' in self.query:
+            message_parts = [
+                'CLIENT VALUES:',
+                'client_address={} ({})'.format(
+                    self.client_address,
+                    self.address_string()),
+                'command={}'.format(self.command),
+                'path={}'.format(self.path),
+                'real path={}'.format(parsed_path.path),
+                'query={}'.format(parsed_path.query),
+                'query_dict={}'.format(self.query),
+                'request_version={}'.format(self.request_version),
+                '',
+                'SERVER VALUES:',
+                'server_version={}'.format(self.server_version),
+                'sys_version={}'.format(self.sys_version),
+                'protocol_version={}'.format(self.protocol_version),
+                '',
+                'HEADERS RECEIVED:',
+            ]
+            for name, value in sorted(self.headers.items()):
+                message_parts.append(
+                    '{}={}'.format(name, value.rstrip())
+                )
+            message_parts.append('')
+            message = '\r\n'.join(message_parts)
+        else:
+            message = "Received: {0} {1}".format(parsed_path.path,self.query)
+        hrt = self.parent.get_handler(parsed_path.path,self.query)
+        message += hrt['message']
+        self.send_response(hrt['code'])
+        self.send_header('Content-Type',
+                         'text/plain; charset=utf-8')
+        self.end_headers()
+        self.wfile.write(message.encode('utf-8'))
+
+class wstREST():
+
+    def __init__(self,parent,logger):
+        self.parent  = parent
+        self.logger  = logger
+
+    def start(self):
+        self.myip    = self.get_network_ip('8.8.8.8')
+        self.address = (self.myip, 8080) # let the kernel give us a port
+        self.logger.debug("wstREST: address={0}".format(self.address))
+        # Get a handler and set parent to myself, so we can process the requests.
+        eh = wstHandler
+        eh.parent = self
+        self.server = HTTPServer(self.address, wstHandler)
+        self.url     = 'http://{0}:{1}'.format(self.server.server_address[0],self.server.server_address[1])
+        self.logger.info("wstREST: Running on: {0}".format(self.url))
+        self.thread  = threading.Thread(target=self.server.serve_forever)
+        #t.setDaemon(True) # don't hang on exit
+        try:
+            self.server.serve_forever()
+        except KeyboardInterrupt:
+            self.logger.info('wstREST: Exiting from interupt')
+            self.server.shutdown()
+            self.server.server_close()
+            raise
+        except Exception as err:
+            self.logger.error('wstREST: failed: {0}'.format(err), exc_info=True)
+        self.server.shutdown()
+        self.server.server_close()
+
+    def get_handler(self,path,query):
+        return self.parent.get_handler(path,query)
+        
+    def get_network_ip(self,rhost):
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect((rhost, 0))
+        except:
+            self.l_error("get_network_ip","Failed to open socket to " + rhost)
+            return False
+        rt = s.getsockname()[0]
+        s.close()
+        return rt
 
 class wst():
 
-    def __init__(self,client_id,client_secret,oauth2_code=False):
+    def __init__(self,logger,client_id,client_secret,oauth2_code=False):
+        self.logger = logger
         self.client_id = client_id
         self.client_secret = client_secret
         self.oauth2_code = oauth2_code
 
     def start(self):
-        self.rest = wstREST(self,WST_LOGGER)
+        self.rest = wstREST(self,self.logger)
         self.rest.start()
         self.url = self.rest.url
         if self.oauth2_code != False:
             self.get_access_token()
 
+    def get_handler(self,command,params):
+        """
+        This is passed the incoming http get's to processes
+        """
+        self.l_debug('get_handler','command={}'.format(command))
+        message = "\n"
+        # This is from the oauth2 redirect with our code.
+        if command == "/code":
+            code = 200
+            message += "\nGot code {}, asking for access token\n".format(params['code'])
+            self.oauth2_code = params['code']
+            self.l_info('get_handler','Got code: {}'.format(self.oauth2_code))
+            tr = self.get_access_token()
+            if tr == False:
+                code = 500
+                message += "\nERROR: Unable to get access token from code, see log"
+            else:
+                message += "\nSUCCESS, received our token, will save in Polyglot database for the future"
+        else:
+            code = 500
+            message += "Unknown command '%s'".format(command)
+        return  { 'code': code, 'message': message }
+    
     def get_access_token(self):
         aret = self.http_post('oauth2/access_token.aspx',
                               {
@@ -39,22 +147,14 @@ class wst():
                               }, use_token=False)
         # This gives us:
         # {'token_type': 'Bearer', 'access_token': '...', 'expires_in': 9999999}
+        if aret == False:
+            self.l_error('get_access_token','Failed')
+            self.access_token = aret
+            return aret
         self.access_token = aret['access_token']
-        self.token_type    = aret['token_type']
+        self.token_type   = aret['token_type']
         self.l_debug('start',"token_type={} access_token={}".format(self.token_type,self.access_token))
 
-    def get_handler(self,command,params):
-        """
-        This is passed the incoming http get's to processes
-        """
-        self.l_debug('get_handler','command={}'.format(command))
-        # This is from the oauth2 redirect with our code.
-        if command == "code":
-            self.oauth2_code = params['code']
-            self.l_info('get_handler','Got code: {}'.format(self.oauth2_code))
-            self.get_access_token()
-        return True
-    
     def http_post(self,path,payload,use_token=True):
         #url = "http://www.mytaglist.com/{}".format(path)
         url = "http://wirelesstag.net/{}".format(path)
@@ -83,7 +183,7 @@ class wst():
             try:
                 d = json.loads(response.text)
             except (Exception) as err:
-                WST_LOGGER.error('http_post: Failed to convert to json {0}: {1}'.format(response.text,err), exc_info=True)
+                self.l_error('http_post','Failed to convert to json {0}: {1}'.format(response.text,err), exc_info=True)
                 return False
             return d
         elif response.status_code == 400:
@@ -99,16 +199,16 @@ class wst():
         return False
 
     def l_info(self, name, string):
-        WST_LOGGER.info("%s: %s" %  (name,string))
+        self.logger.info("%s: %s" %  (name,string))
         
-    def l_error(self, name, string):
-        WST_LOGGER.error("%s: %s" % (name,string))
+    def l_error(self, name, string, exc_info=False):
+        self.logger.error("%s: %s" % (name,string), exc_info=exc_info)
         
     def l_warning(self, name, string):
-        WST_LOGGER.warning("%s: %s" % (name,string))
+        self.logger.warning("%s: %s" % (name,string))
         
     def l_debug(self, name, string):
-        WST_LOGGER.debug("%s: %s" % (name,string))
+        self.logger.debug("%s: %s" % (name,string))
 
     # These match the names used in the API:
     # http://wirelesstag.net/ethAccount.asmx?op=GetTagManagers
@@ -119,74 +219,35 @@ class wst():
         for mgr in aret['d']:
             mgrs.append(mgr)
         return mgrs
-
-class EchoRequestHandler(socketserver.BaseRequestHandler):
     
-    def handle(self):
-        try:
-            # Echo the back to the client
-            data = self.request.recv(1024)
-            # Don't worry about a status for now, just echo back.
-            self.request.sendall(data)
-            # Then parse it.
-            self.parent.handler(data.decode('utf-8','ignore'))
-        except (Exception) as err:
-            self.parent.logger.error("request_handler failed {0}".format(err), exc_info=True)
-        return
-
-class wstREST():
-
-    def __init__(self,parent,logger):
-        self.parent  = parent
-        self.logger  = logger
-
-    def start(self):
-        self.myip    = self.get_network_ip('8.8.8.8')
-        self.address = (self.myip, 0) # let the kernel give us a port
-        self.logger.debug("wstREST: address={0}".format(self.address))
-        eh = EchoRequestHandler
-        eh.parent = self
-        self.server  = socketserver.TCPServer(self.address, eh)
-        self.url     = 'http://{0}:{1}'.format(self.server.server_address[0],self.server.server_address[1])
-        self.logger.info("wstREST: Running on: {0}".format(self.url))
-        self.thread  = threading.Thread(target=self.server.serve_forever)
-        #t.setDaemon(True) # don't hang on exit
-        self.thread.start()
-
-    def get_network_ip(self,rhost):
-        try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect((rhost, 0))
-        except:
-            self.logger.error("wstREST:get_network_ip: Failed to open socket to " + rhost)
-            return False
-        rt = s.getsockname()[0]
-        s.close()
-        return rt
-
-    def handler(self, data):
-        up = urlparse(data.strip())
-        self.logger.debug("wstRESTServer:handler: Got {0}".format(up))
-        match = re.match( r'GET /(.*)', up.path, re.I)
-        command = match.group(1)
-        query = re.match( r'(.*) ', up.query, re.I)
-        qs = dict(parse_qsl(query.group(1)))
-        self.logger.debug("wstRESTServer:handler: {0}".format(qs))
-        #self.logger.debug("code={}".format(qs['code']))
-        return self.parent.get_handler(command=command,params=qs)
-                                
-        
-if __name__ == "__main__":
+if __name__ == '__main__':
+    import logging
+    logging.basicConfig(
+        level=10,
+        format='%(levelname)s:\t%(name)s\t%(message)s'
+    )
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
     client_id     = "3b08b242-f0f8-41c0-ba29-6b0478cd0b77"
     client_secret = "0b947853-1676-4a63-a384-72769c88f3b1"
     code          = "d967868a-144e-49ed-921f-c27b65dda06a"
-    obj = wst(client_id,client_secret)
-    obj.start()
+    obj = wst(logger,client_id,client_secret)
+    try:
+        obj.start()
+    except KeyboardInterrupt:
+        logger.info('Exiting from keyboard interupt')
+        sys.exit()
     # Manually get the access token
     #obj.get_access_token(client_id,client_secret,code)
-    WST_LOGGER.info("Waiting for code...");
+    logger.info("Waiting for code...");
     while obj.oauth2_code == False:
         time.sleep(1)
     obj.GetTagManagers()
-    while True:
-        time.sleep(1)
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        pass
+    except Exception as err:
+        logger.error('wstREST: failed: {0}'.format(err), exc_info=True)
+    sys.exit()

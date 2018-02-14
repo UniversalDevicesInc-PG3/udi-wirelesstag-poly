@@ -59,7 +59,7 @@ class wstController(polyinterface.Controller):
         """
         self.l_info('start','WirelessSensorTags Polyglot...')
         self.load_params()
-        self.wst = wst(self.client_id,self.client_secret,self.oauth2_code)
+        self.wst = wst(LOGGER,self.client_id,self.client_secret,self.oauth2_code)
         self.wst.start()
         self.save_params()
         self.discover()
