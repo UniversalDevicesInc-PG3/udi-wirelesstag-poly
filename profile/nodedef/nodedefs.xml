@@ -46,9 +46,9 @@
     <sts>
       <st id="ST" editor="BOOL" />
       <st id="GV1" editor="ONOFF" />
-      <st id="CLITEMP" editor="CLITEMP" />
+      <st id="CLITEMP" editor="I_TEMP_F" />
       <st id="BATLVL" editor="BATLVL" />
-      <st id="CV" editor="CV" />
+      <st id="CV" editor="FLOAT" />
     </sts>
     <cmds>
       <sends />
