@@ -12,6 +12,8 @@
       <st id="GV2" editor="FLOAT" />
       <!-- wirelesstag.net communicating -->
       <st id="GV3" editor="BOOL" />
+      <!-- REST Server listen port -->
+      <st id="GV4" editor="I_INTEGER" />
     </sts>
     <cmds>
       <sends />

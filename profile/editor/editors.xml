@@ -7,6 +7,10 @@
        <range uom="56" min="0.1" max="999.999"/>
     </editor>
 
+    <editor id="I_INTEGER">
+      <range uom="56" min="0" max="4294967295" prec="0" />
+    </editor>
+
     <editor id="B_ONOFF">
         <range uom="2" subset="0,1" nls="ONOFF" />
     </editor>
