@@ -204,11 +204,11 @@ class wst12(polyinterface.Node):
         {'driver': 'CLITEMP', 'value': 0, 'uom': 17}, # temp: Curent temperature (17=F 4=C)
         {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # batp: Battery percent (51=percent)
         {'driver': 'CV',      'value': 0, 'uom': 72}, # batv: Battery Voltag 72=Volt
-        {'driver': 'GV2',     'value': 0, 'uom': 25}, # motion: Migth use True, False, Open for door mode?
-        {'driver': 'GV2',     'value': 0, 'uom': 56}, # orien: Orientation
-        {'driver': 'GV3',     'value': 0, 'uom': 56}, # xaxis: X-Axis
-        {'driver': 'GV4',     'value': 0, 'uom': 56}, # yasis: Y-Axis
-        {'driver': 'GV5',     'value': 0, 'uom': 56}  # zaxis: Z-Asis
+        {'driver': 'GV2',     'value': 0, 'uom': 25}, # motion: Might use True, False, Open for door mode?
+        {'driver': 'GV3',     'value': 0, 'uom': 56}, # orien: Orientation
+        {'driver': 'GV4',     'value': 0, 'uom': 56}, # xaxis: X-Axis
+        {'driver': 'GV5',     'value': 0, 'uom': 56}, # yasis: Y-Axis
+        {'driver': 'GV6',     'value': 0, 'uom': 56}  # zaxis: Z-Asis
     ]
     commands = {
         'DON': cmd_set_on,
