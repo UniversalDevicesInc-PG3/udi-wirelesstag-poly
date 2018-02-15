@@ -48,7 +48,7 @@
       <st id="GV1" editor="B_ONOFF" />
       <st id="CLITEMP" editor="I_TEMP_F" />
       <st id="CLIHUM" editor="I_HUMIDITY" />
-      <st id="HUMIN" editor="BATLVL" />
+      <st id="BATLVL" editor="BATLVL" />
       <st id="CV" editor="FLOAT" />
       <st id="GV2" editor="I_MOTION" />
       <st id="GV3" editor="FLOAT" />
