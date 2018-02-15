@@ -42,9 +42,9 @@ class wst12(polyinterface.Node):
                 self.l_error('__init__',"address ({0}) and name ({0}) must be specified when tdata is None".format(address,tdata))
                 return
             self.tdata = tdata
-            self.uuid  = tag['uuid']
+            self.uuid  = tdata['uuid']
             address    = id_to_address(self.uuid)
-            name        = tag['name']
+            name       = tdata['name']
         else:
             self.tdata = dict()
         super(wst12, self).__init__(controller, primary, address, name)
