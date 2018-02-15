@@ -10,10 +10,12 @@
       <st id="GV1" editor="FLOAT" />
       <!-- Version Minor -->
       <st id="GV2" editor="FLOAT" />
-      <!-- wirelesstag.net communicating -->
+      <!-- Authorized (got oauth2 code) -->
       <st id="GV3" editor="BOOL" />
+      <!-- wirelesstag.net communicating -->
+      <st id="GV4" editor="BOOL" />
       <!-- REST Server listen port -->
-      <st id="GV4" editor="I_INTEGER" />
+      <st id="GV5" editor="I_INTEGER" />
     </sts>
     <cmds>
       <sends />
