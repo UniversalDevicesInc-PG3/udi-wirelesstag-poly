@@ -92,6 +92,10 @@ class wst12(polyinterface.Node):
             self.set_batv(self.tdata['batteryVolt'])
         if 'batteryRemaining' in self.tdata:
             self.set_batp(float(self.tdata['batteryRemaining']) * 100)
+        if 'lux' in self.tdata:
+            self.set_lux(self.tdata['lux'])
+        if 'hum' in self.tdata:
+            self.set_hum(self.tdata['hum'])
             
     def set_lit(self,value,force=False):
         if not force and hasattr(self,"lit") and self.lit == value:
