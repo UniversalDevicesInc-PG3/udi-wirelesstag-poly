@@ -67,14 +67,29 @@ class wstTagManager(polyinterface.Node):
 
     def discover(self):
         #self.controller.addNode(wst12(self.controller, self.address, 'test12', 'Test 12')
-        ret = self.controller.wst.SelectTagManager(self.mac)
-        if ret is False:
-            self.l_error('discover',"Unable to select tag manager: {}".format(self.mac))
-        for tag in self.controller.wst.GetTagList():
+        ret = self.get_tag_list()
+        if ret['st'] is False:
+            return
+        for tag in ret['result']:
             self.l_info('discover','Got Tag: {}'.format(tag))
             self.controller.addNode(wst12(self.controller, self.address, tag['uuid'], tag['name']))
     """
+    Misc functions
     """
+
+    def get_tag_list(self):
+        ret = self.controller.wst.SelectTagManager(self.mac)
+        if ret['st'] is False:
+            self.set_st(False)
+            self.l_error('get_tag_list',"Unable to select tag manager: {}".format(self.mac))
+        else:
+            ret = self.controller.wst.GetTagList():
+            if ret['st'] is False:
+                self.set_st(False)
+                self.l_error('get_tag_list',"Unable to select get tags")
+            else:
+                self.set_st(True)
+        return ret
     
     def l_info(self, name, string):
         LOGGER.info("%s:%s:%s: %s" %  (self.id,self.name,name,string))
