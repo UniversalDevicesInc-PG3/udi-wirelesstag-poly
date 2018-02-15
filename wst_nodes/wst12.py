@@ -123,6 +123,40 @@ class wst12(polyinterface.Node):
         self.batv = value
         self.setDriver('CV', self.batv)
         
+    def set_motion(self,value,force=False):
+        if not force and hasattr(self,"motion") and self.motion == value:
+            return True
+        self.motion = value
+        self.setDriver('GV2', self.motion)
+        
+    def set_orien(self,value,force=False):
+        value = myfloat(value,1)
+        if not force and hasattr(self,"orien") and self.orien == value:
+            return True
+        self.orien = value
+        self.setDriver('GV3', self.orien)
+        
+    def set_xaxis(self,value,force=False):
+        value = int(value)
+        if not force and hasattr(self,"xaxis") and self.xaxis == value:
+            return True
+        self.xaxis = value
+        self.setDriver('GV4', self.xaxis)
+        
+    def set_yaxis(self,value,force=False):
+        value = int(value)
+        if not force and hasattr(self,"yaxis") and self.yaxis == value:
+            return True
+        self.yaxis = value
+        self.setDriver('GV5', self.yaxis)
+        
+    def set_xaxis(self,value,force=False):
+        value = int(value)
+        if not force and hasattr(self,"zaxis") and self.zaxis == value:
+            return True
+        self.zaxis = value
+        self.setDriver('GV6', self.zaxis)
+        
     """
     """
 

@@ -155,7 +155,11 @@ class wstController(polyinterface.Controller):
             return False
         if command == '/motion':
             # {'ts': '2018-02-15T12:44:04 00:00', 'tagid': '0', 'zaxis': '-81', 'xaxis': '51', 'tagname': 'GarageFreezer', 'orien': '100', 'yaxis': '129'}
-            pass
+            node.set_motion(1)
+            node.set_orien(params['orien'])
+            node.set_xaxis(params['xaxis'])
+            node.set_yaxis(params['yaxis'])
+            node.set_zaxis(params['zaxis'])
         elif command == '/update':
             #tagname=Garage Freezer&tagid=0&temp=-21.4213935329179&hum=0&lux=0&ts=2018-02-15T11:18:02+00:00 HTTP/1.1" 400 -
             node.set_temp(params['temp'])
