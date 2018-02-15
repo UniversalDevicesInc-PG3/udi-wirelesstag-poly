@@ -46,6 +46,7 @@ class wstController(polyinterface.Controller):
         Super runs all the parent class necessities. You do NOT have
         to override the __init__ method, but if you do, you MUST call super.
         """
+        self.name = 'WST Controller'
         super(wstController, self).__init__(polyglot)
 
     def start(self):
