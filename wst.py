@@ -219,23 +219,32 @@ class wst():
     def GetTagManagers(self):
         aret = self.http_post('ethAccount.asmx/GetTagManagers',{})
         self.l_debug('getTagManagers',aret)
-        return aret['d']
+        if 'd' in aret:
+            ret = { 'st': True, 'result': aret['d'] }
+        else:
+            ret = { 'st': False }
+        return ret
 
     # http://wirelesstag.net/ethAccount.asmx?op=SelectTagManager
     def SelectTagManager(self,mgr_mac):
+        # This doesn't like how request converts dict to json, so do it here.
         aret = self.http_post('ethAccount.asmx/SelectTagManager',json.dumps({'mac':mgr_mac}))
         self.l_debug('SelectTagManager',aret)
         if 'd' in aret:
-            return aret['d']
-        return False
+            ret = { 'st': True, 'result': aret['d'] }
+        else:
+            ret = { 'st': False }
+        return ret
         
     # http://wirelesstag.net/ethClient.asmx?op=GetTagList
     def GetTagList(self):
         aret = self.http_post('ethClient.asmx/GetTagList',{})
         self.l_debug('GetTagList',aret)
         if 'd' in aret:
-            return aret['d']
-        return list()
+            ret = { 'st': True, 'result': aret['d'] }
+        else:
+            ret = { 'st': False }
+        return ret
     
 if __name__ == '__main__':
     import logging, time
@@ -260,7 +269,8 @@ if __name__ == '__main__':
     #    logger.info("Waiting for code...");
     #    time.sleep(10)
     mgrs = obj.GetTagManagers()
-    obj.SelectTagManager(mgrs[0]['mac'])
+    if mgrs['st']:
+        obj.SelectTagManager(mgrs['result'][0]['mac'])
     obj.GetTagList()
     try:
         while True:

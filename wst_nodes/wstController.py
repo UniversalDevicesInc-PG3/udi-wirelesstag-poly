@@ -67,7 +67,8 @@ class wstController(polyinterface.Controller):
             logger.info('Exiting from keyboard interupt')
             sys.exit()
         self.save_params()
-        self.discover()
+        self.discover() # Temporary, discover on startup
+        self.query()
 
     def shortPoll(self):
         """
@@ -85,11 +86,13 @@ class wstController(polyinterface.Controller):
         or shortPoll. No need to Super this method the parent version does nothing.
         The timer can be overriden in the server.json.
         """
-        for mgr in self.wst.GetTagManagers():
-            node = self.get_node(get_valid_node_name(mgr['mac']))
-            if node is not None:
-                node.set_params(mgr)
-
+        mgd = self.get_tag_managers()
+        if mgd['st']:
+            for mgr in mgd['result']:
+                node = self.get_node(get_valid_node_name(mgr['mac']))
+                if node is not None:
+                    node.set_params(mgr)
+            
     def query(self):
         """
         Optional.
@@ -97,6 +100,12 @@ class wstController(polyinterface.Controller):
         nodes back to ISY. If you override this method you will need to Super or
         issue a reportDrivers() to each node manually.
         """
+        if self.wst.oauth2_code == False:
+            self.set_auth(False)
+            self.l_error('discover',"Not able to query oauth2_code={}".format(self.wst.oauth2_code))
+            return False
+        self.set_auth(True)
+        # Call longPoll since it check the comm status
         self.longPoll()
         for node in self.nodes:
             self.nodes[node].reportDrivers()
@@ -108,14 +117,16 @@ class wstController(polyinterface.Controller):
         controller start method and from DISCOVER command recieved from ISY as an exmaple.
         """
         if self.wst.oauth2_code == False:
+            self.set_auth(False)
             self.l_error('discover',"Not able to discover oauth2_code={}".format(self.wst.oauth2_code))
             return False
+        self.set_auth(True)
         self.save_params()
-        mgrs = self.wst.GetTagManagers()
-        for mgr in mgrs:
-            self.l_debug("discover","TagManager={0}".format(mgrs))
-            self.addNode(wstTagManager(self, mgr['mac'], mgr['name'], discover=True))
-        #self.addNode(wstTagManager(self, 'testtagmanager', 'Test Tag Manager'))
+        mgd = self.get_tag_managers()
+        if mgd['st']:
+            for mgr in mgd['result']:
+                self.l_debug("discover","TagManager={0}".format(mgrs))
+                self.addNode(wstTagManager(self, mgr['mac'], mgr['name'], discover=True))
 
     def delete(self):
         """
@@ -132,6 +143,14 @@ class wstController(polyinterface.Controller):
     """
      Misc funcs
     """
+    def get_tag_managers(self):
+        mgd = self.wst.GetTagManagers();
+        if mgd['st']:
+            self.set_comm(True)
+        else:
+            self.set_comm(False)
+        return mgd
+    
     def get_node(self,address):
         self.l_info('get_node',"adress={0}".format(address))
         for node in self.nodes:
@@ -168,7 +187,28 @@ class wstController(polyinterface.Controller):
         
     def l_debug(self, name, string):
         LOGGER.debug("%s:%s: %s" % (self.id,name,string))
-        
+
+    """
+    Set Functions
+    """
+    def set_auth(self,value,force=False):
+        if not force and hasattr(self,"auth") and self.auth == value:
+            return True
+        self.auth = value
+        if value:
+            self.setDriver('GV3', 1)
+        else:
+            self.setDriver('GV3', 0)
+
+    def set_comm(self,value,force=False):
+        if not force and hasattr(self,"comm") and self.comm == value:
+            return True
+        self.comm = value
+        if value:
+            self.setDriver('GV4', 1)
+        else:
+            self.setDriver('GV4', 0)
+
     """
     Command Functions
     """
@@ -187,6 +227,8 @@ class wstController(polyinterface.Controller):
     }
     drivers = [
         {'driver': 'ST',  'value': 0, 'uom': 2},
-        {'driver': 'GV1', 'value': 0, 'uom': 56}, # Version Major
-        {'driver': 'GV2', 'value': 0, 'uom': 56}, # Version Minor
+        {'driver': 'GV1', 'value': 0, 'uom': 56}, # vmaj: Version Major
+        {'driver': 'GV2', 'value': 0, 'uom': 56}, # vmin: Version Minor
+        {'driver': 'GV3', 'value': 0, 'uom': 2},  # auth: Authorized (we have valid oauth2 token)
+        {'driver': 'GV4', 'value': 0, 'uom': 2},  # comm: Communicating
     ]
