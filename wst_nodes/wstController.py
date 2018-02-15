@@ -141,8 +141,19 @@ class wstController(polyinterface.Controller):
     def stop(self):
         LOGGER.debug('NodeServer stopped.')
 
+    """
+    This handle's all the 'get's from the tag URL calling.
+    """
     def get_handler(self,command,params):
-        self.l_debug('get_handler','command={0} params={1}'.format(command,params))
+        self.l_debug('get_handler','processing command={0} params={1}'.format(command,params))
+        node = None
+        for address in self.nodes:
+            if self.nodes[address].name == params['tagname']:
+                node = self.nodes[address]
+        if node is None:
+            self.l_error('get_handler',"Did not find node with name '{0}' id '{1}'".format(params['tagname'],params['tagid']))
+            return False
+        if command == '/motion':
         return True
 
     """
