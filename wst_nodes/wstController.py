@@ -125,7 +125,7 @@ class wstController(polyinterface.Controller):
         mgd = self.get_tag_managers()
         if mgd['st']:
             for mgr in mgd['result']:
-                self.l_debug("discover","TagManager={0}".format(mgrs))
+                self.l_debug("discover","TagManager={0}".format(mgr))
                 self.addNode(wstTagManager(self, mgr['mac'], mgr['name'], discover=True))
 
     def delete(self):
