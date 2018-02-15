@@ -7,6 +7,10 @@
        <range uom="56" min="0.1" max="999.999"/>
     </editor>
 
+    <editor id="B_ONOFF">
+        <range uom="2" subset="0,1", nls="EN_ONNOFF" />
+    </editor>
+
     <!-- Temperature -->
    <editor id="I_TEMP">
       <range uom="14" min="-50" max="200" prec="2" />

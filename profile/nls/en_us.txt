@@ -6,6 +6,7 @@ CMD-cntl-INSTALL_PROFILE-NAME = Install Profile
 ST-cntl-ST-NAME = NodeServer Online
 ST-cntl-GV1-NAME = Version Major
 ST-cntl-GV2-NAME = Version Minor
+ST-cntl-GV3-NAME = Commumicating
 
 # Tag Manager
 ND-wstTagManager-NAME = Wireless Sensor Tag Manager
@@ -17,3 +18,6 @@ ND-wst12-NAME = Wireless Sensor Tag 12
 ST-tag12-ST-NAME = Tag Status
 ST-tag12-GV1-NAME = Light
 ST-tag12-CV-NAME = Battery Voltage
+
+EN_ONOFF-0 = Off
+EN_ONOFF-1 = On

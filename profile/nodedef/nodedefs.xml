@@ -45,7 +45,7 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="ONOFF" />
+      <st id="GV1" editor="B_ONOFF" />
       <st id="CLITEMP" editor="I_TEMP_F" />
       <st id="BATLVL" editor="BATLVL" />
       <st id="CV" editor="FLOAT" />
