@@ -83,7 +83,7 @@ class wstTagManager(polyinterface.Node):
             self.set_st(False)
             self.l_error('get_tag_list',"Unable to select tag manager: {}".format(self.mac))
         else:
-            ret = self.controller.wst.GetTagList():
+            ret = self.controller.wst.GetTagList()
             if ret['st'] is False:
                 self.set_st(False)
                 self.l_error('get_tag_list',"Unable to select get tags")
