@@ -60,7 +60,7 @@ class wstController(polyinterface.Controller):
         """
         self.l_info('start','WirelessSensorTags Polyglot...')
         self.load_params()
-        self.wst = wst(LOGGER,self.client_id,self.client_secret,self.oauth2_code)
+        self.wst = wst(LOGGER,self.client_id,self.client_secret,self.get_handler,self.oauth2_code)
         try:
             self.wst.start()
         except KeyboardInterrupt:
@@ -140,6 +140,10 @@ class wstController(polyinterface.Controller):
 
     def stop(self):
         LOGGER.debug('NodeServer stopped.')
+
+    def get_handler(self,command,params):
+        self.l_debug('get_handler','command={0} params={1}'.format(command,params))
+        return True
 
     """
      Misc funcs

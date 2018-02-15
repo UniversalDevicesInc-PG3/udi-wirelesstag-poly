@@ -47,7 +47,7 @@ class wstHandler(BaseHTTPRequestHandler):
             message_parts.append('')
             message = '\r\n'.join(message_parts)
         else:
-            message = "Received: {0} {1}".format(parsed_path.path,self.query)
+            message = "Received: {0} {1}. ".format(parsed_path.path,self.query)
         hrt = self.parent.get_handler(parsed_path.path,self.query)
         message += hrt['message']
         self.send_response(hrt['code'])
@@ -104,10 +104,11 @@ class wstREST():
 
 class wst():
 
-    def __init__(self,logger,client_id,client_secret,oauth2_code=False):
+    def __init__(self,logger,client_id,client_secret,ghandler=None,oauth2_code=False):
         self.logger = logger
         self.client_id = client_id
         self.client_secret = client_secret
+        self.ghandler=ghandler
         self.oauth2_code = oauth2_code
 
     def start(self):
@@ -122,22 +123,34 @@ class wst():
         This is passed the incoming http get's to processes
         """
         self.l_debug('get_handler','command={}'.format(command))
-        message = "\n"
         # This is from the oauth2 redirect with our code.
         if command == "/code":
             code = 200
-            message += "\nGot code {}, asking for access token\n".format(params['code'])
+            message = "\nGot code {}, asking for access token\n".format(params['code'])
             self.oauth2_code = params['code']
             self.l_info('get_handler','Got code: {}'.format(self.oauth2_code))
             tr = self.get_access_token()
             if tr == False:
                 code = 500
-                message += "\nERROR: Unable to get access token from code, see log"
+                message += "ERROR: Unable to get access token from code, see log"
             else:
-                message += "\nSUCCESS, received our token, will save in Polyglot database for the future"
+                message += "SUCCESS, received our token, will save in Polyglot database for the future"
         else:
-            code = 500
-            message += "Unknown command '%s'".format(command)
+            if self.ghandler is None:
+                code = 500
+                message = "Unknown command, no ghandler specified '{}'".format(command)
+            else:
+                ret = self.ghandler(command,params)
+                if ret:
+                    code = 200
+                    message = 'Command {0} success'.format(command)
+                else:
+                    code = 500
+                    message = 'Command {0} failed'.format(command)
+        if code == 200:
+            self.l_debug('get_handler','code={0} message={1}'.format(code,message))
+        else:
+            self.l_error('get_handler','code={0} message={1}'.format(code,message))
         return  { 'code': code, 'message': message }
     
     def get_access_token(self,code=None):
@@ -245,7 +258,10 @@ class wst():
         else:
             ret = { 'st': False }
         return ret
-    
+
+def my_ghandler(command,params):
+    return True
+
 if __name__ == '__main__':
     import logging, time
     logging.basicConfig(
@@ -257,7 +273,7 @@ if __name__ == '__main__':
     client_id     = "3b08b242-f0f8-41c0-ba29-6b0478cd0b77"
     client_secret = "0b947853-1676-4a63-a384-72769c88f3b1"
     code          = "d967868a-144e-49ed-921f-c27b65dda06a"
-    obj = wst(logger,client_id,client_secret)
+    obj = wst(logger,client_id,client_secret,ghandler=my_ghandler)
     try:
         obj.start()
     except KeyboardInterrupt:
