@@ -103,6 +103,7 @@ class wst12(polyinterface.Node):
             self.setDriver('GV1', 0)
         
     def set_temp(self,value,force=False):
+        value = myfloat(value,2)
         if not force and hasattr(self,"temp") and self.lit == value:
             return True
         self.temp = value
@@ -116,6 +117,7 @@ class wst12(polyinterface.Node):
         self.setDriver('BATLVL', self.batp)
         
     def set_batv(self,value,force=False):
+        value = myfloat(value,3)
         if not force and hasattr(self,"batv") and self.batv == value:
             return True
         self.batv = value
