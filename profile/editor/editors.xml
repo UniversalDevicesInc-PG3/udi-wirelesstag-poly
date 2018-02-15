@@ -26,6 +26,10 @@
      <range uom="51" min="0" max="100" prec="0" />
    </editor>
 
+   <editor id="I_LUMIN">
+     <range uom="36" min="0" max="100" prec="0" />
+   </editor>
+
    <!-- Voltage -->
    <editor id="I_VOLT">
       <range uom="72" min="0" max="10" prec="3" />
