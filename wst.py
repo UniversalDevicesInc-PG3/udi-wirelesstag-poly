@@ -215,10 +215,19 @@ class wst():
     def GetTagManagers(self):
         aret = self.http_post('ethAccount.asmx/GetTagManagers',{})
         self.l_debug('getTagManagers',aret)
-        mgrs = list()
-        for mgr in aret['d']:
-            mgrs.append(mgr)
-        return mgrs
+        return aret['d']
+
+    # http://wirelesstag.net/ethAccount.asmx?op=SelectTagManager
+    def SelectTagManager(self,mgr_mac):
+        aret = self.http_post('ethAccount.asmx/SelectTagManager',{})
+        self.l_debug('SelectTagManager',aret)
+        return aret['d']
+        
+    # http://wirelesstag.net/ethClient.asmx?op=GetTagList
+    def GetTagList(self):
+        aret = self.http_post('ethClient.asmx/GetTagList',{})
+        self.l_debug('GetTagList',aret)
+        return aret['d']
     
 if __name__ == '__main__':
     import logging
