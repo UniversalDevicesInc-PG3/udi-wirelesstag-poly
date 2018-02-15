@@ -63,8 +63,9 @@ class wstREST():
         self.logger  = logger
 
     def start(self):
+        port    = 0
         self.myip    = self.get_network_ip('8.8.8.8')
-        self.address = (self.myip, 8080) # let the kernel give us a port
+        self.address = (self.myip, port) # let the kernel give us a port
         self.logger.debug("wstREST: address={0}".format(self.address))
         # Get a handler and set parent to myself, so we can process the requests.
         eh = wstHandler
@@ -139,7 +140,9 @@ class wst():
             message += "Unknown command '%s'".format(command)
         return  { 'code': code, 'message': message }
     
-    def get_access_token(self):
+    def get_access_token(self,code=None):
+        if code is not None:
+            self.oauth2_code = code
         aret = self.http_post('oauth2/access_token.aspx',
                               {
                                   'client_id': self.client_id,
@@ -171,16 +174,16 @@ class wst():
             response = requests.post(
                 url,
                 headers=headers,
-                params=payload,
+                data=payload,
                 timeout=10
             )
         # This is supposed to catch all request excpetions.
         except requests.exceptions.RequestException as e:
-            self.l_error('http_get',"Connection error for %s: %s" % (url, e))
+            self.l_error('http_post',"Connection error for %s: %s" % (url, e))
             return False
-        self.l_debug('http_get',' Got: code=%s' % (response.status_code))
+        self.l_debug('http_post',' Got: code=%s' % (response.status_code))
         if response.status_code == 200:
-            #self.l_debug('http_get',"http_get: Got: text=%s" % response.text)
+            #self.l_debug('http_post',"Got: text=%s" % response.text)
             try:
                 d = json.loads(response.text)
             except (Exception) as err:
@@ -188,15 +191,15 @@ class wst():
                 return False
             return d
         elif response.status_code == 400:
-            self.l_error('http_get',"Bad request: %s" % (url) )
+            self.l_error('http_post',"Bad request: %s" % (url) )
         elif response.status_code == 404:
-            self.l_error('http_get',"Not Found: %s" % (url) )
+            self.l_error('http_post',"Not Found: %s" % (url) )
         elif response.status_code == 401:
             # Authentication error
-            self.l_error('http_get',
+            self.l_error('http_post',
                 "Failed to authenticate, please check your username and password")
         else:
-            self.l_error('http_get',"Unknown response %s: %s" % (response.status_code, url) )
+            self.l_error('http_post',"Unknown response %s: %s %s" % (response.status_code, url, response.text) )
         return False
 
     def l_info(self, name, string):
@@ -220,15 +223,19 @@ class wst():
 
     # http://wirelesstag.net/ethAccount.asmx?op=SelectTagManager
     def SelectTagManager(self,mgr_mac):
-        aret = self.http_post('ethAccount.asmx/SelectTagManager',{'mac': mgr_mac})
+        aret = self.http_post('ethAccount.asmx/SelectTagManager',json.dumps({'mac':mgr_mac}))
         self.l_debug('SelectTagManager',aret)
-        return aret['d']
+        if 'd' in aret:
+            return aret['d']
+        return False
         
     # http://wirelesstag.net/ethClient.asmx?op=GetTagList
     def GetTagList(self):
         aret = self.http_post('ethClient.asmx/GetTagList',{})
         self.l_debug('GetTagList',aret)
-        return aret['d']
+        if 'd' in aret:
+            return aret['d']
+        return list()
     
 if __name__ == '__main__':
     import logging, time
@@ -248,10 +255,10 @@ if __name__ == '__main__':
         logger.info('Exiting from keyboard interupt')
         sys.exit()
     # Manually get the access token
-    #obj.get_access_token(client_id,client_secret,code)
-    while obj.oauth2_code == False:
-        logger.info("Waiting for code...");
-        time.sleep(10)
+    obj.get_access_token(code)
+    #while obj.oauth2_code == False:
+    #    logger.info("Waiting for code...");
+    #    time.sleep(10)
     mgrs = obj.GetTagManagers()
     obj.SelectTagManager(mgrs[0]['mac'])
     obj.GetTagList()

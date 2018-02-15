@@ -1,5 +1,11 @@
 
-import os,socket,struct,json,re
+import os,socket,struct,json,re,hashlib
+
+def id_to_address(address,slen=14):
+    slen = slen * -1
+    m = hashlib.md5()
+    m.update(address.encode())
+    return m.hexdigest()[slen:]
 
 def str_d(value):
     # Only allow utf-8 characters

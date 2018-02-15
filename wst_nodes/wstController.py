@@ -61,7 +61,7 @@ class wstController(polyinterface.Controller):
         self.load_params()
         self.wst = wst(LOGGER,self.client_id,self.client_secret,self.oauth2_code)
         try:
-            wst.start()
+            self.wst.start()
         except KeyboardInterrupt:
             # TODO: Should we set a flag so poll can just restart the server, instead of exiting?
             logger.info('Exiting from keyboard interupt')

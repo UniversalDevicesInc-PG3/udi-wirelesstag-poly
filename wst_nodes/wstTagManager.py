@@ -5,8 +5,10 @@ by JimBoCA jimboca3@gmail.com
 import polyinterface
 import sys
 import time
-
+from wst_funcs import get_valid_node_name
 from wst_nodes import wst12
+
+LOGGER = polyinterface.LOGGER
 
 class wstTagManager(polyinterface.Node):
     """
@@ -40,7 +42,7 @@ class wstTagManager(polyinterface.Node):
         """
         # Save the real mac before we legalize it.
         self.mac      = mac
-        self.discover = discover
+        self.do_discover = discover
         address = get_valid_node_name(mac)
         super(wstTagManager, self).__init__(controller, address, address, name)
 
@@ -51,8 +53,8 @@ class wstTagManager(polyinterface.Node):
         and we get a return result from Polyglot. Only happens once.
         """
         self.set_st(True)
-        if self.discover:
-            self.discover = False
+        if self.do_discover:
+            self.do_discover = False
             self.discover()
 
     def query(self):
@@ -66,9 +68,11 @@ class wstTagManager(polyinterface.Node):
     def discover(self):
         #self.controller.addNode(wst12(self.controller, self.address, 'test12', 'Test 12')
         ret = self.controller.wst.SelectTagManager(self.mac)
+        if ret is False:
+            self.l_error('discover',"Unable to select tag manager: {}".format(self.mac))
         for tag in self.controller.wst.GetTagList():
-            self.l_info('discover','Got Tag: {}'.format(tag)
-            self.controller.addNode(wst12(self.controller, self.address, tag['uuid'], tag['name'])
+            self.l_info('discover','Got Tag: {}'.format(tag))
+            self.controller.addNode(wst12(self.controller, self.address, tag['uuid'], tag['name']))
     """
     """
     

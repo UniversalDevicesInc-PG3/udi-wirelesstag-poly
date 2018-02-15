@@ -5,6 +5,7 @@ by JimBoCA jimboca3@gmail.com
 import polyinterface
 import sys
 import time
+from wst_funcs import id_to_address
 
 class wst12(polyinterface.Node):
     """
@@ -25,7 +26,7 @@ class wst12(polyinterface.Node):
     reportDrivers(): Forces a full update of all drivers to Polyglot/ISY.
     query(): Called when ISY sends a query request to Polyglot for this specific node
     """
-    def __init__(self, controller, primary, address, name):
+    def __init__(self, controller, primary, uuid, name):
         """
         Optional.
         Super runs all the parent class necessities. You do NOT have
@@ -36,6 +37,8 @@ class wst12(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
+        self.uuid = uuid
+        address = id_to_address(uuid)
         super(wst12, self).__init__(controller, primary, address, name)
 
     def start(self):
