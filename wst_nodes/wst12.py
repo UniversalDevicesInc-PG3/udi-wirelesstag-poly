@@ -117,7 +117,7 @@ class wst12(polyinterface.Node):
     def set_batv(self,value,force=False):
         if not force and hasattr(self,"batv") and self.batv == value:
             return True
-        self.batp = value
+        self.batv = value
         self.setDriver('CV', self.batv)
         
     """
