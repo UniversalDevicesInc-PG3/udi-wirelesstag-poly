@@ -115,6 +115,7 @@ class wst():
     def start(self):
         self.rest = wstREST(self,self.logger)
         self.rest.start()
+        self.listen_port = self.rest.listen_port
         self.url = self.rest.url
         if self.oauth2_code != False:
             self.get_access_token()
