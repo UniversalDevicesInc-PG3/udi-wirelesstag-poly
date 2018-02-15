@@ -22,7 +22,11 @@
       <range uom="17" min="-50" max="150" prec="2" />
    </editor>
 
-    <!-- Volatage -->
+   <editor id="I_HUMIDITY">
+     <range uom="51" min="0" max="100" prec="0" />
+   </editor>
+
+   <!-- Voltage -->
    <editor id="I_VOLT">
       <range uom="72" min="0" max="10" prec="3" />
    </editor>

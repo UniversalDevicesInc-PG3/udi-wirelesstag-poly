@@ -109,6 +109,20 @@ class wst12(polyinterface.Node):
         self.temp = value
         self.setDriver('CLITEMP', self.temp)
         
+    def set_hum(self,value,force=False):
+        value = int(value)
+        if not force and hasattr(self,"hum") and self.hum == value:
+            return True
+        self.hum = value
+        self.setDriver('CLIHUM', self.hum)
+        
+    def set_lux(self,value,force=False):
+        value = int(value)
+        if not force and hasattr(self,"lux") and self.lux == value:
+            return True
+        self.lux = value
+        self.setDriver('LUMIN', self.lux)
+        
     def set_batp(self,value,force=False):
         value = myfloat(value,2)
         if not force and hasattr(self,"batp") and self.batp == value:
@@ -234,15 +248,17 @@ class wst12(polyinterface.Node):
     id = 'wst12'
     drivers = [
         {'driver': 'ST',      'value': 0, 'uom': 2},
-        {'driver': 'GV1',     'value': 0, 'uom': 78}, # lit:  Light status (78=Off/On)
-        {'driver': 'CLITEMP', 'value': 0, 'uom': 17}, # temp: Curent temperature (17=F 4=C)
-        {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # batp: Battery percent (51=percent)
-        {'driver': 'CV',      'value': 0, 'uom': 72}, # batv: Battery Voltag 72=Volt
+        {'driver': 'GV1',     'value': 0, 'uom': 78}, # lit:    Light status (78=Off/On)
+        {'driver': 'CLITEMP', 'value': 0, 'uom': 17}, # temp:   Curent temperature (17=F 4=C)
+        {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # batp:   Battery percent (51=percent)
+        {'driver': 'LUMIN',   'value': 0, 'uom': 36}, # lux:    Lux (36=lux)
+        {'driver': 'CLIHUM',  'value': 0, 'uom': 21}, # hum:    Humidity (21 = absolute humidity)
+        {'driver': 'CV',      'value': 0, 'uom': 72}, # batv:   Battery Voltag 72=Volt
         {'driver': 'GV2',     'value': 0, 'uom': 25}, # motion: Might use True, False, Open for door mode?
-        {'driver': 'GV3',     'value': 0, 'uom': 56}, # orien: Orientation
-        {'driver': 'GV4',     'value': 0, 'uom': 56}, # xaxis: X-Axis
-        {'driver': 'GV5',     'value': 0, 'uom': 56}, # yasis: Y-Axis
-        {'driver': 'GV6',     'value': 0, 'uom': 56}  # zaxis: Z-Asis
+        {'driver': 'GV3',     'value': 0, 'uom': 56}, # orien:  Orientation
+        {'driver': 'GV4',     'value': 0, 'uom': 56}, # xaxis:  X-Axis
+        {'driver': 'GV5',     'value': 0, 'uom': 56}, # yasis:  Y-Axis
+        {'driver': 'GV6',     'value': 0, 'uom': 56}  # zaxis:  Z-Asis
     ]
     commands = {
         'DON': cmd_set_on,
