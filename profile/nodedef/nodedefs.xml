@@ -49,6 +49,11 @@
       <st id="CLITEMP" editor="I_TEMP_F" />
       <st id="BATLVL" editor="BATLVL" />
       <st id="CV" editor="FLOAT" />
+      <st id="GV2" editor="I_MOTION" />
+      <st id="GV3" editor="FLOAT" />
+      <st id="GV4" editor="FLOAT" />
+      <st id="GV5" editor="FLOAT" />
+      <st id="GV6" editor="FLOAT" />
     </sts>
     <cmds>
       <sends />

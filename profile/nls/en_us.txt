@@ -18,6 +18,16 @@ ND-wst12-NAME = Wireless Sensor Tag 12
 ST-tag12-ST-NAME = Tag Status
 ST-tag12-GV1-NAME = Light
 ST-tag12-CV-NAME = Battery Voltage
+ST-tag12-GV2-NAME = Motion
+ST-tag12-GV3-NAME = Orientation
+ST-tag12-GV4-NAME = X-Axis
+ST-tag12-GV5-NAME = Y-Axis
+ST-tag12-GV6-NAME = Z-Axis
 
-EN_ONOFF-0 = Off
-EN_ONOFF-1 = On
+ONOFF-0 = Off
+ONOFF-1 = On
+
+MOT4-0  = False
+MOT4-1  = True
+MOT4-2  = Open
+MOT4-3  = Open Long

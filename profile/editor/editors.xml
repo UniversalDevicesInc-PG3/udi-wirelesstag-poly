@@ -8,7 +8,7 @@
     </editor>
 
     <editor id="B_ONOFF">
-        <range uom="2" subset="0,1", nls="EN_ONNOFF" />
+        <range uom="2" subset="0,1", nls="ONOFF" />
     </editor>
 
     <!-- Temperature -->
@@ -25,6 +25,11 @@
     <!-- Volatage -->
    <editor id="I_VOLT">
       <range uom="72" min="0" max="10" prec="3" />
+   </editor>
+   
+    <!-- Motion -->
+   <editor id="I_MOTION">
+      <range uom="25" subset="0,1,2,3", nls="MOT4" />
    </editor>
    
 </editors>
