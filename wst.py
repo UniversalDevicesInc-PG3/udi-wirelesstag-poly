@@ -74,17 +74,18 @@ class wstREST():
         self.logger.info("wstREST: Running on: {0}".format(self.url))
         self.thread  = threading.Thread(target=self.server.serve_forever)
         #t.setDaemon(True) # don't hang on exit
-        try:
-            self.server.serve_forever()
-        except KeyboardInterrupt:
-            self.logger.info('wstREST: Exiting from interupt')
-            self.server.shutdown()
-            self.server.server_close()
-            raise
-        except Exception as err:
-            self.logger.error('wstREST: failed: {0}'.format(err), exc_info=True)
-        self.server.shutdown()
-        self.server.server_close()
+        self.thread.start()
+        #try:
+        #    self.server.serve_forever()
+        #except KeyboardInterrupt:
+        #    self.logger.info('wstREST: Exiting from interupt')
+        #    self.server.shutdown()
+        #    self.server.server_close()
+        #    raise
+        #except Exception as err:
+        #    self.logger.error('wstREST: failed: {0}'.format(err), exc_info=True)
+        #self.server.shutdown()
+        #self.server.server_close()
 
     def get_handler(self,path,query):
         return self.parent.get_handler(path,query)
@@ -219,7 +220,7 @@ class wst():
 
     # http://wirelesstag.net/ethAccount.asmx?op=SelectTagManager
     def SelectTagManager(self,mgr_mac):
-        aret = self.http_post('ethAccount.asmx/SelectTagManager',{})
+        aret = self.http_post('ethAccount.asmx/SelectTagManager',{'mac': mgr_mac})
         self.l_debug('SelectTagManager',aret)
         return aret['d']
         
@@ -230,7 +231,7 @@ class wst():
         return aret['d']
     
 if __name__ == '__main__':
-    import logging
+    import logging, time
     logging.basicConfig(
         level=10,
         format='%(levelname)s:\t%(name)s\t%(message)s'
@@ -248,10 +249,12 @@ if __name__ == '__main__':
         sys.exit()
     # Manually get the access token
     #obj.get_access_token(client_id,client_secret,code)
-    logger.info("Waiting for code...");
     while obj.oauth2_code == False:
-        time.sleep(1)
-    obj.GetTagManagers()
+        logger.info("Waiting for code...");
+        time.sleep(10)
+    mgrs = obj.GetTagManagers()
+    obj.SelectTagManager(mgrs[0]['mac'])
+    obj.GetTagList()
     try:
         while True:
             time.sleep(1)

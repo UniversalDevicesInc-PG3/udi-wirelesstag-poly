@@ -60,7 +60,12 @@ class wstController(polyinterface.Controller):
         self.l_info('start','WirelessSensorTags Polyglot...')
         self.load_params()
         self.wst = wst(LOGGER,self.client_id,self.client_secret,self.oauth2_code)
-        self.wst.start()
+        try:
+            wst.start()
+        except KeyboardInterrupt:
+            # TODO: Should we set a flag so poll can just restart the server, instead of exiting?
+            logger.info('Exiting from keyboard interupt')
+            sys.exit()
         self.save_params()
         self.discover()
 
@@ -109,7 +114,7 @@ class wstController(polyinterface.Controller):
         mgrs = self.wst.GetTagManagers()
         for mgr in mgrs:
             self.l_debug("discover","TagManager={0}".format(mgrs))
-            self.addNode(wstTagManager(self, get_valid_node_name(mgr['mac']), mgr['name']))
+            self.addNode(wstTagManager(self, mgr['mac'], mgr['name'], discover=True))
         #self.addNode(wstTagManager(self, 'testtagmanager', 'Test Tag Manager'))
 
     def delete(self):

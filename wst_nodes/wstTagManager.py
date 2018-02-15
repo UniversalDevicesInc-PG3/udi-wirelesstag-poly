@@ -27,7 +27,7 @@ class wstTagManager(polyinterface.Node):
     reportDrivers(): Forces a full update of all drivers to Polyglot/ISY.
     query(): Called when ISY sends a query request to Polyglot for this specific node
     """
-    def __init__(self, controller, address, name):
+    def __init__(self, controller, mac, name, discover=False):
         """
         Optional.
         Super runs all the parent class necessities. You do NOT have
@@ -38,6 +38,10 @@ class wstTagManager(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
+        # Save the real mac before we legalize it.
+        self.mac      = mac
+        self.discover = discover
+        address = get_valid_node_name(mac)
         super(wstTagManager, self).__init__(controller, address, address, name)
 
     def start(self):
@@ -47,8 +51,9 @@ class wstTagManager(polyinterface.Node):
         and we get a return result from Polyglot. Only happens once.
         """
         self.set_st(True)
-        self.controller.addNode(wst12(self.controller, self.address, 'test12', 'Test 12'))
-        pass
+        if self.discover:
+            self.discover = False
+            self.discover()
 
     def query(self):
         """
@@ -58,6 +63,12 @@ class wstTagManager(polyinterface.Node):
         """
         self.reportDrivers()
 
+    def discover(self):
+        #self.controller.addNode(wst12(self.controller, self.address, 'test12', 'Test 12')
+        ret = self.controller.wst.SelectTagManager(self.mac)
+        for tag in self.controller.wst.GetTagList():
+            self.l_info('discover','Got Tag: {}'.format(tag)
+            self.controller.addNode(wst12(self.controller, self.address, tag['uuid'], tag['name'])
     """
     """
     
