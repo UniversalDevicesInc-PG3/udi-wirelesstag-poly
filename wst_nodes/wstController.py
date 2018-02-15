@@ -111,7 +111,7 @@ class wstController(polyinterface.Controller):
         for node in self.nodes:
             self.nodes[node].reportDrivers()
 
-    def discover(self):
+    def discover(self, *args, **kwargs):
         """
         Example
         Do discovery here. Does not have to be called discovery. Called from example
