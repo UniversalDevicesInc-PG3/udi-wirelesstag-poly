@@ -150,7 +150,7 @@ class wstController(polyinterface.Controller):
         self.addCustomParam({'oauth2_code': self.oauth2_code})
         self.removeNoticesAll()
         if self.oauth2_code == False:
-            self.addNotice("Please authorize: {0}&redirect_uri={1}/code".format(self.auth_url,self.wst.url))
+            self.addNotice('Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wst.url))
 
     def l_info(self, name, string):
         LOGGER.info("%s:%s: %s" %  (self.id,name,string))
