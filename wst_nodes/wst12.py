@@ -5,7 +5,7 @@ by JimBoCA jimboca3@gmail.com
 import polyinterface
 import sys
 import time
-from wst_funcs import id_to_address
+from wst_funcs import id_to_address,myfloat
 
 class wst12(polyinterface.Node):
     """
@@ -109,6 +109,7 @@ class wst12(polyinterface.Node):
         self.setDriver('CLITEMP', self.temp)
         
     def set_batp(self,value,force=False):
+        value = myfloat(value,2)
         if not force and hasattr(self,"batp") and self.batp == value:
             return True
         self.batp = value

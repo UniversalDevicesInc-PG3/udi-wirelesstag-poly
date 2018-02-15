@@ -1,6 +1,10 @@
 
 import os,socket,struct,json,re,hashlib
 
+def myfloat(value, prec=4):
+    """ round and return float """
+    return round(float(value), prec)
+
 def id_to_address(address,slen=14):
     slen = slen * -1
     m = hashlib.md5()
