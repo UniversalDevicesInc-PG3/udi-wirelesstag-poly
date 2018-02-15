@@ -26,7 +26,7 @@ class wst12(polyinterface.Node):
     reportDrivers(): Forces a full update of all drivers to Polyglot/ISY.
     query(): Called when ISY sends a query request to Polyglot for this specific node
     """
-    def __init__(self, controller, primary, uuid, name):
+    def __init__(self, controller, primary, address=None, name=None, tdata=None):
         """
         Optional.
         Super runs all the parent class necessities. You do NOT have
@@ -37,8 +37,16 @@ class wst12(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
-        self.uuid = uuid
-        address = id_to_address(uuid)
+        if address is None or name is None:
+            if tdata is None:
+                self.l_error('__init__',"address ({0}) and name ({0}) must be specified when tdata is None".format(address,tdata))
+                return
+            self.tdata = tdata
+            self.uuid  = tag['uuid']
+            address    = id_to_address(self.uuid)
+            name        = tag['name']
+        else:
+            self.tdata = dict()
         super(wst12, self).__init__(controller, primary, address, name)
 
     def start(self):
@@ -48,7 +56,7 @@ class wst12(polyinterface.Node):
         and we get a return result from Polyglot. Only happens once.
         """
         self.setDriver('ST', 1)
-        pass
+        self.set_from_tag_data()
 
     def query(self):
         """
@@ -60,7 +68,6 @@ class wst12(polyinterface.Node):
 
     """
     """
-    
     def l_info(self, name, string):
         LOGGER.info("%s:%s:%s: %s" %  (self.id,self.name,name,string))
         
@@ -73,6 +80,46 @@ class wst12(polyinterface.Node):
     def l_debug(self, name, string):
         LOGGER.debug("%s:%s:%s: %s" % (self.id,self.name,name,string))
 
+    """
+    Set Functions
+    """
+    def set_from_tag_data(self):
+        if 'lit' in self.tdata:
+            self.set_lit(self.tdata['lit'])
+        if 'temperature' in self.tdata:
+            self.set_temp(self.tdata['temperature'])
+        if 'batteryVolt' in self.tdata:
+            self.set_batv(self.tdata['batteryVolt'])
+        if 'batteryRemaining' in self.tdata:
+            self.set_lit(self.tdata['batteryRemaining'])
+            
+    def set_lit(self,value,force=False):
+        if not force and hasattr(self,"lit") and self.lit == value:
+            return True
+        self.lit = value
+        if value:
+            self.setDriver('GV1', 1)
+        else:
+            self.setDriver('GV1', 0)
+        
+    def set_temp(self,value,force=False):
+        if not force and hasattr(self,"temp") and self.lit == value:
+            return True
+        self.temp = value
+        self.setDriver('CLITEMP', self.temp)
+        
+    def set_batp(self,value,force=False):
+        if not force and hasattr(self,"batp") and self.batp == value:
+            return True
+        self.batp = value
+        self.setDriver('BATLVL', self.batp)
+        
+    def set_batv(self,value,force=False):
+        if not force and hasattr(self,"batv") and self.batv == value:
+            return True
+        self.batp = value
+        self.setDriver('CV', self.batv)
+        
     """
     """
 
@@ -150,10 +197,10 @@ class wst12(polyinterface.Node):
     id = 'wst12'
     drivers = [
         {'driver': 'ST',      'value': 0, 'uom': 2},
-        {'driver': 'GV1',     'value': 0, 'uom': 78}, # 78=Off/On
-        {'driver': 'CLITEMP', 'value': 0, 'uom': 17}, # 17=F 4=C
-        {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # 51=percent
-        {'driver': 'CV',      'value': 0, 'uom': 72}  # 72=Volt
+        {'driver': 'GV1',     'value': 0, 'uom': 78}, # lit:  Light status (78=Off/On)
+        {'driver': 'CLITEMP', 'value': 0, 'uom': 17}, # temp: Curent temperature (17=F 4=C)
+        {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # batp: Battery percent (51=percent)
+        {'driver': 'CV',      'value': 0, 'uom': 72}  # batv: Battery Voltag 72=Volt
     ]
     commands = {
         'DON': cmd_set_on,

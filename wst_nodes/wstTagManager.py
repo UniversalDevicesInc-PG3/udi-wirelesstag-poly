@@ -71,8 +71,8 @@ class wstTagManager(polyinterface.Node):
         if ret['st'] is False:
             return
         for tag in ret['result']:
-            self.l_info('discover','Got Tag: {}'.format(tag))
-            self.controller.addNode(wst12(self.controller, self.address, tag['uuid'], tag['name']))
+            self.l_debug('discover','Got Tag: {}'.format(tag))
+            self.controller.addNode(wst12(self.controller, self.address, tdata=tag))
     """
     Misc functions
     """
