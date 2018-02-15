@@ -72,6 +72,7 @@ class wstREST():
         eh.parent = self
         self.server = HTTPServer(self.address, wstHandler)
         self.url     = 'http://{0}:{1}'.format(self.server.server_address[0],self.server.server_address[1])
+        self.listen_port = self.server.server_address[1]
         self.logger.info("wstREST: Running on: {0}".format(self.url))
         self.thread  = threading.Thread(target=self.server.serve_forever)
         #t.setDaemon(True) # don't hang on exit

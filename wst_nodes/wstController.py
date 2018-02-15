@@ -67,6 +67,7 @@ class wstController(polyinterface.Controller):
             # TODO: Should we set a flag so poll can just restart the server, instead of exiting?
             logger.info('Exiting from keyboard interupt')
             sys.exit()
+        self.set_port(self.wst.listen_port)
         self.save_params()
         self.discover() # Temporary, discover on startup
         self.query()
@@ -236,6 +237,12 @@ class wstController(polyinterface.Controller):
         else:
             self.setDriver('GV4', 0)
 
+    def set_port(self,value,force=False):
+        if not force and hasattr(self,"port") and self.port == value:
+            return True
+        self.port = value
+        self.setDriver('GV5', value)
+
     """
     Command Functions
     """
@@ -258,4 +265,5 @@ class wstController(polyinterface.Controller):
         {'driver': 'GV2', 'value': 0, 'uom': 56}, # vmin: Version Minor
         {'driver': 'GV3', 'value': 0, 'uom': 2},  # auth: Authorized (we have valid oauth2 token)
         {'driver': 'GV4', 'value': 0, 'uom': 2},  # comm: Communicating
+        {'driver': 'GV5', 'value': 0, 'uom': 56}, # port: REST Server Listen port
     ]

@@ -168,7 +168,7 @@ class wst12(polyinterface.Node):
         self.yaxis = value
         self.setDriver('GV5', self.yaxis)
         
-    def set_xaxis(self,value,force=False):
+    def set_zaxis(self,value,force=False):
         value = int(value)
         if not force and hasattr(self,"zaxis") and self.zaxis == value:
             return True
