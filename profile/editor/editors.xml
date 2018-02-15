@@ -8,7 +8,7 @@
     </editor>
 
     <editor id="B_ONOFF">
-        <range uom="2" subset="0,1", nls="ONOFF" />
+        <range uom="2" subset="0,1" nls="ONOFF" />
     </editor>
 
     <!-- Temperature -->
@@ -33,7 +33,7 @@
    
     <!-- Motion -->
    <editor id="I_MOTION">
-      <range uom="25" subset="0,1,2,3", nls="MOT4" />
+      <range uom="25" subset="0,1,2,3" nls="MOT4" />
    </editor>
    
 </editors>
