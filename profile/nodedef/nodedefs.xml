@@ -2,7 +2,7 @@
   <!-- NODE DEF from 5.0 document http://wiki.universal-devices.com/index.php?title=V50_MAIN -->
   <!-- controller -->
   
-  <nodeDef id="wstCntl" nls="cntl">
+  <nodeDef id="wtController" nls="cntl">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
@@ -29,7 +29,7 @@
 
   
   <!-- Tag Manager -->
-  <nodeDef id="wstTagManager" nls="tagmgr">
+  <nodeDef id="wTagManager" nls="tagmgr">
     <editors />
     <sts>
       <st id="ST" editor="bool" />
@@ -45,7 +45,7 @@
 
   
   <!-- Tag 12 -->
-  <nodeDef id="wst12" nls="tag12">
+  <nodeDef id="wTag12" nls="tag12">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />

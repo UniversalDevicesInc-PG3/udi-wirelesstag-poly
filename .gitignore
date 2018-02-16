@@ -3,10 +3,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Project Specific
-logs/
-profile.zip
-
 # C extensions
 *.so
 
@@ -71,4 +67,11 @@ target/
 #Project specific
 polyinterface
 *~
+logs/
+profile.zip
+#Emacs backup file
+*~
+.AppleDouble
+.DS_Store
+*.sublime-*
 

@@ -5,12 +5,12 @@ by JimBoCA jimboca3@gmail.com
 import polyinterface
 import sys
 import time
-from wst_funcs import get_valid_node_name
-from wst_nodes import wst12
+from wt_funcs import get_valid_node_name
+from wt_nodes import wTag12
 
 LOGGER = polyinterface.LOGGER
 
-class wstTagManager(polyinterface.Node):
+class wTagManager(polyinterface.Node):
     """
     This is the class that all the Nodes will be represented by. You will add this to
     Polyglot/ISY with the controller.addNode method.
@@ -44,7 +44,7 @@ class wstTagManager(polyinterface.Node):
         self.mac      = mac
         self.do_discover = discover
         address = get_valid_node_name(mac)
-        super(wstTagManager, self).__init__(controller, address, address, name)
+        super(wTagManager, self).__init__(controller, address, address, name)
 
     def start(self):
         """
@@ -66,7 +66,6 @@ class wstTagManager(polyinterface.Node):
         self.reportDrivers()
 
     def discover(self):
-        #self.controller.addNode(wst12(self.controller, self.address, 'test12', 'Test 12')
         ret = self.get_tag_list()
         if ret['st'] is False:
             return
@@ -74,18 +73,18 @@ class wstTagManager(polyinterface.Node):
         for tag in ret['result']:
             self.l_debug('discover','Got Tag: {}'.format(tag))
             tag['tid'] = index
-            self.controller.addNode(wst12(self.controller, self.address, tdata=tag))
+            self.controller.addNode(wTag12(self.controller, self.address, tdata=tag))
     """
     Misc functions
     """
 
     def get_tag_list(self):
-        ret = self.controller.wst.SelectTagManager(self.mac)
+        ret = self.controller.wtServer.SelectTagManager(self.mac)
         if ret['st'] is False:
             self.set_st(False)
             self.l_error('get_tag_list',"Unable to select tag manager: {}".format(self.mac))
         else:
-            ret = self.controller.wst.GetTagList()
+            ret = self.controller.wtServer.GetTagList()
             if ret['st'] is False:
                 self.set_st(False)
                 self.l_error('get_tag_list',"Unable to select get tags")
@@ -143,7 +142,7 @@ class wstTagManager(polyinterface.Node):
         self.setDriver('ST', 0)
 
     
-    id = 'wstTagManager'
+    id = 'wTagManager'
     drivers = [
         {'driver': 'ST',  'value': 0, 'uom': 2},
     ]

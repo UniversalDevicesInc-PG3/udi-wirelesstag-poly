@@ -9,13 +9,7 @@ from urllib import parse
 from urllib.parse import parse_qsl
 import socket, threading, sys, requests, json
 
-#logging.basicConfig(
-#    level=10,
-#    format='%(levelname)s:\t%(name)s\t%(message)s'
-#)
-#WST_LOGGER = polyinterface.LOGGER
-
-class wstHandler(BaseHTTPRequestHandler):
+class wtHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         parsed_path = parse.urlparse(self.path)
@@ -56,7 +50,7 @@ class wstHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(message.encode('utf-8'))
 
-class wstREST():
+class wtREST():
 
     def __init__(self,parent,logger):
         self.parent  = parent
@@ -66,26 +60,26 @@ class wstREST():
         port    = 0
         self.myip    = self.get_network_ip('8.8.8.8')
         self.address = (self.myip, port) # let the kernel give us a port
-        self.logger.debug("wstREST: address={0}".format(self.address))
+        self.logger.debug("wtREST: address={0}".format(self.address))
         # Get a handler and set parent to myself, so we can process the requests.
-        eh = wstHandler
+        eh = wtHandler
         eh.parent = self
-        self.server = HTTPServer(self.address, wstHandler)
+        self.server = HTTPServer(self.address, wtHandler)
         self.url     = 'http://{0}:{1}'.format(self.server.server_address[0],self.server.server_address[1])
         self.listen_port = self.server.server_address[1]
-        self.logger.info("wstREST: Running on: {0}".format(self.url))
+        self.logger.info("wtREST: Running on: {0}".format(self.url))
         self.thread  = threading.Thread(target=self.server.serve_forever)
         #t.setDaemon(True) # don't hang on exit
         self.thread.start()
         #try:
         #    self.server.serve_forever()
         #except KeyboardInterrupt:
-        #    self.logger.info('wstREST: Exiting from interupt')
+        #    self.logger.info('wtREST: Exiting from interupt')
         #    self.server.shutdown()
         #    self.server.server_close()
         #    raise
         #except Exception as err:
-        #    self.logger.error('wstREST: failed: {0}'.format(err), exc_info=True)
+        #    self.logger.error('wtREST: failed: {0}'.format(err), exc_info=True)
         #self.server.shutdown()
         #self.server.server_close()
 
@@ -103,7 +97,7 @@ class wstREST():
         s.close()
         return rt
 
-class wst():
+class wtServer():
 
     def __init__(self,logger,client_id,client_secret,ghandler=None,oauth2_code=False):
         self.logger = logger
@@ -115,7 +109,7 @@ class wst():
         self.token_type   = None
 
     def start(self):
-        self.rest = wstREST(self,self.logger)
+        self.rest = wtREST(self,self.logger)
         self.rest.start()
         self.listen_url  = self.rest.url
         self.listen_port = self.rest.listen_port
@@ -307,7 +301,7 @@ if __name__ == '__main__':
     client_id     = "3b08b242-f0f8-41c0-ba29-6b0478cd0b77"
     client_secret = "0b947853-1676-4a63-a384-72769c88f3b1"
     code          = "d967868a-144e-49ed-921f-c27b65dda06a"
-    obj = wst(logger,client_id,client_secret,ghandler=my_ghandler)
+    obj = wtServer(logger,client_id,client_secret,ghandler=my_ghandler)
     try:
         obj.start()
     except KeyboardInterrupt:
@@ -328,5 +322,5 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         pass
     except Exception as err:
-        logger.error('wstREST: failed: {0}'.format(err), exc_info=True)
+        logger.error('wtREST: failed: {0}'.format(err), exc_info=True)
     sys.exit()

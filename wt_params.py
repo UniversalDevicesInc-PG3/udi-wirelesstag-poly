@@ -1,5 +1,5 @@
 
-tag_params = {
+wt_params = {
 
     # When tag sends a temperature/humidity/brightness update - 
     # {0}: Tag name, {1}: Tag ID, {2}: temperature in °C, {3}: humidity/moisture (%), {4}: brightness (lux), {5}: timestamp

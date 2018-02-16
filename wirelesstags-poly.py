@@ -6,13 +6,13 @@ by JimBoCA jimboca3@gmail.com
 import polyinterface
 import sys
 import time
-from wst_nodes import wstController
+from wt_nodes import wtController
 
 LOGGER = polyinterface.LOGGER
 
 if __name__ == "__main__":
     try:
-        polyglot = polyinterface.Interface('WST')
+        polyglot = polyinterface.Interface('WT')
         """
         Instantiates the Interface to Polyglot.
         """
@@ -20,7 +20,7 @@ if __name__ == "__main__":
         """
         Starts MQTT and connects to Polyglot.
         """
-        control = wstController(polyglot)
+        control = wtController(polyglot)
         """
         Creates the Controller Node and passes in the Interface
         """

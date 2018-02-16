@@ -1,5 +1,5 @@
 # controller
-ND-wstCntl-NAME = Wireless Sensor Tags Controller
+ND-wstController-NAME = Wireless Tags Controller
 CMD-cntl-DISCOVER-NAME = Discover
 CMD-cntl-QUERY-NAME = Query
 CMD-cntl-INSTALL_PROFILE-NAME = Install Profile
@@ -11,11 +11,11 @@ ST-cntl-GV4-NAME = OAUTH2
 ST-cntl-GV5-NAME = Listen Port
 
 # Tag Manager
-ND-wstTagManager-NAME = Wireless Sensor Tag Manager
-ST-wstTagManager-ST-NAME = Status
+ND-wTagManager-NAME = Wireless Tags Manager
+ST-wTagManager-ST-NAME = Status
 
 # Tag
-ND-wst12-NAME = Wireless Sensor Tag 12
+ND-wTag12-NAME = Wireless Tags 12
 
 ST-tag12-ST-NAME = Tag Status
 ST-tag12-GV1-NAME = Light

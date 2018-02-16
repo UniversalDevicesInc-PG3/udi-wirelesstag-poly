@@ -3,13 +3,13 @@ import polyinterface
 import sys
 import time
 
-from wst_nodes import wstTagManager
-from wst import wst
-from wst_funcs import get_valid_node_name
+from wt_nodes import wTagManager
+from wtServer import wtServer
+from wt_funcs import get_valid_node_name
 
 LOGGER = polyinterface.LOGGER
 
-class wstController(polyinterface.Controller):
+class wtController(polyinterface.Controller):
     client_id     = "3b08b242-f0f8-41c0-ba29-6b0478cd0b77"
     client_secret = "0b947853-1676-4a63-a384-72769c88f3b1"
     auth_url      = "https://www.wirelesstag.net/oauth2/authorize.aspx?client_id={0}".format(client_id)
@@ -46,9 +46,9 @@ class wstController(polyinterface.Controller):
         Super runs all the parent class necessities. You do NOT have
         to override the __init__ method, but if you do, you MUST call super.
         """
-        super(wstController, self).__init__(polyglot)
-        self.name = 'WirelessTag Controller'
-        self.address = 'wirelesstagctl'
+        super(wtController, self).__init__(polyglot)
+        self.name = 'WirelessTagsController'
+        self.address = 'wtcontroller'
         self.primary = self.address
 
     def start(self):
@@ -62,16 +62,16 @@ class wstController(polyinterface.Controller):
         """
         self.l_info('start','WirelessSensorTags Polyglot...')
         self.load_params()
-        self.wst = wst(LOGGER,self.client_id,self.client_secret,self.get_handler,self.oauth2_code)
+        self.wtServer = wtServer(LOGGER,self.client_id,self.client_secret,self.get_handler,self.oauth2_code)
         try:
-            self.wst.start()
+            self.wtServer.start()
         except KeyboardInterrupt:
             # TODO: Should we set a flag so poll can just restart the server, instead of exiting?
             logger.info('Exiting from keyboard interupt')
             sys.exit()
-        self.set_port(self.wst.listen_port)
+        self.set_port(self.wtServer.listen_port)
         self.save_params()
-        self.discover() # Temporary, discover on startup
+        self.discover() # TODO: Temporary, discover on startup, or always?
         self.query()
 
     def shortPoll(self):
@@ -105,9 +105,9 @@ class wstController(polyinterface.Controller):
         nodes back to ISY. If you override this method you will need to Super or
         issue a reportDrivers() to each node manually.
         """
-        if self.wst.oauth2_code == False:
+        if self.wtServer.oauth2_code == False:
             self.set_auth(False)
-            self.l_error('discover',"Not able to query oauth2_code={}".format(self.wst.oauth2_code))
+            self.l_error('discover',"Not able to query oauth2_code={}".format(self.wtServer.oauth2_code))
             return False
         self.set_auth(True)
         # Call longPoll since it check the comm status
@@ -121,9 +121,9 @@ class wstController(polyinterface.Controller):
         Do discovery here. Does not have to be called discovery. Called from example
         controller start method and from DISCOVER command recieved from ISY as an exmaple.
         """
-        if self.wst.oauth2_code == False:
+        if self.wtServer.oauth2_code == False:
             self.set_auth(False)
-            self.l_error('discover',"Not able to discover oauth2_code={}".format(self.wst.oauth2_code))
+            self.l_error('discover',"Not able to discover oauth2_code={}".format(self.wtServer.oauth2_code))
             return False
         self.set_auth(True)
         self.save_params()
@@ -131,7 +131,7 @@ class wstController(polyinterface.Controller):
         if mgd['st']:
             for mgr in mgd['result']:
                 self.l_debug("discover","TagManager={0}".format(mgr))
-                self.addNode(wstTagManager(self, mgr['mac'], mgr['name'], discover=True))
+                self.addNode(wTagManager(self, mgr['mac'], mgr['name'], discover=True))
 
     def delete(self):
         """
@@ -183,10 +183,10 @@ class wstController(polyinterface.Controller):
      Misc funcs
     """
     def get_tag_managers(self):
-        if self.wst.oauth2_code == False:
+        if self.wtServer.oauth2_code == False:
             self.l_error('get_tag_managers',"oauth2_code={}".format(self.wst.oauth2_code))
             return { 'st': False }
-        mgd = self.wst.GetTagManagers();
+        mgd = self.wtServer.GetTagManagers();
         if mgd['st']:
             self.set_comm(True)
         else:
@@ -214,7 +214,13 @@ class wstController(polyinterface.Controller):
         self.addCustomParam({'oauth2_code': self.oauth2_code})
         self.removeNoticesAll()
         if self.oauth2_code == False:
-            self.addNotice('Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wst.url))
+            self.addNotice('Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wtServer.url))
+
+    def set_url_config(self):
+        # TODO: Loop over tags and set_url_config on each
+        for address in self.nodes:
+            if not (self.nodes[address].id == 'wtController' or self.nodes[address].id == 'wTagManger'):
+                self.nodes[address].set_url_config()
 
     def l_info(self, name, string):
         LOGGER.info("%s:%s: %s" %  (self.id,name,string))
@@ -235,7 +241,7 @@ class wstController(polyinterface.Controller):
         if self.oauth2_code != value:
             self.oauth2_code = value
             self.save_params()
-            self.save_event_url_config()
+            self.set_url_config()
         if value is False:
             self.set_auth(False)
             self.set_comm(False)
@@ -278,7 +284,7 @@ class wstController(polyinterface.Controller):
     """
     Node Definitions
     """
-    id = 'wstCntl'
+    id = 'wtController'
     commands = {
         'QUERY': query,
         'DISCOVER': discover,

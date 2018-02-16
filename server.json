@@ -2,7 +2,7 @@
     "name": "WirelessTag",
     "docs": "https://github.com/jimboca/udi-WirelessSensorTags-poly",
     "type": "python3",
-    "executable": "wst-poly.py",
+    "executable": "wirelesstags-poly.py",
     "install": "install.sh",
     "description": "Node Server for CAO Gadgets Wireless Sensor Tags www.wirelesstag.net",
     "notice": "No disclaimer here",
@@ -12,7 +12,7 @@
         {
             "title": "udi-WirelessSensorTags-poly: A NodeServer for CAO Gadgets Wireless Sensor Tags",
             "author": "JimBoCA",
-            "version": "0.0.1.0",
+            "version": "0.0.2",
             "date": "February 11, 2017",
             "source": "https://github.com/jimboca/udi-wirelesstag-poly",
             "license": "https://raw.githubusercontent.com/jimboca/udi-wirelesstag-poly/master/LICENSE"

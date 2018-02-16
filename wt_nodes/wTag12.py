@@ -5,12 +5,12 @@ by JimBoCA jimboca3@gmail.com
 import polyinterface
 import sys
 import time
-from wst_funcs import id_to_address,myfloat
-from tag_params import tag_params
+from wt_funcs import id_to_address,myfloat
+from wt_params import wt_params
 
 LOGGER = polyinterface.LOGGER
 
-class wst12(polyinterface.Node):
+class wTag12(polyinterface.Node):
     """
     This is the class that all the Nodes will be represented by. You will add this to
     Polyglot/ISY with the controller.addNode method.
@@ -51,7 +51,7 @@ class wst12(polyinterface.Node):
             name       = tdata['name']
         else:
             self.tdata = dict()
-        super(wst12, self).__init__(controller, primary, address, name)
+        super(wTag12, self).__init__(controller, primary, address, name)
 
     def start(self):
         """
@@ -75,18 +75,18 @@ class wst12(polyinterface.Node):
     """
     def set_url_config(self):
         def_param = '0={0}&1={1}&2={2}'
-        mgd = self.controller.wst.LoadEventURLConfig({'id':self.tid})
+        mgd = self.controller.wtServer.LoadEventURLConfig({'id':self.tid})
         self.l_debug('set_url_config','{0}'.format(mgd))
         if mgd['st'] is False:
             return False
         else:
-            url = self.controller.wst.listen_url
+            url = self.controller.wtServer.listen_url
             #{'in_free_fall': {'disabled': True, 'nat': False, 'verb': None, 'url': 'http://', 'content': None}
             newconfig = dict()
             for key, value in mgd['result'].items():
                 if key != '__type':
-                    if key in tag_params:
-                        param = tag_params[key]
+                    if key in wt_params:
+                        param = wt_params[key]
                     else:
                         self.l_error('set_url_config',"Unknown tag param '{0}'".format(key))
                         param = def_param
@@ -95,7 +95,7 @@ class wst12(polyinterface.Node):
                     value['url'] = '{0}/{1}?{2}'.format(url,key,param)
                     value['nat'] = True
                     newconfig[key] = value
-            res = self.controller.wst.SaveEventURLConfig({'id':self.tid, 'config': newconfig, 'applyAll': False})
+            res = self.controller.wtServer.SaveEventURLConfig({'id':self.tid, 'config': newconfig, 'applyAll': False})
 
     def l_info(self, name, string):
         LOGGER.info("%s:%s:%s: %s" %  (self.id,self.name,name,string))
@@ -278,7 +278,7 @@ class wst12(polyinterface.Node):
       "batteryRemaining":1.13 # = 113% ?
     }]}
     """
-    id = 'wst12'
+    id = 'wTag12'
     drivers = [
         {'driver': 'ST',      'value': 0, 'uom': 2},
         {'driver': 'GV1',     'value': 0, 'uom': 78}, # lit:    Light status (78=Off/On)
