@@ -139,6 +139,9 @@ class wst():
                 message += "ERROR: Unable to get access token from code, see log"
             else:
                 message += "SUCCESS, received our token, will save in Polyglot database for the future"
+        elif command == "/favicon.ico":
+            # Ignore this, where does it come from?
+            pass
         else:
             if self.ghandler is None:
                 code = 500

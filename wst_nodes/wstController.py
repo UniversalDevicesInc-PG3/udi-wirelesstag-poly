@@ -148,6 +148,9 @@ class wstController(polyinterface.Controller):
     def get_handler(self,command,params):
         self.l_debug('get_handler','processing command={0} params={1}'.format(command,params))
         node = None
+        if not 'tagname' in params:
+            self.l_error('get_handler','Tag name not in params? command={0} params={1}'.format(command,params))
+            return False
         for address in self.nodes:
             if self.nodes[address].name == params['tagname']:
                 node = self.nodes[address]
