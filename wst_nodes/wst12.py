@@ -6,6 +6,9 @@ import polyinterface
 import sys
 import time
 from wst_funcs import id_to_address,myfloat
+from tag_params import tag_params
+
+LOGGER = polyinterface.LOGGER
 
 class wst12(polyinterface.Node):
     """
@@ -42,6 +45,7 @@ class wst12(polyinterface.Node):
                 self.l_error('__init__',"address ({0}) and name ({0}) must be specified when tdata is None".format(address,tdata))
                 return
             self.tdata = tdata
+            self.tid   = tdata['tid']
             self.uuid  = tdata['uuid']
             address    = id_to_address(self.uuid)
             name       = tdata['name']
@@ -57,6 +61,7 @@ class wst12(polyinterface.Node):
         """
         self.setDriver('ST', 1)
         self.set_from_tag_data()
+        self.set_url_config()
 
     def query(self):
         """
@@ -68,6 +73,30 @@ class wst12(polyinterface.Node):
 
     """
     """
+    def set_url_config(self):
+        def_param = '0={0}&1={1}&2={2}'
+        mgd = self.controller.wst.LoadEventURLConfig({'id':self.tid})
+        self.l_debug('set_url_config','{0}'.format(mgd))
+        if mgd['st'] is False:
+            return False
+        else:
+            url = self.controller.wst.listen_url
+            #{'in_free_fall': {'disabled': True, 'nat': False, 'verb': None, 'url': 'http://', 'content': None}
+            newconfig = dict()
+            for key, value in mgd['result'].items():
+                if key != '__type':
+                    if key in tag_params:
+                        param = tag_params[key]
+                    else:
+                        self.l_error('set_url_config',"Unknown tag param '{0}'".format(key))
+                        param = def_param
+                    self.l_debug('set_url_config',"key={0} value={1}".format(key,value))
+                    value['disabled'] = False
+                    value['url'] = '{0}/{1}?{2}'.format(url,key,param)
+                    value['nat'] = True
+                    newconfig[key] = value
+            res = self.controller.wst.SaveEventURLConfig({'id':self.tid, 'config': newconfig, 'applyAll': False})
+
     def l_info(self, name, string):
         LOGGER.info("%s:%s:%s: %s" %  (self.id,self.name,name,string))
         

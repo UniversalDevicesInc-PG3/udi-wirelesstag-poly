@@ -117,6 +117,7 @@ class wst():
     def start(self):
         self.rest = wstREST(self,self.logger)
         self.rest.start()
+        self.listen_url  = self.rest.url
         self.listen_port = self.rest.listen_port
         self.url = self.rest.url
         if self.oauth2_code != False:
@@ -139,6 +140,8 @@ class wst():
                 message += "ERROR: Unable to get access token from code, see log"
             else:
                 message += "SUCCESS, received our token, will save in Polyglot database for the future"
+            if self.ghandler is not None:
+                self.ghandler(command,{'oauth2_code': self.oauth2_code})
         elif command == "/favicon.ico":
             # Ignore this, where does it come from?
             code = 200
@@ -269,6 +272,26 @@ class wst():
         else:
             ret = { 'st': False }
         return ret
+
+    # http://wirelesstag.net/ethClient.asmx?op=LoadEventURLConfig
+    def LoadEventURLConfig(self,params):
+        aret = self.http_post('ethClient.asmx/LoadEventURLConfig',json.dumps(params))
+        self.l_debug('LoadEventURLConfig',aret)
+        if 'd' in aret:
+            ret = { 'st': True, 'result': aret['d'] }
+        else:
+            ret = { 'st': False }
+        return ret
+
+    # http://wirelesstag.net/ethClient.asmx?op=SaveEventURLConfig
+    def SaveEventURLConfig(self,params):
+        aret = self.http_post('ethClient.asmx/SaveEventURLConfig',json.dumps(params))
+        self.l_debug('SaveEventURLConfig',aret)
+        #if 'd' in aret:
+        #    ret = { 'st': True, 'result': aret['d'] }
+        #else:
+        #    ret = { 'st': False }
+        return aret
 
 def my_ghandler(command,params):
     return True

@@ -150,6 +150,8 @@ class wstController(polyinterface.Controller):
     """
     def get_handler(self,command,params):
         self.l_debug('get_handler','processing command={0} params={1}'.format(command,params))
+        if command == '/code':
+            return self.set_oauth2(params['oauth2_code'])
         node = None
         if not 'tagname' in params:
             self.l_error('get_handler','Tag name not in params? command={0} params={1}'.format(command,params))
@@ -160,7 +162,7 @@ class wstController(polyinterface.Controller):
         if node is None:
             self.l_error('get_handler',"Did not find node with name '{0}' id '{1}'".format(params['tagname'],params['tagid']))
             return False
-        if command == '/motion':
+        if command == '/motion_detected':
             # {'ts': '2018-02-15T12:44:04 00:00', 'tagid': '0', 'zaxis': '-81', 'xaxis': '51', 'tagname': 'GarageFreezer', 'orien': '100', 'yaxis': '129'}
             node.set_motion(1)
             node.set_orien(params['orien'])
@@ -172,6 +174,9 @@ class wstController(polyinterface.Controller):
             node.set_temp(params['temp'])
             #node.set_hum(params['hum']
             #node.set_lux(params['lux']
+        else:
+            self.l_error('get_handler',"Unknown command '{0}'".format(command))
+            return False
         return True
 
     """
@@ -187,7 +192,7 @@ class wstController(polyinterface.Controller):
         else:
             self.set_comm(False)
         return mgd
-    
+
     def get_node(self,address):
         self.l_info('get_node',"adress={0}".format(address))
         for node in self.nodes:
@@ -205,9 +210,7 @@ class wstController(polyinterface.Controller):
             st = False
 
     def save_params(self):
-        # Always use the server oauth2_code if defined?s
-        if self.wst.oauth2_code != False:
-            self.oauth2_code = self.wst.oauth2_code
+        # Make sure latest code is in the params
         self.addCustomParam({'oauth2_code': self.oauth2_code})
         self.removeNoticesAll()
         if self.oauth2_code == False:
@@ -228,6 +231,19 @@ class wstController(polyinterface.Controller):
     """
     Set Functions
     """
+    def set_oauth2(self,value):
+        if self.oauth2_code != value:
+            self.oauth2_code = value
+            self.save_params()
+            self.save_event_url_config()
+        if value is False:
+            self.set_auth(False)
+            self.set_comm(False)
+        else:
+            self.set_auth(True)
+            self.set_comm(True)
+        return True
+
     def set_auth(self,value,force=False):
         if not force and hasattr(self,"auth") and self.auth == value:
             return True

@@ -70,8 +70,10 @@ class wstTagManager(polyinterface.Node):
         ret = self.get_tag_list()
         if ret['st'] is False:
             return
+        index = 0
         for tag in ret['result']:
             self.l_debug('discover','Got Tag: {}'.format(tag))
+            tag['tid'] = index
             self.controller.addNode(wst12(self.controller, self.address, tdata=tag))
     """
     Misc functions
