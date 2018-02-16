@@ -7,6 +7,8 @@ ST-cntl-ST-NAME = NodeServer Online
 ST-cntl-GV1-NAME = Version Major
 ST-cntl-GV2-NAME = Version Minor
 ST-cntl-GV3-NAME = Commumicating
+ST-cntl-GV4-NAME = OAUTH2
+ST-cntl-GV5-NAME = Listen Port
 
 # Tag Manager
 ND-wstTagManager-NAME = Wireless Sensor Tag Manager
