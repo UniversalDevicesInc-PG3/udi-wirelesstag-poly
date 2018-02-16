@@ -141,7 +141,8 @@ class wst():
                 message += "SUCCESS, received our token, will save in Polyglot database for the future"
         elif command == "/favicon.ico":
             # Ignore this, where does it come from?
-            pass
+            code = 200
+            message = "Ignored {0}".format(command)
         else:
             if self.ghandler is None:
                 code = 500
