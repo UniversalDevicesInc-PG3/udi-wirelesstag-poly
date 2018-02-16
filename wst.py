@@ -243,10 +243,10 @@ class wst():
     def GetTagManagers(self):
         aret = self.http_post('ethAccount.asmx/GetTagManagers',{})
         self.l_debug('getTagManagers',aret)
-        if 'd' in aret:
-            ret = { 'st': True, 'result': aret['d'] }
-        else:
+        if aret is False or not 'd' in aret:
             ret = { 'st': False }
+        else:
+            ret = { 'st': True, 'result': aret['d'] }
         return ret
 
     # http://wirelesstag.net/ethAccount.asmx?op=SelectTagManager
