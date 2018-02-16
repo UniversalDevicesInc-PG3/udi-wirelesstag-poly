@@ -172,6 +172,9 @@ class wstController(polyinterface.Controller):
      Misc funcs
     """
     def get_tag_managers(self):
+        if self.wst.oauth2_code == False:
+            self.l_error('get_tag_managers',"oauth2_code={}".format(self.wst.oauth2_code))
+            return False
         mgd = self.wst.GetTagManagers();
         if mgd['st']:
             self.set_comm(True)

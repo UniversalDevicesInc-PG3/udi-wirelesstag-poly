@@ -111,6 +111,8 @@ class wst():
         self.client_secret = client_secret
         self.ghandler=ghandler
         self.oauth2_code = oauth2_code
+        self.access_token = False
+        self.token_type   = None
 
     def start(self):
         self.rest = wstREST(self,self.logger)
@@ -179,6 +181,9 @@ class wst():
         url = "http://wirelesstag.net/{}".format(path)
         self.l_debug('http_post',"Sending: url={0} payload={1}".format(url,payload))
         if use_token:
+            if self.access_token is False:
+                self.l_error('http_post',"No authorization for url={0} payload={1}".format(url,payload))
+                return False
             headers = {
                 "Authorization": "{0} {1}".format(self.token_type,self.access_token),
                 "Content-Type": "application/json"
