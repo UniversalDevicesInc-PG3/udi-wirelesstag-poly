@@ -80,3 +80,4 @@ wt_params = {
     # {0}: Tag name, {1}: Tag ID, {2}: timestamp
     'water_dried': 'tagname={0}&mois={1}&ts={2}',
  }
+ 

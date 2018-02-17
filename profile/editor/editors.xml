@@ -11,6 +11,10 @@
       <range uom="56" min="0" max="4294967295" prec="0" />
     </editor>
 
+    <editor id="I_TAGID">
+      <range uom="56" min="0" max="92" prec="0" />
+    </editor>
+
     <editor id="B_ONOFF">
         <range uom="2" subset="0,1" nls="ONOFF" />
     </editor>

@@ -1,5 +1,5 @@
 # controller
-ND-wstController-NAME = Wireless Tags Controller
+ND-wtController-NAME = Wireless Tags Controller
 CMD-cntl-DISCOVER-NAME = Discover
 CMD-cntl-QUERY-NAME = Query
 CMD-cntl-INSTALL_PROFILE-NAME = Install Profile
@@ -14,11 +14,20 @@ ST-cntl-GV5-NAME = Listen Port
 ND-wTagManager-NAME = Wireless Tags Manager
 ST-wTagManager-ST-NAME = Status
 
-# Tag
-ND-wTag12-NAME = Wireless Tags 12
+# Tags http://wirelesstag.net/kumoapp/17/tags-kumosensors-kumostats
+ND-wTag12-NAME = Motion Sensor Tag (8-bit temperature) (12)
+ND-wTag13-NAME = Motion Sensor Tag (13-bit temperature+humidity) (13)
+ND-wTag21-NAME = Motion Sensor Tag Pro (21)
+ND-wTag26-NAME = Motion Sensor Tag Pro ALS (Ambient Light Sensor) (26)
+ND-wTag32-NAME = Water/Soil moisture sensor	(32)
+ND-wTag52-NAME = Door/window (reed) KumoSensor (52)
+ND-wTag62-NAME = Kumostat/Nest Thremostat (62)
+ND-wTag72-NAME = Infra-Red (PIR) KumoSensor (72)
+ND-wTag82-NAME = WeMo Switches/Maker/LED (82)
+ND-wTag92-NAME = Webcams (Dropcam) (92)
 
-ST-tag12-ST-NAME = Tag Status
-ST-tag12-GV1-NAME = Light
+ST-ST-NAME = Tag Status
+ST-GV1-NAME = Tag Type
 ST-tag12-CV-NAME = Battery Voltage
 ST-tag12-GV2-NAME = Motion
 ST-tag12-GV3-NAME = Orientation

@@ -38,17 +38,24 @@ class wtHandler(BaseHTTPRequestHandler):
                 message_parts.append(
                     '{}={}'.format(name, value.rstrip())
                 )
-            message_parts.append('')
-            message = '\r\n'.join(message_parts)
         else:
-            message = "Received: {0} {1}. ".format(parsed_path.path,self.query)
+            message_parts = ["Received: {0} {1}. ".format(parsed_path.path,self.query)]
+        # We send back a response quickly cause the TAG Manager doesn't wait very long?
         hrt = self.parent.get_handler(parsed_path.path,self.query)
-        message += hrt['message']
-        self.send_response(hrt['code'])
+        message_parts.append("Code: {0}".format(int(hrt['code'])))
+        message_parts.append(hrt['message'])
+        self.send_response(int(hrt['code']))
         self.send_header('Content-Type',
                          'text/plain; charset=utf-8')
         self.end_headers()
+        message_parts.append('')
+        message = '\r\n'.join(message_parts)
+        message += '\r\n'
         self.wfile.write(message.encode('utf-8'))
+
+    def log_message(self, fmt, *args):
+        # Stop log messages going to stdout
+        self.parent.logger.info('wtHandler:log_message' + fmt % args)
 
 class wtREST():
 

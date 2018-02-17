@@ -5,7 +5,6 @@ by JimBoCA jimboca3@gmail.com
 """
 import polyinterface
 import sys
-import time
 from wt_nodes import wtController
 
 LOGGER = polyinterface.LOGGER

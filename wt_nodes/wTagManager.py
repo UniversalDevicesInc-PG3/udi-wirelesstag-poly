@@ -6,7 +6,7 @@ import polyinterface
 import sys
 import time
 from wt_funcs import get_valid_node_name
-from wt_nodes import wTag12
+from wt_nodes import wTag
 
 LOGGER = polyinterface.LOGGER
 
@@ -73,7 +73,7 @@ class wTagManager(polyinterface.Node):
         for tag in ret['result']:
             self.l_debug('discover','Got Tag: {}'.format(tag))
             tag['tid'] = index
-            self.controller.addNode(wTag12(self.controller, self.address, tdata=tag))
+            self.controller.addNode(wTag(self.controller, self.address, tdata=tag))
     """
     Misc functions
     """

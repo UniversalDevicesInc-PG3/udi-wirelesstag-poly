@@ -10,7 +10,7 @@ from wt_params import wt_params
 
 LOGGER = polyinterface.LOGGER
 
-class wTag12(polyinterface.Node):
+class wTag(polyinterface.Node):
     """
     This is the class that all the Nodes will be represented by. You will add this to
     Polyglot/ISY with the controller.addNode method.
@@ -29,7 +29,7 @@ class wTag12(polyinterface.Node):
     reportDrivers(): Forces a full update of all drivers to Polyglot/ISY.
     query(): Called when ISY sends a query request to Polyglot for this specific node
     """
-    def __init__(self, controller, primary, address=None, name=None, tdata=None):
+    def __init__(self, controller, primary, address=None, name=None, tagType=None, tdata=None):
         """
         Optional.
         Super runs all the parent class necessities. You do NOT have
@@ -40,18 +40,20 @@ class wTag12(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
-        if address is None or name is None:
+        if address is None or name is None or tagType is None:
             if tdata is None:
-                self.l_error('__init__',"address ({0}) and name ({0}) must be specified when tdata is None".format(address,tdata))
+                self.l_error('__init__',"address ({0}), name ({1}), and type ({2}) must be specified when tdata is None".format(address,tdata,type))
                 return
             self.tdata = tdata
             self.tid   = tdata['tid']
             self.uuid  = tdata['uuid']
+            tagType    = tdata['tagType']
             address    = id_to_address(self.uuid)
             name       = tdata['name']
         else:
             self.tdata = dict()
-        super(wTag12, self).__init__(controller, primary, address, name)
+        self.id = 'wTag' + str(tagType)
+        super(wTag, self).__init__(controller, primary, address, name)
 
     def start(self):
         """
@@ -113,8 +115,10 @@ class wTag12(polyinterface.Node):
     Set Functions
     """
     def set_from_tag_data(self):
-        if 'lit' in self.tdata:
-            self.set_lit(self.tdata['lit'])
+        if 'tagType' in self.tdata:
+            self.set_tagType(self.tdata['tagType'],True)
+        else:
+            self.l_error('set_from_tag_data',"No tagType in tdata?")
         if 'temperature' in self.tdata:
             self.set_temp(self.tdata['temperature'])
         if 'batteryVolt' in self.tdata:
@@ -125,19 +129,20 @@ class wTag12(polyinterface.Node):
             self.set_lux(self.tdata['lux'])
         if 'hum' in self.tdata:
             self.set_hum(self.tdata['hum'])
-            
-    def set_lit(self,value,force=False):
-        if not force and hasattr(self,"lit") and self.lit == value:
+        if 'lit' in self.tdata:
+            self.set_lit(self.tdata['lit'])
+
+    # This is the tagType number, we don't really need to show it, but 
+    # we need the info when recreating the tags from the config.
+    def set_tagType(self,value,force=False):
+        if not force and hasattr(self,"tagType") and self.tagType == value:
             return True
-        self.lit = value
-        if value:
-            self.setDriver('GV1', 1)
-        else:
-            self.setDriver('GV1', 0)
+        self.tagType = value
+        self.setDriver('GV1', value)
         
     def set_temp(self,value,force=False):
         value = myfloat(value,2)
-        if not force and hasattr(self,"temp") and self.lit == value:
+        if not force and hasattr(self,"temp") and self.temp == value:
             return True
         self.temp = value
         self.setDriver('CLITEMP', self.temp)
@@ -148,7 +153,14 @@ class wTag12(polyinterface.Node):
             return True
         self.hum = value
         self.setDriver('CLIHUM', self.hum)
-        
+ 
+    def set_lit(self,value,force=False):
+        value = int(value)
+        if not force and hasattr(self,"lit") and self.lit == value:
+            return True
+        self.lit = value
+        self.setDriver('GV7', value)
+      
     def set_lux(self,value,force=False):
         value = int(value)
         if not force and hasattr(self,"lux") and self.lux == value:
@@ -278,10 +290,10 @@ class wTag12(polyinterface.Node):
       "batteryRemaining":1.13 # = 113% ?
     }]}
     """
-    id = 'wTag12'
+
     drivers = [
         {'driver': 'ST',      'value': 0, 'uom': 2},
-        {'driver': 'GV1',     'value': 0, 'uom': 78}, # lit:    Light status (78=Off/On)
+        {'driver': 'GV1',     'value': 0, 'uom': 56}, # tagType:    
         {'driver': 'CLITEMP', 'value': 0, 'uom': 17}, # temp:   Curent temperature (17=F 4=C)
         {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # batp:   Battery percent (51=percent)
         {'driver': 'LUMIN',   'value': 0, 'uom': 36}, # lux:    Lux (36=lux)
@@ -291,8 +303,10 @@ class wTag12(polyinterface.Node):
         {'driver': 'GV3',     'value': 0, 'uom': 56}, # orien:  Orientation
         {'driver': 'GV4',     'value': 0, 'uom': 56}, # xaxis:  X-Axis
         {'driver': 'GV5',     'value': 0, 'uom': 56}, # yasis:  Y-Axis
-        {'driver': 'GV6',     'value': 0, 'uom': 56}  # zaxis:  Z-Asis
+        {'driver': 'GV6',     'value': 0, 'uom': 56}, # zaxis:  Z-Asis
+        {'driver': 'GV7',     'value': 0, 'uom': 78}  # lit:    Lighth 78=off/off
     ]
+
     commands = {
         'DON': cmd_set_on,
         'DOF': cmd_set_off,

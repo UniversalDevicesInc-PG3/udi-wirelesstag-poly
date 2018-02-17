@@ -3,6 +3,6 @@
 
 import polyinterface
 
-from .wTag12       import wTag12
+from .wTag         import wTag
 from .wTagManager  import wTagManager
 from .wtController import wtController

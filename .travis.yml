@@ -11,4 +11,4 @@ install:
 script:
     - xmllint --noout profile/*/*.xml
     - /usr/bin/make profile.zip
-    - ./wst-poly.py
+    - python wirelesstags-poly.py

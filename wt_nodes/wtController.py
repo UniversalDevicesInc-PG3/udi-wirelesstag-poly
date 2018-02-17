@@ -171,9 +171,12 @@ class wtController(polyinterface.Controller):
             node.set_zaxis(params['zaxis'])
         elif command == '/update':
             #tagname=Garage Freezer&tagid=0&temp=-21.4213935329179&hum=0&lux=0&ts=2018-02-15T11:18:02+00:00 HTTP/1.1" 400 -
-            node.set_temp(params['temp'])
-            #node.set_hum(params['hum']
-            #node.set_lux(params['lux']
+            if 'temp' in params:
+                node.set_temp(params['temp'])
+            if 'hum' in params:
+                node.set_hum(params['hum'])
+            if 'lux' in params:
+                node.set_lux(params['lux'])
         else:
             self.l_error('get_handler',"Unknown command '{0}'".format(command))
             return False
