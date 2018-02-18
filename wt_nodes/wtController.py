@@ -5,7 +5,7 @@ import time
 
 from wt_nodes import wTagManager
 from wtServer import wtServer
-from wt_funcs import get_valid_node_name
+from wt_funcs import get_server_data,get_valid_node_name
 
 LOGGER = polyinterface.LOGGER
 
