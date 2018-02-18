@@ -370,10 +370,10 @@ class wtController(polyinterface.Controller):
     commands = {
         'SET_DM': cmd_set_debug_mode,
         'SET_SHORTPOLL': cmd_set_short_poll,
-        'SET_LONGPOLL':  cmd_set_long_poll
+        'SET_LONGPOLL':  cmd_set_long_poll,
         'QUERY': query,
         'DISCOVER': discover,
-        'INSTALL_PROFILE': cmd_install_profile,
+        'INSTALL_PROFILE': cmd_install_profile
     }
     drivers = [
         {'driver': 'ST',  'value': 0, 'uom': 2},
@@ -383,6 +383,6 @@ class wtController(polyinterface.Controller):
         {'driver': 'GV4', 'value': 0, 'uom': 2},  # comm: Communicating
         {'driver': 'GV5', 'value': 0, 'uom': 25}, # Debug (Log) Mode
         {'driver': 'GV6', 'value': 5, 'uom': 25}, # shortpoll
-        {'driver': 'GV7', 'value': 60, 'uom': 25}  # longpoll
-        {'driver': 'GV8', 'value': 0, 'uom': 56}, # port: REST Server Listen port
+        {'driver': 'GV7', 'value': 60, 'uom': 25},  # longpoll
+        {'driver': 'GV8', 'value': 0, 'uom': 56} # port: REST Server Listen port
     ]
