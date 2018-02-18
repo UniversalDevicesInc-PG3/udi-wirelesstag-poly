@@ -46,6 +46,8 @@ class wtController(polyinterface.Controller):
         Super runs all the parent class necessities. You do NOT have
         to override the __init__ method, but if you do, you MUST call super.
         """
+        self.serverdata = get_server_data(LOGGER)
+        self.l_info('init','Initializing VERSION=%s' % (self.serverdata['version']))
         super(wtController, self).__init__(polyglot)
         self.name = 'WirelessTagsController'
         self.address = 'wtcontroller'
@@ -69,6 +71,8 @@ class wtController(polyinterface.Controller):
             # TODO: Should we set a flag so poll can just restart the server, instead of exiting?
             logger.info('Exiting from keyboard interupt')
             sys.exit()
+        self.setDriver('GV1', self.serverdata['version_major'])
+        self.setDriver('GV2', self.serverdata['version_minor'])
         self.set_port(self.wtServer.listen_port)
         self.save_params()
         self.discover() # TODO: Temporary, discover on startup, or always?
@@ -98,7 +102,7 @@ class wtController(polyinterface.Controller):
                 node = self.get_node(get_valid_node_name(mgr['mac']))
                 if node is not None:
                     node.set_params(mgr)
-            
+
     def query(self):
         """
         Optional.
@@ -235,13 +239,13 @@ class wtController(polyinterface.Controller):
 
     def l_info(self, name, string):
         LOGGER.info("%s:%s: %s" %  (self.id,name,string))
-        
+
     def l_error(self, name, string):
         LOGGER.error("%s:%s: %s" % (self.id,name,string))
-        
+
     def l_warning(self, name, string):
         LOGGER.warning("%s:%s: %s" % (self.id,name,string))
-        
+
     def l_debug(self, name, string):
         LOGGER.debug("%s:%s: %s" % (self.id,name,string))
 
