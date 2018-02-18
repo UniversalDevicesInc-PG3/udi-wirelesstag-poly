@@ -295,7 +295,7 @@ class wtServer():
         return aret
 
     # http://wirelesstag.net/ethClient.asmx?op=GetServerTime
-    def ServerTime(self):
+    def GetServerTime(self):
         aret = self.http_post('ethClient.asmx/ServerTime',{})
         self.l_debug('GetServerTime',aret)
         if 'd' in aret:
