@@ -8,7 +8,19 @@ ST-cntl-GV1-NAME = Version Major
 ST-cntl-GV2-NAME = Version Minor
 ST-cntl-GV3-NAME = Commumicating
 ST-cntl-GV4-NAME = OAUTH2
-ST-cntl-GV5-NAME = Listen Port
+ST-cntl-GV5-NAME = Debug Mode
+ST-cntl-GV6-NAME = Short Poll
+ST-cntl-GV7-NAME = Long Poll
+ST-cntl-GV8-NAME = Listen Port
+
+CMD-cntl-SET_DM-NAME = Debug
+CDM-0 = All
+CDM-10 = Debug
+CDM-20 = Info
+CDM-30 = Warning
+CDM-40 = Error
+CDM-50 = Critical
+
 
 # Tag Manager
 ND-wTagManager-NAME = Wireless Tags Manager

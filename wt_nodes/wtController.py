@@ -73,6 +73,25 @@ class wtController(polyinterface.Controller):
             sys.exit()
         self.setDriver('GV1', self.serverdata['version_major'])
         self.setDriver('GV2', self.serverdata['version_minor'])
+        self.debug_mode     = self.getDriver('GV5')
+        # Short Poll
+        val = self.getDriver('GV6')
+        self.l_debug("start","shortPoll={0} GV6={1}".format(self.polyConfig['shortPoll'],val))
+        if val is None or int(val) == 0:
+            val = self.polyConfig['shortPoll']
+            self.setDriver('GV6',val)
+        else:
+            self.polyConfig['shortPoll'] = int(val)
+        self.short_poll = val
+        # Long Poll
+        val = self.getDriver('GV7')
+        self.l_debug("start","longPoll={0} GV7={1}".format(self.polyConfig['longPoll'],val))
+        if val is None or int(val) == 0:
+            val = self.polyConfig['longPoll']
+            self.setDriver('GV7',val)
+        else:
+            self.polyConfig['longPoll'] = int(val)
+        self.long_poll = val
         self.set_port(self.wtServer.listen_port)
         self.save_params()
         self.discover() # TODO: Temporary, discover on startup, or always?
@@ -276,6 +295,27 @@ class wtController(polyinterface.Controller):
             self.set_comm(True)
         return True
 
+    def set_debug_mode(self,val):
+        if val is None:
+            val = 0
+        self.debug_mode = int(val)
+        self.setDriver('GV5', self.debug_mode)
+
+    def set_short_poll(self,val):
+        if val is None:
+            val = 0
+        self.short_poll = int(val)
+        self.setDriver('GV6', self.short_poll)
+        self.polyConfig['shortPoll'] = val
+
+    def set_long_poll(self,val):
+        if val is None:
+            val = 0
+        self.long_poll = int(val)
+        self.setDriver('GV7', self.long_poll)
+        self.polyConfig['longPoll'] = val
+
+
     def set_auth(self,value,force=False):
         if not force and hasattr(self,"auth") and self.auth == value:
             return True
@@ -298,11 +338,27 @@ class wtController(polyinterface.Controller):
         if not force and hasattr(self,"port") and self.port == value:
             return True
         self.port = value
-        self.setDriver('GV5', value)
+        self.setDriver('GV8', value)
 
     """
     Command Functions
     """
+    def cmd_set_debug_mode(self,command):
+        val = command.get('value')
+        self.l_info("cmd_set_debug_mode",val)
+        self.set_debug_mode(val)
+
+    def cmd_set_short_poll(self,command):
+        val = command.get('value')
+        self.l_info("cmd_set_short_poll",val)
+        self.set_short_poll(val)
+
+    def cmd_set_long_poll(self,command):
+        val = int(command.get('value'))
+        self.l_info("cmd_set_long_poll",val)
+        self.set_long_poll(val)
+
+
     def cmd_install_profile(self,command):
         self.l_info("cmd_install_profile","installing...")
         self.poly.installprofile()
@@ -312,6 +368,9 @@ class wtController(polyinterface.Controller):
     """
     id = 'wtController'
     commands = {
+        'SET_DM': cmd_set_debug_mode,
+        'SET_SHORTPOLL': cmd_set_short_poll,
+        'SET_LONGPOLL':  cmd_set_long_poll
         'QUERY': query,
         'DISCOVER': discover,
         'INSTALL_PROFILE': cmd_install_profile,
@@ -322,5 +381,8 @@ class wtController(polyinterface.Controller):
         {'driver': 'GV2', 'value': 0, 'uom': 56}, # vmin: Version Minor
         {'driver': 'GV3', 'value': 0, 'uom': 2},  # auth: Authorized (we have valid oauth2 token)
         {'driver': 'GV4', 'value': 0, 'uom': 2},  # comm: Communicating
-        {'driver': 'GV5', 'value': 0, 'uom': 56}, # port: REST Server Listen port
+        {'driver': 'GV5', 'value': 0, 'uom': 25}, # Debug (Log) Mode
+        {'driver': 'GV6', 'value': 5, 'uom': 25}, # shortpoll
+        {'driver': 'GV7', 'value': 60, 'uom': 25}  # longpoll
+        {'driver': 'GV8', 'value': 0, 'uom': 56}, # port: REST Server Listen port
     ]
