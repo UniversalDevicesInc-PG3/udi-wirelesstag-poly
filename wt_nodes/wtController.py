@@ -90,6 +90,7 @@ class wtController(polyinterface.Controller):
         or shortPoll. No need to Super this method the parent version does nothing.
         The timer can be overriden in the server.json.
         """
+        # MAke sure we don't do this while startin up or discover is running!
         return True # Do nothing for now.
         mgd = self.get_tag_managers()
         if mgd['st']:
@@ -112,8 +113,9 @@ class wtController(polyinterface.Controller):
         self.set_auth(True)
         # Call longPoll since it check the comm status
         self.longPoll()
-        for node in self.nodes:
-            self.nodes[node].reportDrivers()
+        # Don't do this on initial startup!
+        #for node in self.nodes:
+            #self.nodes[node].reportDrivers()
 
     def discover(self, *args, **kwargs):
         """
@@ -131,7 +133,13 @@ class wtController(polyinterface.Controller):
         if mgd['st']:
             for mgr in mgd['result']:
                 self.l_debug("discover","TagManager={0}".format(mgr))
-                self.addNode(wTagManager(self, mgr['mac'], mgr['name'], discover=True))
+                address = get_valid_node_name(mgr['mac'])
+                if address in self.nodes:
+                    is_new = True
+                else:
+                    is_new = False
+                self.l_info('discover','Adding Node {0} new={1}'.format(address,is_new))
+                self.addNode(wTagManager(self, address, mgr['name'], mac=mgr['mac'], new=is_new))
 
     def delete(self):
         """

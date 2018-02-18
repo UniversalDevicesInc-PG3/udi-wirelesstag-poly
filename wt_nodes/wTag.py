@@ -62,8 +62,10 @@ class wTag(polyinterface.Node):
         and we get a return result from Polyglot. Only happens once.
         """
         self.setDriver('ST', 1)
+        self.primary_n = self.controller.nodes[self.primary]
         self.set_from_tag_data()
         self.set_url_config()
+        self.query()
 
     def query(self):
         """
@@ -97,7 +99,8 @@ class wTag(polyinterface.Node):
                     value['url'] = '{0}/{1}?{2}'.format(url,key,param)
                     value['nat'] = True
                     newconfig[key] = value
-            res = self.controller.wtServer.SaveEventURLConfig({'id':self.tid, 'config': newconfig, 'applyAll': False})
+            # Changed to applyAll True for now?
+            res = self.controller.wtServer.SaveEventURLConfig({'id':self.tid, 'config': newconfig, 'applyAll': True})
 
     def l_info(self, name, string):
         LOGGER.info("%s:%s:%s: %s" %  (self.id,self.name,name,string))
@@ -141,7 +144,11 @@ class wTag(polyinterface.Node):
         self.setDriver('GV1', value)
         
     def set_temp(self,value,force=False):
-        value = myfloat(value,2)
+        if self.primary_n.degFC == 0:
+            value = myfloat(value,2)
+        else:
+            # Convert C to F
+            value = myfloat(float(value) * 1.8 + 32.0,2)
         if not force and hasattr(self,"temp") and self.temp == value:
             return True
         self.temp = value

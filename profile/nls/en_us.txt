@@ -13,6 +13,8 @@ ST-cntl-GV5-NAME = Listen Port
 # Tag Manager
 ND-wTagManager-NAME = Wireless Tags Manager
 ST-wTagManager-ST-NAME = Status
+ST-tagmgr-GV1-NAME = Monitor Tags
+CMD-tagmgr-SET_USE_TAGS-NAME = Set Use Tags
 
 # Tags http://wirelesstag.net/kumoapp/17/tags-kumosensors-kumostats
 ND-wTag12-NAME = Motion Sensor Tag (8-bit temperature) (12)
@@ -28,12 +30,12 @@ ND-wTag92-NAME = Webcams (Dropcam) (92)
 
 ST-ST-NAME = Tag Status
 ST-GV1-NAME = Tag Type
-ST-tag12-CV-NAME = Battery Voltage
-ST-tag12-GV2-NAME = Motion
-ST-tag12-GV3-NAME = Orientation
-ST-tag12-GV4-NAME = X-Axis
-ST-tag12-GV5-NAME = Y-Axis
-ST-tag12-GV6-NAME = Z-Axis
+ST-CV-NAME = Battery Voltage
+ST-GV2-NAME = Motion
+ST-GV3-NAME = Orientation
+ST-GV4-NAME = X-Axis
+ST-GV5-NAME = Y-Axis
+ST-GV6-NAME = Z-Axis
 
 ONOFF-0 = Off
 ONOFF-1 = On

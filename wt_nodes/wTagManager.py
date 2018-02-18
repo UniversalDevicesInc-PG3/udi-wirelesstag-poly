@@ -29,7 +29,7 @@ class wTagManager(polyinterface.Node):
     reportDrivers(): Forces a full update of all drivers to Polyglot/ISY.
     query(): Called when ISY sends a query request to Polyglot for this specific node
     """
-    def __init__(self, controller, mac, name, discover=False):
+    def __init__(self, controller, address, name, mac=None, new=False):
         """
         Optional.
         Super runs all the parent class necessities. You do NOT have
@@ -42,7 +42,7 @@ class wTagManager(polyinterface.Node):
         """
         # Save the real mac before we legalize it.
         self.mac      = mac
-        self.do_discover = discover
+        self.new      = new
         address = get_valid_node_name(mac)
         super(wTagManager, self).__init__(controller, address, address, name)
 
@@ -53,9 +53,15 @@ class wTagManager(polyinterface.Node):
         and we get a return result from Polyglot. Only happens once.
         """
         self.set_st(True)
-        if self.do_discover:
-            self.do_discover = False
-            self.discover()
+        if self.new:
+            self.set_use_tags(0)
+        else:
+            self.set_use_tags(self.getDriver('GV1'))
+            self.l_info("start",'{0} {1}'.format(self._drivers,self.use_tags))
+        self.degFC = 1 # I like F.
+        self.discover()
+        self.query()
+
 
     def query(self):
         """
@@ -66,6 +72,9 @@ class wTagManager(polyinterface.Node):
         self.reportDrivers()
 
     def discover(self):
+        self.l_debug('discover','use_tags={}'.format(self.use_tags))
+        if self.use_tags == 0:
+            return False
         ret = self.get_tag_list()
         if ret['st'] is False:
             return
@@ -122,8 +131,18 @@ class wTagManager(polyinterface.Node):
         else:
             self.setDriver('ST', 0)
 
+    def set_use_tags(self,value,force=False):
+        value = int(value)
+        if not force and hasattr(self,"use_tags") and self.use_tags == value:
+            return True
+        self.use_tags = value
+        self.setDriver('GV1', value)
+
     """
     """
+
+    def cmd_set_use_tags(self,command):
+        self.set_use_tags(command.get("value"))
 
     def cmd_set_on(self, command):
         """
@@ -145,8 +164,10 @@ class wTagManager(polyinterface.Node):
     id = 'wTagManager'
     drivers = [
         {'driver': 'ST',  'value': 0, 'uom': 2},
+        {'driver': 'GV1', 'value': 1, 'uom': 2}  # Use Tags
     ]
     commands = {
+        'SET_USE_TAGS': cmd_set_use_tags,
         'DON': cmd_set_on,
         'DOF': cmd_set_off,
     }
