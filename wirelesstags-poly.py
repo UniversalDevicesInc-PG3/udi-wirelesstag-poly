@@ -4,7 +4,7 @@ This is a NodeServer for CAO Gadgets Wireless Sensor Tags for Polyglot v2 writte
 by JimBoCA jimboca3@gmail.com
 """
 import polyinterface
-import sys
+import sys,time
 from wt_nodes import wtController
 
 LOGGER = polyinterface.LOGGER
@@ -20,9 +20,11 @@ if __name__ == "__main__":
         Starts MQTT and connects to Polyglot.
         """
         control = wtController(polyglot)
-        """
+        polyinterface.LOGGER.error("c={}".format(control))
+        """''
         Creates the Controller Node and passes in the Interface
         """
+        time.sleep(1)
         control.runForever()
         """
         Sits around and does nothing forever, keeping your program running.
