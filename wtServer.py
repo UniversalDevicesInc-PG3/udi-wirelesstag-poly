@@ -242,67 +242,47 @@ class wtServer():
     def l_debug(self, name, string):
         self.logger.debug("%s: %s" % (name,string))
 
+    """
+    Wiress Tags API Functions
+    """
+    def api_post_d(self,path,payload,dump=True):
+        """
+        Call the api path with payload expecting data in d entry
+        Return sttatus and result
+        """
+        if dump:
+            payload = json.dumps(payload)
+        aret = self.http_post(path,payload)
+        self.l_debug('api_post_d','path={0} ret={1}'.format(path,aret))
+        if aret == False or not 'd' in aret:
+            return { 'st': False }
+        return { 'st': True, 'result': aret['d'] }
+
     # These match the names used in the API:
     # http://wirelesstag.net/ethAccount.asmx?op=GetTagManagers
     def GetTagManagers(self):
-        aret = self.http_post('ethAccount.asmx/GetTagManagers',{})
-        self.l_debug('getTagManagers',aret)
-        if aret is False or not 'd' in aret:
-            ret = { 'st': False }
-        else:
-            ret = { 'st': True, 'result': aret['d'] }
-        return ret
+        return self.api_post_d('ethAccount.asmx/GetTagManagers',{})
 
     # http://wirelesstag.net/ethAccount.asmx?op=SelectTagManager
     def SelectTagManager(self,mgr_mac):
         # This doesn't like how request converts dict to json, so do it here.
-        aret = self.http_post('ethAccount.asmx/SelectTagManager',json.dumps({'mac':mgr_mac}))
-        self.l_debug('SelectTagManager',aret)
-        if 'd' in aret:
-            ret = { 'st': True, 'result': aret['d'] }
-        else:
-            ret = { 'st': False }
-        return ret
+        return self.api_post_d('ethAccount.asmx/SelectTagManager',{'mac':mgr_mac})
 
     # http://wirelesstag.net/ethClient.asmx?op=GetTagList
     def GetTagList(self):
-        aret = self.http_post('ethClient.asmx/GetTagList',{})
-        self.l_debug('GetTagList',aret)
-        if 'd' in aret:
-            ret = { 'st': True, 'result': aret['d'] }
-        else:
-            ret = { 'st': False }
-        return ret
+        return = self.api_post_d('ethClient.asmx/GetTagList',{})
 
     # http://wirelesstag.net/ethClient.asmx?op=LoadEventURLConfig
     def LoadEventURLConfig(self,params):
-        aret = self.http_post('ethClient.asmx/LoadEventURLConfig',json.dumps(params))
-        self.l_debug('LoadEventURLConfig',aret)
-        if 'd' in aret:
-            ret = { 'st': True, 'result': aret['d'] }
-        else:
-            ret = { 'st': False }
-        return ret
+        return self.api_post_d('ethClient.asmx/LoadEventURLConfig',params)
 
     # http://wirelesstag.net/ethClient.asmx?op=SaveEventURLConfig
     def SaveEventURLConfig(self,params):
-        aret = self.http_post('ethClient.asmx/SaveEventURLConfig',json.dumps(params))
-        self.l_debug('SaveEventURLConfig',aret)
-        #if 'd' in aret:
-        #    ret = { 'st': True, 'result': aret['d'] }
-        #else:
-        #    ret = { 'st': False }
-        return aret
+        return self.api_post_d('ethClient.asmx/SaveEventURLConfig',params)
 
     # http://wirelesstag.net/ethClient.asmx?op=GetServerTime
     def GetServerTime(self):
-        aret = self.http_post('ethClient.asmx/GetServerTime',{})
-        self.l_debug('GetServerTime',aret)
-        if 'd' in aret:
-            ret = { 'st': True, 'result': aret['d'] }
-        else:
-            ret = { 'st': False }
-        return ret
+        return self.api_post_d('ethClient.asmx/GetServerTime',{})
 
 def my_ghandler(command,params):
     return True
