@@ -270,7 +270,7 @@ class wtServer():
 
     # http://wirelesstag.net/ethClient.asmx?op=GetTagList
     def GetTagList(self):
-        return = self.api_post_d('ethClient.asmx/GetTagList',{})
+        return self.api_post_d('ethClient.asmx/GetTagList',{})
 
     # http://wirelesstag.net/ethClient.asmx?op=LoadEventURLConfig
     def LoadEventURLConfig(self,params):
