@@ -92,7 +92,7 @@ class wtREST():
 
     def get_handler(self,path,query):
         return self.parent.get_handler(path,query)
-        
+
     def get_network_ip(self,rhost):
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -164,7 +164,7 @@ class wtServer():
         else:
             self.l_error('get_handler','code={0} message={1}'.format(code,message))
         return  { 'code': code, 'message': message }
-    
+
     def get_access_token(self,code=None):
         if code is not None:
             self.oauth2_code = code
@@ -232,13 +232,13 @@ class wtServer():
 
     def l_info(self, name, string):
         self.logger.info("%s: %s" %  (name,string))
-        
+
     def l_error(self, name, string, exc_info=False):
         self.logger.error("%s: %s" % (name,string), exc_info=exc_info)
-        
+
     def l_warning(self, name, string):
         self.logger.warning("%s: %s" % (name,string))
-        
+
     def l_debug(self, name, string):
         self.logger.debug("%s: %s" % (name,string))
 
@@ -263,7 +263,7 @@ class wtServer():
         else:
             ret = { 'st': False }
         return ret
-        
+
     # http://wirelesstag.net/ethClient.asmx?op=GetTagList
     def GetTagList(self):
         aret = self.http_post('ethClient.asmx/GetTagList',{})
@@ -293,6 +293,16 @@ class wtServer():
         #else:
         #    ret = { 'st': False }
         return aret
+
+    # http://wirelesstag.net/ethClient.asmx?op=GetServerTime
+    def ServerTime(self):
+        aret = self.http_post('ethClient.asmx/ServerTime',{})
+        self.l_debug('GetServerTime',aret)
+        if 'd' in aret:
+            ret = { 'st': True, 'result': aret['d'] }
+        else:
+            ret = { 'st': False }
+        return ret
 
 def my_ghandler(command,params):
     return True

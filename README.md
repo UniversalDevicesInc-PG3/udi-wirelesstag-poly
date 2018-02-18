@@ -3,7 +3,7 @@
 #### TODO Before release
 - Test adding from scratch that TagManager .new works properly?
 - Add discover for TagManager node
-- Can't have Tag Names with spaces in them?
+- Can't have Tag Names with spaces in them? Make it show the tag as error?
 - Restore nodes or re-disover on startup?
 - Query Tag's on startup
 - Add Query command for Tags

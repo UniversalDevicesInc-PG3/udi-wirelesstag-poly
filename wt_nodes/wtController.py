@@ -94,6 +94,8 @@ class wtController(polyinterface.Controller):
         or shortPoll. No need to Super this method the parent version does nothing.
         The timer can be overriden in the server.json.
         """
+        # For now just pinging the serverto make sure it's alive
+        self.get_server_time()
         # MAke sure we don't do this while startin up or discover is running!
         return True # Do nothing for now.
         mgd = self.get_tag_managers()
@@ -206,6 +208,15 @@ class wtController(polyinterface.Controller):
             self.set_comm(True)
         else:
             self.set_comm(False)
+        return mgd
+
+    def get_server_time(self):
+        if self.wtServer.oauth2_code == False:
+            self.l_error('get_server_time',"oauth2_code={}".format(self.wst.oauth2_code))
+            return { 'st': False }
+        mgd = self.wtServer.GetServerTime();
+        self.set_comm(mgd['st'])
+        self.server_time = mgd['result']
         return mgd
 
     def get_node(self,address):
