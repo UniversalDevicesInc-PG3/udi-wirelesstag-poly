@@ -113,16 +113,13 @@ class wtController(polyinterface.Controller):
         or shortPoll. No need to Super this method the parent version does nothing.
         The timer can be overriden in the server.json.
         """
+        #self.l_debug('longPoll','...')
         # For now just pinging the serverto make sure it's alive
         self.get_server_time()
-        # MAke sure we don't do this while startin up or discover is running!
-        return True # Do nothing for now.
-        mgd = self.get_tag_managers()
-        if mgd['st']:
-            for mgr in mgd['result']:
-                node = self.get_node(get_valid_node_name(mgr['mac']))
-                if node is not None:
-                    node.set_params(mgr)
+        # Make sure we don't do this while starting up or discover is running!
+        for address in self.nodes:
+            if hasattr('longPoll',self.nodes[address]):
+                self.nodes[address].longPoll()
 
     def query(self):
         """
@@ -131,10 +128,7 @@ class wtController(polyinterface.Controller):
         nodes back to ISY. If you override this method you will need to Super or
         issue a reportDrivers() to each node manually.
         """
-        if self.wtServer.oauth2_code == False:
-            self.set_auth(False)
-            self.l_error('discover',"Not able to query oauth2_code={}".format(self.wtServer.oauth2_code))
-            return False
+        if not self.authorized('query') : return False
         self.set_auth(True)
         # Call longPoll since it check the comm status
         self.longPoll()
@@ -148,23 +142,16 @@ class wtController(polyinterface.Controller):
         Do discovery here. Does not have to be called discovery. Called from example
         controller start method and from DISCOVER command recieved from ISY as an exmaple.
         """
-        if self.wtServer.oauth2_code == False:
-            self.set_auth(False)
-            self.l_error('discover',"Not able to discover oauth2_code={}".format(self.wtServer.oauth2_code))
-            return False
+        if not self.authorized('discover') : return False
         self.set_auth(True)
         self.save_params()
+        self.l_info('discover','nodes={}'.format(self.nodes))
         mgd = self.get_tag_managers()
         if mgd['st']:
             for mgr in mgd['result']:
                 self.l_debug("discover","TagManager={0}".format(mgr))
                 address = get_valid_node_name(mgr['mac'])
-                if address in self.nodes:
-                    is_new = True
-                else:
-                    is_new = False
-                self.l_info('discover','Adding Node {0} new={1}'.format(address,is_new))
-                self.addNode(wTagManager(self, address, mgr['name'], mac=mgr['mac'], new=is_new))
+                self.addNode(wTagManager(self, address, mgr['name'], mac=mgr['mac'], node_data=self.poly.getNode(address)))
 
     def delete(self):
         """
@@ -218,10 +205,15 @@ class wtController(polyinterface.Controller):
     """
      Misc funcs
     """
-    def get_tag_managers(self):
+    def authorized(self,name):
         if self.wtServer.oauth2_code == False:
-            self.l_error('get_tag_managers',"oauth2_code={}".format(self.wst.oauth2_code))
-            return { 'st': False }
+            self.set_auth(False)
+            self.l_error('authorized',"Not able to {0} oauth2_code={1}".format(name,self.wtServer.oauth2_code))
+            return False
+        return True
+
+    def get_tag_managers(self):
+        if not self.authorized('get_tag_managers') : return { 'st': False }
         mgd = self.wtServer.GetTagManagers();
         if mgd['st']:
             self.set_comm(True)
@@ -230,15 +222,18 @@ class wtController(polyinterface.Controller):
         return mgd
 
     def get_server_time(self):
-        if self.wtServer.oauth2_code == False:
-            self.l_error('get_server_time',"oauth2_code={}".format(self.wst.oauth2_code))
-            return { 'st': False }
+        if not self.authorized('get_server_time') : return { 'st': False }
         mgd = self.wtServer.GetServerTime();
         self.set_comm(mgd['st'])
-        self.server_time = mgd['result']
+        if 'result' in mgd:
+            self.server_time = mgd['result']
         return mgd
 
     def get_node(self,address):
+        """
+        Returns a node that already exists in the controller.
+        Use self.poly.getNode to look for node's in config, not this method.
+        """
         self.l_info('get_node',"adress={0}".format(address))
         for node in self.nodes:
             #self.l_debug('get_node',"node={0}".format(node))
@@ -262,9 +257,10 @@ class wtController(polyinterface.Controller):
             self.addNotice('Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wtServer.url))
 
     def set_url_config(self):
-        # TODO: Loop over tags and set_url_config on each
+        # TODO: Should loop over tag managers, and call set_url_config on the tag manager
         for address in self.nodes:
-            if not (self.nodes[address].id == 'wtController' or self.nodes[address].id == 'wTagManger'):
+            self.l_debug('set_url_config',"id={}".format(self.nodes[address].id))
+            if not (self.nodes[address].id == 'wtController' or self.nodes[address].id == 'wTagManager'):
                 self.nodes[address].set_url_config()
 
     def l_info(self, name, string):
@@ -286,6 +282,7 @@ class wtController(polyinterface.Controller):
         if self.oauth2_code != value:
             self.oauth2_code = value
             self.save_params()
+            self.discover()
             self.set_url_config()
         if value is False:
             self.set_auth(False)
@@ -295,11 +292,27 @@ class wtController(polyinterface.Controller):
             self.set_comm(True)
         return True
 
-    def set_debug_mode(self,val):
-        if val is None:
-            val = 0
-        self.debug_mode = int(val)
-        self.setDriver('GV5', self.debug_mode)
+
+    def set_debug_mode(self,level):
+        if level is None:
+            level = 0
+        else:
+            level = int(level)
+        self.debug_mode = level
+        self.setDriver('GV5', level)
+        # 0=All 10=Debug are the same because 0 (NOTSET) doesn't show everything.
+        if level == 0 or level == 10: 
+            self.set_all_logs(logging.DEBUG)
+        elif level == 20:
+            self.set_all_logs(logging.INFO)
+        elif level == 30:
+            self.set_all_logs(logging.WARNING)
+        elif level == 40:
+            self.set_all_logs(logging.ERROR)
+        elif level == 50:
+            self.set_all_logs(logging.CRITICAL)
+        else:
+            self.l_error("set_debug_level","Unknown level {0}".format(level))
 
     def set_short_poll(self,val):
         if val is None:
@@ -382,7 +395,7 @@ class wtController(polyinterface.Controller):
         {'driver': 'GV3', 'value': 0, 'uom': 2},  # auth: Authorized (we have valid oauth2 token)
         {'driver': 'GV4', 'value': 0, 'uom': 2},  # comm: Communicating
         {'driver': 'GV5', 'value': 0, 'uom': 25}, # Debug (Log) Mode
-        {'driver': 'GV6', 'value': 5, 'uom': 25}, # shortpoll
-        {'driver': 'GV7', 'value': 60, 'uom': 25},  # longpoll
+        {'driver': 'GV6', 'value': 5, 'uom': 56}, # shortpoll
+        {'driver': 'GV7', 'value': 60, 'uom': 56},  # longpoll
         {'driver': 'GV8', 'value': 0, 'uom': 56} # port: REST Server Listen port
     ]

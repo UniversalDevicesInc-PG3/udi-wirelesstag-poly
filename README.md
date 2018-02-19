@@ -37,13 +37,16 @@ Here is how you install this poly.
 
 - Add it
 - Will add message in Polyglot Web which shows a Active link to click.
+  - Seems the wirelesstags certificate is not up to date, so in chrome you have to click continue anyway (unsafe) to continue :(
   - To https://www.wirelesstag.net/oauth2/authorize.aspx?...
   - With a redirect back to the nodeserver's REST Server
   - After you 'Grant' access you should see a message saying "SUCCESS, received our token, ..."
-- Open Admin Console
-  - Select node 'WirelessTagsController'
-  - Click 'Discover'
+- Open Admin Console (if you already had it open, then close and re-open)
 - You should now have a node for each of your tag managers
+- By default the Monitor Tags for each tag manager is turned off, if you want the tags to show up in your current ISY/nodeserver, then enable it.
+   - The nodeserver and tag manager must be on the same LAN since the tag mangaer sends updates directly to the nodeserver.
+   - Only one nodeserver can monitor the tags if you have multiple ISY/nodeserver's.
+
 TODO: Need to add param on tag manager to enable/disable?
 
 #### Requirements

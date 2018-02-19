@@ -13,6 +13,9 @@ ST-cntl-GV6-NAME = Short Poll
 ST-cntl-GV7-NAME = Long Poll
 ST-cntl-GV8-NAME = Listen Port
 
+CMD-cntl-SET_SHORTPOLL-NAME = Short Poll
+CMD-cntl-SET_LONGPOLL-NAME = Long Poll
+
 CMD-cntl-SET_DM-NAME = Debug
 CDM-0 = All
 CDM-10 = Debug
@@ -20,7 +23,6 @@ CDM-20 = Info
 CDM-30 = Warning
 CDM-40 = Error
 CDM-50 = Critical
-
 
 # Tag Manager
 ND-wTagManager-NAME = Wireless Tags Manager
@@ -40,6 +42,7 @@ ND-wTag72-NAME = Infra-Red (PIR) KumoSensor (72)
 ND-wTag82-NAME = WeMo Switches/Maker/LED (82)
 ND-wTag92-NAME = Webcams (Dropcam) (92)
 
+# These are the defaults for all tags
 ST-ST-NAME = Tag Status
 ST-GV1-NAME = Tag Type
 ST-CV-NAME = Battery Voltage

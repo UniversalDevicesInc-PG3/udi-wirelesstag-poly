@@ -29,7 +29,7 @@ class wTagManager(polyinterface.Node):
     reportDrivers(): Forces a full update of all drivers to Polyglot/ISY.
     query(): Called when ISY sends a query request to Polyglot for this specific node
     """
-    def __init__(self, controller, address, name, mac=None, new=False):
+    def __init__(self, controller, address, name, mac=None, node_data=False):
         """
         Optional.
         Super runs all the parent class necessities. You do NOT have
@@ -41,9 +41,8 @@ class wTagManager(polyinterface.Node):
         :param name: This nodes name
         """
         # Save the real mac before we legalize it.
-        self.mac      = mac
-        self.new      = new
-        address = get_valid_node_name(mac)
+        self.mac       = mac
+        self.node_data = node_data
         super(wTagManager, self).__init__(controller, address, address, name)
 
     def start(self):
@@ -53,7 +52,8 @@ class wTagManager(polyinterface.Node):
         and we get a return result from Polyglot. Only happens once.
         """
         self.set_st(True)
-        if self.new:
+        if self.node_data is False:
+            # New node, set the defaults.
             self.set_use_tags(0)
         else:
             self.set_use_tags(self.getDriver('GV1'))
@@ -132,11 +132,14 @@ class wTagManager(polyinterface.Node):
             self.setDriver('ST', 0)
 
     def set_use_tags(self,value,force=False):
+        if value is None: value = 0
         value = int(value)
         if not force and hasattr(self,"use_tags") and self.use_tags == value:
             return True
         self.use_tags = value
         self.setDriver('GV1', value)
+        if value == 1:
+            self.discover()
 
     """
     """

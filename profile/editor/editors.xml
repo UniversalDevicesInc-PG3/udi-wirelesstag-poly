@@ -15,6 +15,10 @@
       <range uom="56" min="0" max="92" prec="0" />
     </editor>
 
+    <editor id="I_DM">
+        <range uom="25" subset="0,10,20,30,40,50" nls="CDM" />
+    </editor>
+
     <editor id="B_ONOFF">
         <range uom="2" subset="0,1" nls="ONOFF" />
     </editor>
