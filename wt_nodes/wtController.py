@@ -46,6 +46,7 @@ class wtController(polyinterface.Controller):
         Super runs all the parent class necessities. You do NOT have
         to override the __init__ method, but if you do, you MUST call super.
         """
+        self.ready = False
         self.serverdata = get_server_data(LOGGER)
         self.l_info('init','Initializing VERSION=%s' % (self.serverdata['version']))
         super(wtController, self).__init__(polyglot)
@@ -94,8 +95,10 @@ class wtController(polyinterface.Controller):
         self.long_poll = val
         self.set_port(self.wtServer.listen_port)
         self.save_params()
-        self.discover() # TODO: Temporary, discover on startup, or always?
+        self.add_existing_tag_managers()
         self.query()
+        self.ready = True
+        self.l_info('start','done')
 
     def shortPoll(self):
         """
@@ -113,13 +116,15 @@ class wtController(polyinterface.Controller):
         or shortPoll. No need to Super this method the parent version does nothing.
         The timer can be overriden in the server.json.
         """
-        #self.l_debug('longPoll','...')
+        self.l_debug('longPoll','ready={}'.format(self.ready))
+        if not self.ready: return False
         # For now just pinging the serverto make sure it's alive
-        self.get_server_time()
-        # Make sure we don't do this while starting up or discover is running!
-        for address in self.nodes:
-            if hasattr('longPoll',self.nodes[address]):
-                self.nodes[address].longPoll()
+        self.is_signed_in()
+        if not self.comm: return self.comm 
+        # Call long poll on the tags.
+        #for address in self.nodes:
+        #    if address != self.address and hasattr(self.nodes[address],'longPoll'):
+        #        self.nodes[address].longPoll()
 
     def query(self):
         """
@@ -130,11 +135,22 @@ class wtController(polyinterface.Controller):
         """
         if not self.authorized('query') : return False
         self.set_auth(True)
-        # Call longPoll since it check the comm status
-        self.longPoll()
+        self.is_signed_in()
+        self.reportDrivers;
         # Don't do this on initial startup!
         #for node in self.nodes:
             #self.nodes[node].reportDrivers()
+
+    def add_existing_tag_managers(self):
+        """
+        Called on startup to add the tags from the config
+        We can't rely on discover at startup in case the server is down, we need to add the ones we know about.
+        """
+        for address in self.controller._nodes:
+            node = self.controller._nodes[address]
+            if node['node_def_id'] == 'wTagManager':
+                self.l_info('add_existing_tag_managers','node={0}'.format(node))
+                self.addNode(wTagManager(self, address, node['name'], address.upper(), node_data=node))
 
     def discover(self, *args, **kwargs):
         """
@@ -145,13 +161,13 @@ class wtController(polyinterface.Controller):
         if not self.authorized('discover') : return False
         self.set_auth(True)
         self.save_params()
-        self.l_info('discover','nodes={}'.format(self.nodes))
         mgd = self.get_tag_managers()
+        if not 'macs' in self.polyConfig['customData']: 
+            self.polyConfig['customData']['macs'] = dict()
         if mgd['st']:
             for mgr in mgd['result']:
                 self.l_debug("discover","TagManager={0}".format(mgr))
-                address = get_valid_node_name(mgr['mac'])
-                self.addNode(wTagManager(self, address, mgr['name'], mac=mgr['mac'], node_data=self.poly.getNode(address)))
+                self.addNode(wTagManager(self, mgr['mac'].lower(), mgr['name'], mgr['mac'], do_discover=True))
 
     def delete(self):
         """
@@ -212,18 +228,26 @@ class wtController(polyinterface.Controller):
             return False
         return True
 
+    def is_signed_in(self):
+        if not self.authorized('is_signed_in') : return False
+        mgd = self.wtServer.IsSignedIn()
+        if 'd' in mgd:
+            st = mgd['d']
+        else:
+            st = False
+        self.set_auth(st)
+        self.set_comm(st)
+        return st
+
     def get_tag_managers(self):
         if not self.authorized('get_tag_managers') : return { 'st': False }
-        mgd = self.wtServer.GetTagManagers();
-        if mgd['st']:
-            self.set_comm(True)
-        else:
-            self.set_comm(False)
+        mgd = self.wtServer.GetTagManagers()
+        self.set_comm(mgd['st'])
         return mgd
 
     def get_server_time(self):
         if not self.authorized('get_server_time') : return { 'st': False }
-        mgd = self.wtServer.GetServerTime();
+        mgd = self.wtServer.GetServerTime()
         self.set_comm(mgd['st'])
         if 'result' in mgd:
             self.server_time = mgd['result']
@@ -315,15 +339,15 @@ class wtController(polyinterface.Controller):
             self.l_error("set_debug_level","Unknown level {0}".format(level))
 
     def set_short_poll(self,val):
-        if val is None:
-            val = 0
+        if val is None or int(val) < 5:
+            val = 5
         self.short_poll = int(val)
         self.setDriver('GV6', self.short_poll)
         self.polyConfig['shortPoll'] = val
 
     def set_long_poll(self,val):
-        if val is None:
-            val = 0
+        if val is None or int(val) < 60:
+            val = 60
         self.long_poll = int(val)
         self.setDriver('GV7', self.long_poll)
         self.polyConfig['longPoll'] = val

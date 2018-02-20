@@ -258,6 +258,12 @@ class wtServer():
             return { 'st': False }
         return { 'st': True, 'result': aret['d'] }
 
+    # These match the names used in the API
+    
+    # http://wirelesstag.net/ethAccount.asmx?op=IsSignedIn
+    def IsSignedIn(self):
+        return self.api_post_d('ethAccount.asmx/IsSignedIn',{})
+
     # These match the names used in the API:
     # http://wirelesstag.net/ethAccount.asmx?op=GetTagManagers
     def GetTagManagers(self):
@@ -267,6 +273,10 @@ class wtServer():
     def SelectTagManager(self,mgr_mac):
         # This doesn't like how request converts dict to json, so do it here.
         return self.api_post_d('ethAccount.asmx/SelectTagManager',{'mac':mgr_mac})
+
+    # http://wirelesstag.net/ethClient.asmx?op=GetServerTime
+    def GetServerTime(self):
+        return self.api_post_d('ethClient.asmx/GetServerTime',{})
 
     # http://wirelesstag.net/ethClient.asmx?op=GetTagList
     def GetTagList(self):
@@ -279,10 +289,6 @@ class wtServer():
     # http://wirelesstag.net/ethClient.asmx?op=SaveEventURLConfig
     def SaveEventURLConfig(self,params):
         return self.api_post_d('ethClient.asmx/SaveEventURLConfig',params)
-
-    # http://wirelesstag.net/ethClient.asmx?op=GetServerTime
-    def GetServerTime(self):
-        return self.api_post_d('ethClient.asmx/GetServerTime',{})
 
 def my_ghandler(command,params):
     return True

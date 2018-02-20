@@ -6,7 +6,6 @@ import polyinterface
 import sys
 import time
 from wt_funcs import id_to_address,myfloat
-from wt_params import wt_params
 
 LOGGER = polyinterface.LOGGER
 
@@ -29,7 +28,7 @@ class wTag(polyinterface.Node):
     reportDrivers(): Forces a full update of all drivers to Polyglot/ISY.
     query(): Called when ISY sends a query request to Polyglot for this specific node
     """
-    def __init__(self, controller, primary, address=None, name=None, tagType=None, tdata=None):
+    def __init__(self, controller, primary, address=None, name=None, tag_type=None, tdata=None, node_data=None):
         """
         Optional.
         Super runs all the parent class necessities. You do NOT have
@@ -40,19 +39,30 @@ class wTag(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
-        if address is None or name is None or tagType is None:
+        if node_data is not None:
+            # An existing node,
+            self.is_new = False
+            # We need to pull tag_type from GV1 for existing tags.
+            for driver in node_data['drivers']:
+                if driver['driver'] == 'GV1':
+                    self.tag_type = driver['value']
+                elif driver['driver'] == 'GPV':
+                    self.tag_id   = driver['value']
+        elif address is None or name is None or tag_type is None:
             if tdata is None:
                 self.l_error('__init__',"address ({0}), name ({1}), and type ({2}) must be specified when tdata is None".format(address,tdata,type))
-                return
+                return False
+            self.is_new = True
             self.tdata = tdata
-            self.tid   = tdata['tid']
+            self.tag_type = tdata['tagType']
+            self.tag_id   = tdata['slaveId']
             self.uuid  = tdata['uuid']
-            tagType    = tdata['tagType']
             address    = id_to_address(self.uuid)
             name       = tdata['name']
-        else:
-            self.tdata = dict()
-        self.id = 'wTag' + str(tagType)
+        self.name = name
+        self.tdata = tdata
+        self.id = 'wTag' + str(self.tag_type)
+        self.l_info('__init__','address={0} name={1} type={2}'.format(address,name,tag_type))
         super(wTag, self).__init__(controller, primary, address, name)
 
     def start(self):
@@ -63,8 +73,10 @@ class wTag(polyinterface.Node):
         """
         self.setDriver('ST', 1)
         self.primary_n = self.controller.nodes[self.primary]
+        # Alwasy set driver from tag type
+        self.set_tag_type(self.tag_type)
+        self.set_tag_id(self.tag_id)
         self.set_from_tag_data()
-        self.set_url_config()
         self.query()
 
     def query(self):
@@ -74,33 +86,6 @@ class wTag(polyinterface.Node):
         there is a need.
         """
         self.reportDrivers()
-
-    """
-    """
-    def set_url_config(self):
-        def_param = '0={0}&1={1}&2={2}'
-        mgd = self.controller.wtServer.LoadEventURLConfig({'id':self.tid})
-        self.l_debug('set_url_config','{0}'.format(mgd))
-        if mgd['st'] is False:
-            return False
-        else:
-            url = self.controller.wtServer.listen_url
-            #{'in_free_fall': {'disabled': True, 'nat': False, 'verb': None, 'url': 'http://', 'content': None}
-            newconfig = dict()
-            for key, value in mgd['result'].items():
-                if key != '__type':
-                    if key in wt_params:
-                        param = wt_params[key]
-                    else:
-                        self.l_error('set_url_config',"Unknown tag param '{0}'".format(key))
-                        param = def_param
-                    self.l_debug('set_url_config',"key={0} value={1}".format(key,value))
-                    value['disabled'] = False
-                    value['url'] = '{0}/{1}?{2}'.format(url,key,param)
-                    value['nat'] = True
-                    newconfig[key] = value
-            # Changed to applyAll True for now?
-            res = self.controller.wtServer.SaveEventURLConfig({'id':self.tid, 'config': newconfig, 'applyAll': True})
 
     def l_info(self, name, string):
         LOGGER.info("%s:%s:%s: %s" %  (self.id,self.name,name,string))
@@ -118,10 +103,7 @@ class wTag(polyinterface.Node):
     Set Functions
     """
     def set_from_tag_data(self):
-        if 'tagType' in self.tdata:
-            self.set_tagType(self.tdata['tagType'],True)
-        else:
-            self.l_error('set_from_tag_data',"No tagType in tdata?")
+        if self.tdata is None: return False
         if 'temperature' in self.tdata:
             self.set_temp(self.tdata['temperature'])
         if 'batteryVolt' in self.tdata:
@@ -135,13 +117,19 @@ class wTag(polyinterface.Node):
         if 'lit' in self.tdata:
             self.set_lit(self.tdata['lit'])
 
-    # This is the tagType number, we don't really need to show it, but 
+    # This is the tag_type number, we don't really need to show it, but 
     # we need the info when recreating the tags from the config.
-    def set_tagType(self,value,force=False):
-        if not force and hasattr(self,"tagType") and self.tagType == value:
+    def set_tag_type(self,value,force=False):
+        if not force and hasattr(self,"tag_type") and self.tag_type == value:
             return True
-        self.tagType = value
+        self.tag_type = value
         self.setDriver('GV1', value)
+        
+    def set_tag_id(self,value,force=False):
+        if not force and hasattr(self,"tag_id") and self.tag_id == value:
+            return True
+        self.tag_id = value
+        self.setDriver('GVP', value)
         
     def set_temp(self,value,force=False):
         if self.primary_n.degFC == 0:
@@ -256,7 +244,7 @@ class wTag(polyinterface.Node):
       "uuid":"7911937f-c758-4b88-a33a-0761ed284f29",
       "comment":"",
       "slaveId":0,
-      "tagType":12,
+      "tag_type":12,
       "lastComm":131628820472086602,
       "alive":true,
       "signaldBm":-64,
@@ -300,7 +288,8 @@ class wTag(polyinterface.Node):
 
     drivers = [
         {'driver': 'ST',      'value': 0, 'uom': 2},
-        {'driver': 'GV1',     'value': 0, 'uom': 56}, # tagType:    
+        {'driver': 'GPV',     'value': 0, 'uom': 56}, # tag_id
+        {'driver': 'GV1',     'value': 0, 'uom': 56}, # tag_type:    
         {'driver': 'CLITEMP', 'value': 0, 'uom': 17}, # temp:   Curent temperature (17=F 4=C)
         {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # batp:   Battery percent (51=percent)
         {'driver': 'LUMIN',   'value': 0, 'uom': 36}, # lux:    Lux (36=lux)

@@ -2,6 +2,8 @@
 
 #### TODO Before release
 - Test adding from scratch that TagManager .new works properly?
+- Do wTag->set_url_config in the TagManager and applyAll?
+- Move set_url
 - Add discover for TagManager node
 - Can't have Tag Names with spaces in them? Make it show the tag as error?
 - Restore nodes or re-disover on startup?
@@ -30,6 +32,9 @@
 2018-02-16 20:44:56,048 ERROR    wtController:get_handler: Unknown command '/water_dried'
 2018-02-16 20:44:56,049 ERROR    get_handler: code=500 message=Command /water_dried failed
 
+- When SaveEventURLConfig fails, remember and retry during poll, or retry in loop?
+2018-02-19 21:02:58,300 ERROR    http_post: Connection error for http://wirelesstag.net/ethClient.asmx/SaveEventURLConfig: HTTPConnectionPool(host='wirelesstag.net', port=80): Read timed out. (read timeout=10)
+2018-02-19 21:02:58,302 DEBUG    api_post_d: path=ethClient.asmx/SaveEventURLConfig ret=False
 
 #### Installation
 

@@ -26,7 +26,7 @@ CDM-50 = Critical
 
 # Tag Manager
 ND-wTagManager-NAME = Wireless Tags Manager
-ST-wTagManager-ST-NAME = Status
+ST-tagmgr-ST-NAME = Status
 ST-tagmgr-GV1-NAME = Monitor Tags
 CMD-tagmgr-SET_USE_TAGS-NAME = Set Use Tags
 
