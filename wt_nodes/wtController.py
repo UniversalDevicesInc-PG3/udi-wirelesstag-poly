@@ -2,6 +2,7 @@
 import polyinterface
 import sys
 import time
+from threading import Thread
 
 from wt_nodes import wTagManager
 from wtServer import wtServer
@@ -47,12 +48,14 @@ class wtController(polyinterface.Controller):
         to override the __init__ method, but if you do, you MUST call super.
         """
         self.ready = False
+        self.discover_thread = None
         self.serverdata = get_server_data(LOGGER)
         self.l_info('init','Initializing VERSION=%s' % (self.serverdata['version']))
         super(wtController, self).__init__(polyglot)
         self.name = 'WirelessTagsController'
         self.address = 'wtcontroller'
         self.primary = self.address
+
 
     def start(self):
         """
@@ -107,7 +110,16 @@ class wtController(polyinterface.Controller):
         or longPoll. No need to Super this method the parent version does nothing.
         The timer can be overriden in the server.json.
         """
-        pass
+        if self.discover_thread is not None:
+            if self.discover_thread.isAlive():
+                self.l_debug('shortPoll','discover thread still running...')
+            else:
+                self.l_debug('shortPoll','discover thread is done...')
+                self.discover_thread = None
+        # Call short poll on the tags managers
+        for address in self.nodes:
+            if self.nodes[address].id == 'wTagManager':
+                self.nodes[address].shortPoll()
 
     def longPoll(self):
         """
@@ -121,10 +133,10 @@ class wtController(polyinterface.Controller):
         # For now just pinging the serverto make sure it's alive
         self.is_signed_in()
         if not self.comm: return self.comm 
-        # Call long poll on the tags.
-        #for address in self.nodes:
-        #    if address != self.address and hasattr(self.nodes[address],'longPoll'):
-        #        self.nodes[address].longPoll()
+        # Call long poll on the tags managers
+        for address in self.nodes:
+            if self.nodes[address].id == 'wTagManager':
+                self.nodes[address].longPoll()
 
     def query(self):
         """
@@ -134,7 +146,6 @@ class wtController(polyinterface.Controller):
         issue a reportDrivers() to each node manually.
         """
         if not self.authorized('query') : return False
-        self.set_auth(True)
         self.is_signed_in()
         self.reportDrivers;
         # Don't do this on initial startup!
@@ -154,6 +165,13 @@ class wtController(polyinterface.Controller):
 
     def discover(self, *args, **kwargs):
         """
+        Start the discover in a thread so we don't cause timeouts :(
+        """
+        self.discover_thread = Thread(target=self._discover)
+        self.discover_thread.start()
+
+    def _discover(self):
+        """
         Example
         Do discovery here. Does not have to be called discovery. Called from example
         controller start method and from DISCOVER command recieved from ISY as an exmaple.
@@ -167,7 +185,13 @@ class wtController(polyinterface.Controller):
         if mgd['st']:
             for mgr in mgd['result']:
                 self.l_debug("discover","TagManager={0}".format(mgr))
-                self.addNode(wTagManager(self, mgr['mac'].lower(), mgr['name'], mgr['mac'], do_discover=True))
+                address = mgr['mac'].lower()
+                node = self.get_node(address)
+                if node is None:
+                    self.addNode(wTagManager(self, address, mgr['name'], mgr['mac'], do_discover=True))
+                else:
+                    self.l_info('discover','Running discover on {0}'.format(node))
+                    node.discover(thread=False)
 
     def delete(self):
         """
@@ -231,12 +255,15 @@ class wtController(polyinterface.Controller):
     def is_signed_in(self):
         if not self.authorized('is_signed_in') : return False
         mgd = self.wtServer.IsSignedIn()
-        if 'd' in mgd:
-            st = mgd['d']
+        if 'result' in mgd:
+            st = mgd['result']
+            self.set_comm(True)
         else:
             st = False
+            # Didn't even get a response.
+            self.set_comm(st)
+        self.l_debug('is_signed_in','{0}'.format(st))
         self.set_auth(st)
-        self.set_comm(st)
         return st
 
     def get_tag_managers(self):
@@ -251,6 +278,12 @@ class wtController(polyinterface.Controller):
         self.set_comm(mgd['st'])
         if 'result' in mgd:
             self.server_time = mgd['result']
+        return mgd
+
+    def load_temp_sensor_config(self,tag_id):
+        if not self.authorized('load_temp_sensor_config') : return { 'st': False }
+        mgd = self.wtServer.LoadTempSensorConfig({'id': tag_id})
+        self.set_comm(mgd['st'])
         return mgd
 
     def get_node(self,address):

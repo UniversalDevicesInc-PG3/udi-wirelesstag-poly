@@ -10,9 +10,9 @@
       <st id="GV1" editor="FLOAT" />
       <!-- Version Minor -->
       <st id="GV2" editor="FLOAT" />
-      <!-- Authorized (got oauth2 code) -->
-      <st id="GV3" editor="BOOL" />
       <!-- wirelesstag.net communicating -->
+      <st id="GV3" editor="BOOL" />
+      <!-- Authorized (got oauth2 code) -->
       <st id="GV4" editor="BOOL" />
       <!-- Debug (Log) Mode -->
       <st id="GV5" editor="I_DM" />
@@ -58,15 +58,15 @@
         <cmd id="SET_USE_TAGS">
           <p id="" editor="BOOL" init="GV1" />
         </cmd>
-        <cmd id="DON" />
-        <cmd id="DOF" />
+        <cmd id="QUERY" />
+        <cmd id="DISCOVER" />
       </accepts>
     </cmds>
   </nodeDef>
 
 
   <!-- Tag 12 -->
-  <nodeDef id="wTag12" nls="tag12">
+  <nodeDef id="wTag12F" nls="tag12">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
@@ -84,14 +84,13 @@
     <cmds>
       <sends />
       <accepts>
-        <cmd id="DON" />
-        <cmd id="DOF" />
+        <cmd id="QUERY" />
       </accepts>
     </cmds>
   </nodeDef>
 
   <!-- Tag 13 -->
-  <nodeDef id="wTag13" nls="tag13">
+  <nodeDef id="wTag13F" nls="tag13">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
@@ -109,12 +108,13 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="QUERY" />
       </accepts>
     </cmds>
   </nodeDef>
 
   <!-- Tag 21 -->
-  <nodeDef id="wTag21" nls="tag21">
+  <nodeDef id="wTag21F" nls="tag21">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
@@ -134,12 +134,13 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="QUERY" />
       </accepts>
     </cmds>
   </nodeDef>
 
   <!-- Tag 26 -->
-  <nodeDef id="wTag26" nls="tag26">
+  <nodeDef id="wTag26F" nls="tag26">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
@@ -158,12 +159,13 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="QUERY" />
       </accepts>
     </cmds>
   </nodeDef>
 
   <!-- Tag 32 -->
-  <nodeDef id="wTag32" nls="tag32">
+  <nodeDef id="wTag32F" nls="tag32">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
@@ -176,12 +178,13 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="QUERY" />
       </accepts>
     </cmds>
   </nodeDef>
 
   <!-- Tag 52 -->
-  <nodeDef id="wTag52" nls="tag52">
+  <nodeDef id="wTag52F" nls="tag52">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
@@ -199,12 +202,13 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="QUERY" />
       </accepts>
     </cmds>
   </nodeDef>
 
   <!-- Tag 62 -->
-  <nodeDef id="wTag62" nls="tag62">
+  <nodeDef id="wTag62F" nls="tag62">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
@@ -213,12 +217,13 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="QUERY" />
       </accepts>
     </cmds>
   </nodeDef>
 
   <!-- Tag 72 -->
-  <nodeDef id="wTag72" nls="tag72">
+  <nodeDef id="wTag72F" nls="tag72">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
@@ -236,12 +241,13 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="QUERY" />
       </accepts>
     </cmds>
   </nodeDef>
 
   <!-- Tag 82 -->
-  <nodeDef id="wTag82" nls="tag82">
+  <nodeDef id="wTag82F" nls="tag82">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
@@ -250,12 +256,13 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="QUERY" />
       </accepts>
     </cmds>
   </nodeDef>
 
   <!-- Tag 92 -->
-  <nodeDef id="wTag92" nls="tag92">
+  <nodeDef id="wTag92F" nls="tag92">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
@@ -264,6 +271,7 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="QUERY" />
       </accepts>
     </cmds>
   </nodeDef>

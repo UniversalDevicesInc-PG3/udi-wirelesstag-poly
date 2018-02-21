@@ -69,10 +69,10 @@ class wTagManager(polyinterface.Node):
         self.degFC = 1 # I like F.
         # When we are added by the controller discover, then run our discover.
         if self.do_discover:
-            self.discover()
+            self.discover(thread=False)
         else:
             self.add_existing_tags()
-        self.query()
+        self.reportDrivers()
         self.ready = True
         self.l_info('start','done')
 
@@ -82,6 +82,18 @@ class wTagManager(polyinterface.Node):
         the parent class, so you don't need to override this method unless
         there is a need.
         """
+        mgd = self.controller.wtServer.GetTagListCached({})
+        if mgd['st']:
+            self.set_st(False)
+            for tag in mgd['result']:
+                tag_o = self.get_tag_by_id(tag['slaveId'])
+                if tag_o is None:
+                    self.l_error('query','Unable to get tag with id={0}'.format(tag['slaveId']))
+                else:
+                    tag_o.set_from_tag_data(tag)
+                    tag_o.reportDrivers()
+        else:
+            self.set_st(False)
         self.reportDrivers()
 
     def shortPoll(self):
@@ -91,6 +103,7 @@ class wTagManager(polyinterface.Node):
         or longPoll. No need to Super this method the parent version does nothing.
         The timer can be overriden in the server.json.
         """
+        if not self.ready: return False
         if self.discover_thread is not None:
             if self.discover_thread.isAlive():
                 self.l_debug('shortPoll','discover thread still running...')
@@ -103,6 +116,12 @@ class wTagManager(polyinterface.Node):
             else:
                 self.l_debug('shortPoll','set_url thread is done...')
                 self.set_url_thread = None
+        if self.discover_thread is None and self.set_url_thread is None:
+            if self.set_url_config_st == False:
+                # Try again...
+                self.l_error('shortPoll',"Calling set_url_config since previous st={}".format(self.set_url_config_st))
+                self.set_url_config()
+
 
     def longPoll(self):
         """
@@ -111,14 +130,21 @@ class wTagManager(polyinterface.Node):
         or shortPoll. No need to Super this method the parent version does nothing.
         The timer can be overriden in the server.json.
         """
+        if not self.ready: return False
         self.l_debug('longPoll','...')
+        if self.st is False:
+            ret = self.controller.wtServer.SelectTagManager(self.mac)
+            self.set_st(ret['st'])
 
-    def discover(self):
+    def discover(self, thread=False):
         """
         Start the discover in a thread so we don't cause timeouts :(
         """
-        self.discover_thread = Thread(target=self._discover)
-        self.discover_thread.start()
+        if thread:
+            self.discover_thread = Thread(target=self._discover)
+            self.discover_thread.start()
+        else:
+            self._discover()
 
     def _discover(self):
         self.l_debug('discover','use_tags={}'.format(self.use_tags))
@@ -130,7 +156,7 @@ class wTagManager(polyinterface.Node):
         index = 0
         for tag in ret['result']:
             self.l_debug('discover','Got Tag: {}'.format(tag))
-            self.add_tag(tdata=tag)
+            self.add_tag(tdata=tag, uom=self.get_tag_temp_unit(tag))
         self.set_url_config(thread=False)
 
     def add_existing_tags(self):
@@ -144,10 +170,28 @@ class wTagManager(polyinterface.Node):
                 self.add_tag(address=node['address'], name=node['name'], node_data=node)
         self.set_url_config()
 
-    def add_tag(self, address=None, name=None, tag_type=None, tdata=None, node_data=None):
-        self.controller.addNode(wTag(self.controller, self.address, address, name=name, tag_type=tag_type, tdata=tdata, node_data=node_data))
+    def add_tag(self, address=None, name=None, tag_type=None, uom=None, tdata=None, node_data=None):
+        self.controller.addNode(wTag(self.controller, self.address, address, name=name, tag_type=tag_type, uom=uom, tdata=tdata, node_data=node_data))
+
+    """
+    Misc functions
+    """
+
+    # TODO: Cache the temp sensor config's?
+    def get_tag_temp_unit(self,tag_data):
+        """
+        Returns the LoadTempSensorConfig temp_unit.  0 = Celcius, 1 = Fahrenheit
+        """
+        mgd = self.controller.load_temp_sensor_config(tag_data['slaveId'])
+        if mgd['st']:
+            return mgd['result']['temp_unit']
+        else:
+            return -1
 
     def get_tags(self):
+        """
+        Get all the tags stored in the polyglot DB
+        """
         nodes = list()
         for address in self.controller.nodes:
             node = self.controller.nodes[address]
@@ -155,10 +199,12 @@ class wTagManager(polyinterface.Node):
                 nodes.append(node)
         return nodes
 
-    """
-    Misc functions
-    """
-
+    def get_tag_by_id(self,tid):
+        for tag in self.get_tags():
+            #self.l_debug('get_tag_by_id','tag_id={0} tid={1}'.format(tag.tag_id,tid))
+            if int(tag.tag_id) == int(tid):
+                return tag
+        return None
     """
         Call set_url_config tags so updates are pushed back to me.
         # TODO: This needs to run in a seperate thread because it can take to long.
@@ -167,6 +213,7 @@ class wTagManager(polyinterface.Node):
         """
         Start the set_url_config in a thread so we don't cause timeouts :(
         """
+        self.set_url_config_st = None
         if thread:
             self.set_url_thread = Thread(target=self._set_url_config)
             self.set_url_thread.start()
@@ -174,13 +221,20 @@ class wTagManager(polyinterface.Node):
             self._set_url_config()
 
     def _set_url_config(self):
+        # None means there are no tags.
+        self.set_url_config_st = None
         if self.use_tags == 0:
             return False
+        # Tracks our status so longPoll can auto-rerun it when necessary
         tags = self.get_tags()
+        if len(tags) == 0:
+            self.l_error("_set_url_config","No tags in Polyglot DB, you need to discover?")
+            return False
         def_param = '0={0}&1={1}&2={2}'
         mgd = self.controller.wtServer.LoadEventURLConfig({'id':tags[0].tag_id})
         self.l_debug('set_url_config','{0}'.format(mgd))
         if mgd['st'] is False:
+            self.set_url_config_st = False
             return False
         else:
             url = self.controller.wtServer.listen_url
@@ -200,6 +254,7 @@ class wTagManager(polyinterface.Node):
                     newconfig[key] = value
             # Changed to applyAll True for now?
             res = self.controller.wtServer.SaveEventURLConfig({'id':tags[0].tag_id, 'config': newconfig, 'applyAll': True})
+            self.set_url_config_st = res['st']
 
     def get_tag_list(self):
         ret = self.controller.wtServer.SelectTagManager(self.mac)
@@ -285,6 +340,6 @@ class wTagManager(polyinterface.Node):
     ]
     commands = {
         'SET_USE_TAGS': cmd_set_use_tags,
-        'DON': cmd_set_on,
-        'DOF': cmd_set_off,
+        'QUERY': query,
+        'DISCOVER': discover,
     }

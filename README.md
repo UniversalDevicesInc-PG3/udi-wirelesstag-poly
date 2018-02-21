@@ -1,14 +1,12 @@
 # MyNodeServer
 
 #### TODO Before release
-- Test adding from scratch that TagManager .new works properly?
-- Do wTag->set_url_config in the TagManager and applyAll?
-- Move set_url
-- Add discover for TagManager node
-- Can't have Tag Names with spaces in them? Make it show the tag as error?
-- Restore nodes or re-disover on startup?
-- Query Tag's on startup
-- Add Query command for Tags
+- Restart is setting all tag data back to zero :(
+- Test if slaveId changes when a tag is deleted and undeleted?
+   - May need to link the mac & slave id in customData
+- Create C versions of all or some tags?
+   - See which have temperature
+- Query Tag's on startup?
 - Short poll query when Motion=True to change motion
 - What are the other motion settings door_open...
 - Query to reset Motion when it's True?
@@ -31,10 +29,6 @@
 2018-02-16 20:44:56,047 DEBUG    wtController:get_handler: processing command=/water_dried params={'tagname': 'WaterSensor', 'mois': '1', 'ts': '2018-02-16T20:44:51 00:00'}
 2018-02-16 20:44:56,048 ERROR    wtController:get_handler: Unknown command '/water_dried'
 2018-02-16 20:44:56,049 ERROR    get_handler: code=500 message=Command /water_dried failed
-
-- When SaveEventURLConfig fails, remember and retry during poll, or retry in loop?
-2018-02-19 21:02:58,300 ERROR    http_post: Connection error for http://wirelesstag.net/ethClient.asmx/SaveEventURLConfig: HTTPConnectionPool(host='wirelesstag.net', port=80): Read timed out. (read timeout=10)
-2018-02-19 21:02:58,302 DEBUG    api_post_d: path=ethClient.asmx/SaveEventURLConfig ret=False
 
 #### Installation
 

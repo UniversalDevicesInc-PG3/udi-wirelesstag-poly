@@ -1,7 +1,10 @@
+
+# All
+CMD-DISCOVER-NAME = Discover
+CMD-QUERY-NAME = Query
+
 # controller
 ND-wtController-NAME = Wireless Tags Controller
-CMD-cntl-DISCOVER-NAME = Discover
-CMD-cntl-QUERY-NAME = Query
 CMD-cntl-INSTALL_PROFILE-NAME = Install Profile
 ST-cntl-ST-NAME = NodeServer Online
 ST-cntl-GV1-NAME = Version Major
@@ -28,19 +31,19 @@ CDM-50 = Critical
 ND-wTagManager-NAME = Wireless Tags Manager
 ST-tagmgr-ST-NAME = Status
 ST-tagmgr-GV1-NAME = Monitor Tags
-CMD-tagmgr-SET_USE_TAGS-NAME = Set Use Tags
+CMD-tagmgr-SET_USE_TAGS-NAME = Monitor Tags
 
 # Tags http://wirelesstag.net/kumoapp/17/tags-kumosensors-kumostats
-ND-wTag12-NAME = Motion Sensor Tag (8-bit temperature) (12)
-ND-wTag13-NAME = Motion Sensor Tag (13-bit temperature+humidity) (13)
-ND-wTag21-NAME = Motion Sensor Tag Pro (21)
-ND-wTag26-NAME = Motion Sensor Tag Pro ALS (Ambient Light Sensor) (26)
-ND-wTag32-NAME = Water/Soil moisture sensor	(32)
-ND-wTag52-NAME = Door/window (reed) KumoSensor (52)
-ND-wTag62-NAME = Kumostat/Nest Thremostat (62)
-ND-wTag72-NAME = Infra-Red (PIR) KumoSensor (72)
-ND-wTag82-NAME = WeMo Switches/Maker/LED (82)
-ND-wTag92-NAME = Webcams (Dropcam) (92)
+ND-wTag12F-NAME = Motion Sensor Tag (8-bit temperature) (12) (F)
+ND-wTag13F-NAME = Motion Sensor Tag (13-bit temperature+humidity) (13) (F)
+ND-wTag21F-NAME = Motion Sensor Tag Pro (21) (F)
+ND-wTag26F-NAME = Motion Sensor Tag Pro ALS (Ambient Light Sensor) (26) (F)
+ND-wTag32F-NAME = Water/Soil moisture sensor (32) (F)
+ND-wTag52F-NAME = Door/window (reed) KumoSensor (52) (F)
+ND-wTag62F-NAME = Kumostat/Nest Thremostat (62) (F)
+ND-wTag72F-NAME = Infra-Red (PIR) KumoSensor (72) (F)
+ND-wTag82F-NAME = WeMo Switches/Maker/LED (82) (F)
+ND-wTag92F-NAME = Webcams (Dropcam) (92) (F)
 
 # These are the defaults for all tags
 ST-ST-NAME = Tag Status

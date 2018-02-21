@@ -253,10 +253,13 @@ class wtServer():
         if dump:
             payload = json.dumps(payload)
         aret = self.http_post(path,payload)
-        self.l_debug('api_post_d','path={0} ret={1}'.format(path,aret))
+        self.l_debug('api_post_d','path={0} got={1}'.format(path,aret))
         if aret == False or not 'd' in aret:
-            return { 'st': False }
-        return { 'st': True, 'result': aret['d'] }
+            mret = { 'st': False }
+        else:
+            mret = { 'st': True, 'result': aret['d'] }
+        self.l_debug('api_post_d','ret={0}'.format(mret))
+        return mret
 
     # These match the names used in the API
     
@@ -272,7 +275,11 @@ class wtServer():
     # http://wirelesstag.net/ethAccount.asmx?op=SelectTagManager
     def SelectTagManager(self,mgr_mac):
         # This doesn't like how request converts dict to json, so do it here.
-        return self.api_post_d('ethAccount.asmx/SelectTagManager',{'mac':mgr_mac})
+        if hasattr(self,'last_selected') and self.last_selected == mgr_mac: return { 'st': True }
+        mgd = self.api_post_d('ethAccount.asmx/SelectTagManager',{'mac':mgr_mac})
+        if mgd['st']:
+            last_selected = mgr_mac
+        return mgd
 
     # http://wirelesstag.net/ethClient.asmx?op=GetServerTime
     def GetServerTime(self):
@@ -289,6 +296,18 @@ class wtServer():
     # http://wirelesstag.net/ethClient.asmx?op=SaveEventURLConfig
     def SaveEventURLConfig(self,params):
         return self.api_post_d('ethClient.asmx/SaveEventURLConfig',params)
+
+    # http://wirelesstag.net/ethClient.asmx?op=LoadTempSensorConfig
+    def LoadTempSensorConfig(self,params):
+        return self.api_post_d('ethClient.asmx/LoadTempSensorConfig',params)
+
+    # http://wirelesstag.net/ethClient.asmx?op=GetTagListCached
+    def GetTagListCached(self,params):
+        return self.api_post_d('ethClient.asmx/GetTagListCached',params)
+
+    # http://wirelesstag.net/ethClient.asmx?op=RequestImmediatePostback
+    def RequestImmediatePostback(self,params):
+        return self.api_post_d('ethClient.asmx/RequestImmediatePostback',params)
 
 def my_ghandler(command,params):
     return True

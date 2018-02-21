@@ -5,6 +5,7 @@ by JimBoCA jimboca3@gmail.com
 import polyinterface
 import sys
 import time
+import re
 from wt_funcs import id_to_address,myfloat
 
 LOGGER = polyinterface.LOGGER
@@ -28,7 +29,7 @@ class wTag(polyinterface.Node):
     reportDrivers(): Forces a full update of all drivers to Polyglot/ISY.
     query(): Called when ISY sends a query request to Polyglot for this specific node
     """
-    def __init__(self, controller, primary, address=None, name=None, tag_type=None, tdata=None, node_data=None):
+    def __init__(self, controller, primary, address=None, name=None, tag_type=None, uom=None, tdata=None, node_data=None):
         """
         Optional.
         Super runs all the parent class necessities. You do NOT have
@@ -39,30 +40,47 @@ class wTag(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
+        LOGGER.debug('wTag:__init__: address={0} name={1} type={2} uom={3}'.format(address,name,tag_type,uom))
+        # Remove spaces from names since that messes with our return urls.
+        if name is not None:
+            name = re.sub(r"\s+", '', name)
         if node_data is not None:
             # An existing node,
             self.is_new = False
             # We need to pull tag_type from GV1 for existing tags.
+            self.tag_uom = -1 # Should never happen, just need for old data added before it existed.
             for driver in node_data['drivers']:
                 if driver['driver'] == 'GV1':
                     self.tag_type = driver['value']
                 elif driver['driver'] == 'GPV':
                     self.tag_id   = driver['value']
+                elif driver['driver'] == 'UOM':
+                    self.tag_uom  = driver['value']
         elif address is None or name is None or tag_type is None:
+            # It's a new tag.
             if tdata is None:
-                self.l_error('__init__',"address ({0}), name ({1}), and type ({2}) must be specified when tdata is None".format(address,tdata,type))
+                self.l_error('__init__',"address ({0}), name ({1}), and type ({2}) must be specified when tdata is None".format(address,name,tag_type))
                 return False
-            self.is_new = True
-            self.tdata = tdata
+            if uom is None:
+                self.l_error('__init__',"uom ({0}) must be specified for new tags.".format(uom))
+            self.is_new   = True
             self.tag_type = tdata['tagType']
+            self.tag_uom  = uom
             self.tag_id   = tdata['slaveId']
-            self.uuid  = tdata['uuid']
-            address    = id_to_address(self.uuid)
-            name       = tdata['name']
+            self.uuid     = tdata['uuid']
+            address       = id_to_address(self.uuid)
+            name          = tdata['name']
         self.name = name
         self.tdata = tdata
-        self.id = 'wTag' + str(self.tag_type)
-        self.l_info('__init__','address={0} name={1} type={2}'.format(address,name,tag_type))
+        # Fix our temp_uom in drivers, this wont' change an existing tag, only new ones.
+        # TODO:  test changing it by forcing update?
+        for driver in self.drivers:
+            if driver['uom'] == 'temp_uom':
+                # (17=F 4=C)
+                driver['uom'] = 4 if self.tag_uom == 0 else 17
+        uomS = "C" if self.tag_uom == 0 else "F"
+        self.id = 'wTag' + str(self.tag_type) + uomS
+        self.l_info('__init__','address={0} name={1} type={2} id={3} uom={4}'.format(address,name,self.tag_type,self.tag_id,self.tag_uom))
         super(wTag, self).__init__(controller, primary, address, name)
 
     def start(self):
@@ -73,11 +91,26 @@ class wTag(polyinterface.Node):
         """
         self.setDriver('ST', 1)
         self.primary_n = self.controller.nodes[self.primary]
-        # Alwasy set driver from tag type
-        self.set_tag_type(self.tag_type)
-        self.set_tag_id(self.tag_id)
-        self.set_from_tag_data()
-        self.query()
+        # Always set driver from tag type
+        self.set_tag_type(self.tag_type,True)
+        self.set_tag_id(self.tag_id,True)
+        self.set_tag_uom(self.tag_uom,True)
+        if self.tdata is not None:
+            self.set_from_tag_data(self.tdata)
+        else:
+            # These stay the same across reboots as the defaul.
+            self.set_temp(self.getDriver('CLITEMP'),True,False)
+            self.set_hum(self.getDriver('CLIHUM'),True)
+            self.set_lit(self.getDriver('GV7'),True)
+            self.set_lux(self.getDriver('LUMIN'),True)
+            self.set_batp(self.getDriver('BATLVL'),True)
+            self.set_batv(self.getDriver('CV'),True)
+            self.set_motion(self.getDriver('GV2'),True)
+            self.set_orien(self.getDriver('GV3'),True)
+            self.set_xaxis(self.getDriver('GV4'),True)
+            self.set_yaxis(self.getDriver('GV5'),True)
+            self.set_zaxis(self.getDriver('GV6'),True)
+        self.reportDrivers()
 
     def query(self):
         """
@@ -85,6 +118,9 @@ class wTag(polyinterface.Node):
         the parent class, so you don't need to override this method unless
         there is a need.
         """
+        # This askes for the sensor to report
+        mgd = self.controller.wtServer.RequestImmediatePostback({'id':self.tag_id})
+        if mgd['st']: self.set_from_tag_data(mgd['result'])
         self.reportDrivers()
 
     def l_info(self, name, string):
@@ -102,20 +138,19 @@ class wTag(polyinterface.Node):
     """
     Set Functions
     """
-    def set_from_tag_data(self):
-        if self.tdata is None: return False
-        if 'temperature' in self.tdata:
-            self.set_temp(self.tdata['temperature'])
-        if 'batteryVolt' in self.tdata:
-            self.set_batv(self.tdata['batteryVolt'])
-        if 'batteryRemaining' in self.tdata:
-            self.set_batp(float(self.tdata['batteryRemaining']) * 100)
-        if 'lux' in self.tdata:
-            self.set_lux(self.tdata['lux'])
-        if 'hum' in self.tdata:
-            self.set_hum(self.tdata['hum'])
-        if 'lit' in self.tdata:
-            self.set_lit(self.tdata['lit'])
+    def set_from_tag_data(self,tdata):
+        if 'temperature' in tdata:
+            self.set_temp(tdata['temperature'])
+        if 'batteryVolt' in tdata:
+            self.set_batv(tdata['batteryVolt'])
+        if 'batteryRemaining' in tdata:
+            self.set_batp(float(tdata['batteryRemaining']) * 100)
+        if 'lux' in tdata:
+            self.set_lux(tdata['lux'])
+        if 'hum' in tdata:
+            self.set_hum(tdata['hum'])
+        if 'lit' in tdata:
+            self.set_lit(tdata['lit'])
 
     # This is the tag_type number, we don't really need to show it, but 
     # we need the info when recreating the tags from the config.
@@ -129,9 +164,15 @@ class wTag(polyinterface.Node):
         if not force and hasattr(self,"tag_id") and self.tag_id == value:
             return True
         self.tag_id = value
-        self.setDriver('GVP', value)
+        self.setDriver('GPV', value)
         
-    def set_temp(self,value,force=False):
+    def set_tag_uom(self,value,force=False):
+        if not force and hasattr(self,"tag_uom") and self.tag_uom == value:
+            return True
+        self.tag_uom = value
+        self.setDriver('UOM', value)
+        
+    def set_temp(self,value,force=False,convert=True):
         if self.primary_n.degFC == 0:
             value = myfloat(value,2)
         else:
@@ -289,8 +330,9 @@ class wTag(polyinterface.Node):
     drivers = [
         {'driver': 'ST',      'value': 0, 'uom': 2},
         {'driver': 'GPV',     'value': 0, 'uom': 56}, # tag_id
+        {'driver': 'UOM',     'value': 0, 'uom': 56}, # UOM 0=C 1=F
         {'driver': 'GV1',     'value': 0, 'uom': 56}, # tag_type:    
-        {'driver': 'CLITEMP', 'value': 0, 'uom': 17}, # temp:   Curent temperature (17=F 4=C)
+        {'driver': 'CLITEMP', 'value': 0, 'uom': 'temp_uom'}, # temp:   Curent temperature (17=F 4=C)
         {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # batp:   Battery percent (51=percent)
         {'driver': 'LUMIN',   'value': 0, 'uom': 36}, # lux:    Lux (36=lux)
         {'driver': 'CLIHUM',  'value': 0, 'uom': 21}, # hum:    Humidity (21 = absolute humidity)
@@ -304,6 +346,6 @@ class wTag(polyinterface.Node):
     ]
 
     commands = {
-        'DON': cmd_set_on,
+        'QUERY': query,
         'DOF': cmd_set_off,
     }
