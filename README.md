@@ -8,6 +8,20 @@ to support [CAO Gadgets Wireless Sensor Tags](http://wirelesstag.net/)
 (c) JimBoCA aka Jim Searle
 MIT license.
 
+## How it works
+
+This nodeserver starts a backgroud process which implements a minimal REST
+server to handle data coming from the tag manager.  All communication from
+the tag manager to the REST server is on the local network, so no port
+forwarding is necessary.
+
+When the tag manager is "Monitor Tags" is enabled, the nodeserver updates
+all the Tag URL's so any updates are pushed to the REST server.
+
+The authorization for communicating with your tag manager account handled
+by OAuth2 so no passwords are necessary, when the nodeserver is started up for
+the first time you will be asked to give permission.
+
 ## Supported Sensors
 
 This node server is intended to eventually support all Wireless Tags used by the
@@ -44,23 +58,23 @@ with:
 | ST       | BOOL  | Online        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | UOM      | CORF  | Degree        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | GPV      | INT   | TagId (slaveId)|X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| CLITEMP  | FLOAT | Temperature   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| CLITEMP  | FLOAT | temperature   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | ALARM    | EVST  | eventState    | X  | X  | X  | X  |    | X  |    | X  |    |    |       |
 | HUMIN    | FLOAT | hum           |    | X  | X  | X  |    | X  | X  | X  |    |    |       |
 | LUMIN    | FLOAT | lux           |    |    |    | X  |    |    |    |    |    |    |       |
 | BATLVL   | FLOAT | batteryRemaining | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | CV       | FLOAT | batteryVolt   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| CLITEMP  | FLOAT | Temperature   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| CLITEMP  | FLOAT | temperature   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | NA1      |       | isClosed      | X  | X  | X  |    |    | X  |    |    |    |    | EVST-3 |
 | NA1      |       | isOpen        | X  | X  | X  |    |    | X  |    |    |    |    | EVST-4 |
 | NA1      |       | hasMoved      | X  | X  | X  |    |    |    |    |    |    |    | EVST-2 |
 | NA1      |       | isDetected    |    |    |    | X  |    |    |    | X  |    |    | EVST-5 |
 | NA1      |       | isTimedout    |    |    |    | X  |    |    |    | X  |    |    | EVST-6 |
 | GV3      | FLOAT | Orientation   | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV4      | FLOAT | angleX        | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV5      | FLOAT | angleY        | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV6      | FLOAT | angleZ        | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV7      | BONOFF| Light         | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GV4      | FLOAT | xaxis         | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV5      | FLOAT | yaxis         | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV6      | FLOAT | zaxis         | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV7      | BONOFF| lit           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | GV8      | BOOL  | oor           | X  | X  | X  | X  | X  | X  |    | X  |    |    | Out Of Range |
 | GV9      | TMST  | tempState     | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | GV10     | MSST  | moistureState |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
@@ -152,17 +166,23 @@ with:
      - Still not released, see TODO list below.
 
 ## TODO Before release
+- Double check all F nodedef's have proper Drivers
+  - Copy F versions of all tags to C
+- Only add necessary drivers based on tag_type in wTag
+- What happens when authorization expires?
+- What happens when authorization is removed?
 - Really test sensor changes when I am home
-- Only add necessary drivers based on tag_type
+  - Humidity & water detected.
+  - Out of Range
+  - Online
 - Test if slaveId changes when a tag is deleted and undeleted?
    - May need to link the mac & slave id in customData
-- Copy F versions of all tags to C?
 - Query Tag's on startup?
 - Short poll query when Motion=True to change motion
 - What are the other motion settings door_open...
 - Query to reset Motion when it's True?
   - Don't seem to get motion timout in updates?
-- Finish handling all GET commands, only update is currently handled.
+- Finish handling all GET commands, only update is currently handled?
 ```
 2018-02-16 20:44:03,737 ERROR    wtController:get_handler: Unknown command '/too_humid'
 2018-02-16 20:44:03,738 ERROR    get_handler: code=500 message=Command /too_humid failed
