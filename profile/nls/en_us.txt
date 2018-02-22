@@ -47,15 +47,19 @@ ND-wTag92F-NAME = Webcams (Dropcam) (92) (F)
 
 # These are the defaults for all tags
 ST-ST-NAME = Tag Status
-ST-GV1-NAME = Tag Type
+ST-ALARM-NAME = Event State
 ST-CV-NAME = Battery Voltage
+ST-GV1-NAME = Tag Type
 ST-GV2-NAME = Motion
 ST-GV3-NAME = Orientation
 ST-GV4-NAME = X-Axis
 ST-GV5-NAME = Y-Axis
 ST-GV6-NAME = Z-Axis
 ST-GV7-NAME = Light
-ST-ALARM-NAME = Event State
+ST-GV8-NAME = Out Of Range
+ST-GV9-NAME = Temp State
+ST-GV10-NAME = Moisture State
+ST-GV11-NAME = Light State
 
 ONOFF-0 = Off
 ONOFF-1 = On
@@ -75,5 +79,23 @@ EVST-3 = Opened
 EVST-4 = Closed
 EVST-5 = DetectedMovement
 EVST-6 = TimedOut
+
+TMST-0 = Not Enabled
+TMST-1 = Normal
+TMST-2 = Too High
+TMST-3 = Too Low
+
+MSST-0 = Cannot monitor
+MSST-1 = Not enabled
+MSST-2 = Normal
+MSST-3 = Too Dry
+MSST-4 = Too Wet
+
+LIST-0 = Cannot monitor
+LIST-1 = Not enabled
+LIST-2 = Normal
+LIST-3 = Too Dark
+LIST-4 = Too Bright
+
 
 

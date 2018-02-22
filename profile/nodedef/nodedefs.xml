@@ -64,108 +64,25 @@
     </cmds>
   </nodeDef>
 
-<!-- 
-
-http://wirelesstag.net/kumoapp/17/tags-kumosensors-kumostats
-
-Motion Sensor Tag (8-bit temperature) 12
-Motion Sensor Tag (13-bit temperature+humidity) 13
-Motion Sensor Tag Pro 21
-Motion Sensor Tag Pro ALS (Ambient Light Sensor)  26
-Water/Soil moisture sensor  32
-Door/window (reed) KumoSensor 52
-Kumostat/Nest Thremostat  62
-Infra-Red (PIR) KumoSensor  72
-WeMo Switches/Maker/LED 82
-Webcams (Dropcam) 92
-
-GV8 - ALARM = eventState (12|13|21|26|52|72|Nest)
-  Index of:
-    Disarmed  0
-    Armed 1
-    Moved 2
-    Opened  3
-    Closed  4
-    DetectedMovement  5
-    TimedOut  6
-Not needed, since eventState handle these?
-  EVST-3 isClosed (12|13|21|52)
-  EVST-4 isOpen (12|13|21|52)
-  EVST-2 hasMoved (12|13|21)
-  EVST-5 isDetected (72|26)
-  EVST-6 isTimedout (72|26)
-GV9 - OOR = outOfRange (12|13|21|26|32|52|72)
-  Boolean
-angleX (12|13|21)
-  Float
-angleY (12|13|21)
-  Float
-angleZ (12|13|21)
-  Float
-tempState (all types)
-  Index of:
-    Monitoring not enabled  0
-    Normal  1
-    Too High  2
-    Too Low 3
-moistureState (13|21|26|32|52|62|72)
-  Index of:
-    Cannot monitor moisture/humidity  0
-    Monitoring not enabled  1
-    Normal  2
-    Too Dry 3
-    Too Wet 4
-lightState (26)
-  Index of:
-    Cannot monitor brightness/no lux sensor 0
-    Monitoring not enabled  1
-    Normal  2
-    Too Dark  3
-    Too Bright  4
-temperature (all types)
-  Float, current temperature in Celcius
-lowTh (all types)
-  Float, low temp warning threshold
-highTh (all types)
-  Float, high temp warning threshold
-moisture (32|13|21|26|52|62|72)
-  Float, current soil moisture or air humidity in %. 
-LUMIN - lux (26)
-  Float,  urrent ambient brightness in lux. 
-Kumostat (62) not currently supported
-  target (62)
-  fanOn (62)
-  hvacTurnOff (62)
-  disableLocal (62)
-GV7 - lit (all types)
-  Boolean, LED On/Off
-batteryVolt (all types)
-  Float, battery voltage
-rssi (all types)
-  Float, signal strength in dBm
-txpwr (all types)
-  Integer of the transmit power, can be used to tag distance from manager
-  http://wirelesstag.net/kumoapp/49/txpwr
-
-waterDetected2 (32)
--->
-
   <!-- Tag 12 -->
   <nodeDef id="wTag12F" nls="tag12">
     <editors />
     <sts>
-      <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
-      <st id="ALARM" editor="I_EVST" />
-      <st id="GV7" editor="B_ONOFF" />
-      <st id="CLITEMP" editor="I_TEMP_F" />
-      <st id="BATLVL" editor="BATLVL" />
-      <st id="CV" editor="FLOAT" />
-      <st id="GV2" editor="I_MOTION" />
-      <st id="GV3" editor="FLOAT" />
-      <st id="GV4" editor="FLOAT" />
-      <st id="GV5" editor="FLOAT" />
-      <st id="GV6" editor="FLOAT" />
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
+      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
+      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
+      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
+      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />
@@ -179,17 +96,22 @@ waterDetected2 (32)
   <nodeDef id="wTag13F" nls="tag13">
     <editors />
     <sts>
-      <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
-      <st id="CLITEMP" editor="I_TEMP_F" />
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
-      <st id="BATLVL" editor="BATLVL" />
-      <st id="CV" editor="FLOAT" />
-      <st id="GV2" editor="I_MOTION" />
-      <st id="GV3" editor="FLOAT" />
-      <st id="GV4" editor="FLOAT" />
-      <st id="GV5" editor="FLOAT" />
-      <st id="GV6" editor="FLOAT" />
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
+      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
+      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
+      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
+      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />
@@ -205,17 +127,21 @@ waterDetected2 (32)
     <sts>
       <st id="ST" editor="BOOL" />
       <st id="GV1" editor="I_TAGID" />
-      <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
-      <st id="CLITEMP" editor="I_TEMP_F" />
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
-      <st id="BATLVL" editor="BATLVL" />
-      <st id="CV" editor="FLOAT" />
-      <st id="GV2" editor="I_MOTION" />
-      <st id="GV3" editor="FLOAT" />
-      <st id="GV4" editor="FLOAT" />
-      <st id="GV5" editor="FLOAT" />
-      <st id="GV6" editor="FLOAT" />
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
+      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
+      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
+      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
+      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />
@@ -231,16 +157,21 @@ waterDetected2 (32)
     <sts>
       <st id="ST" editor="BOOL" />
       <st id="GV1" editor="I_TAGID" />
-      <st id="CLITEMP" editor="I_TEMP_F" />
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
-      <st id="LUMIN" editor="I_LUMIN" />
-      <st id="BATLVL" editor="BATLVL" />
-      <st id="CV" editor="FLOAT" />
-      <st id="GV2" editor="I_MOTION" />
-      <st id="GV3" editor="FLOAT" />
-      <st id="GV4" editor="FLOAT" />
-      <st id="GV5" editor="FLOAT" />
-      <st id="GV6" editor="FLOAT" />
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
+      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
+      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
+      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
+      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />
@@ -256,10 +187,21 @@ waterDetected2 (32)
     <sts>
       <st id="ST" editor="BOOL" />
       <st id="GV1" editor="I_TAGID" />
-      <st id="CLITEMP" editor="I_TEMP_F" />
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
-      <st id="BATLVL" editor="BATLVL" />
-      <st id="CV" editor="FLOAT" />
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
+      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
+      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
+      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
+      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />
@@ -275,15 +217,21 @@ waterDetected2 (32)
     <sts>
       <st id="ST" editor="BOOL" />
       <st id="GV1" editor="I_TAGID" />
-      <st id="CLITEMP" editor="I_TEMP_F" />
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
-      <st id="BATLVL" editor="BATLVL" />
-      <st id="CV" editor="FLOAT" />
-      <st id="GV2" editor="I_MOTION" />
-      <st id="GV3" editor="FLOAT" />
-      <st id="GV4" editor="FLOAT" />
-      <st id="GV5" editor="FLOAT" />
-      <st id="GV6" editor="FLOAT" />
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
+      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
+      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
+      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
+      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />
@@ -314,15 +262,21 @@ waterDetected2 (32)
     <sts>
       <st id="ST" editor="BOOL" />
       <st id="GV1" editor="I_TAGID" />
-      <st id="CLITEMP" editor="I_TEMP_F" />
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
-      <st id="BATLVL" editor="BATLVL" />
-      <st id="CV" editor="FLOAT" />
-      <st id="GV2" editor="I_MOTION" />
-      <st id="GV3" editor="FLOAT" />
-      <st id="GV4" editor="FLOAT" />
-      <st id="GV5" editor="FLOAT" />
-      <st id="GV6" editor="FLOAT" />
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
+      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
+      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
+      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
+      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />

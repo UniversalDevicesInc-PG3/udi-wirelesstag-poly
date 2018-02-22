@@ -57,4 +57,19 @@
       <range uom="25" subset="0,1,2,3,4,5,6" nls="EVST" />
    </editor>
 
+   <!-- Temperature State-->
+   <editor id="I_TMST">
+      <range uom="25" subset="0,1,2,3" nls="TMST" />
+   </editor>
+
+   <!-- Temperature State-->
+   <editor id="I_MSST">
+      <range uom="25" subset="0,1,2,3,4" nls="MSST" />
+   </editor>
+
+   <!-- Temperature State-->
+   <editor id="I_LIST">
+      <range uom="25" subset="0,1,2,3,4" nls="LIST" />
+   </editor>
+
 </editors>

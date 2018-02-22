@@ -57,7 +57,11 @@ class wTag(polyinterface.Node):
             {'driver': 'GV4',     'value': 0, 'uom': 56}, # xaxis:  X-Axis
             {'driver': 'GV5',     'value': 0, 'uom': 56}, # yasis:  Y-Axis
             {'driver': 'GV6',     'value': 0, 'uom': 56}, # zaxis:  Z-Asis
-            {'driver': 'GV7',     'value': 0, 'uom': 78}  # lit:    Light 78=off/off
+            {'driver': 'GV7',     'value': 0, 'uom': 78},  # lit:    Light 78=off/off
+            {'driver': 'GV8',     'value': 0, 'uom':  2},  # oor:    OutOfRange
+            {'driver': 'GV9',     'value': 0, 'uom': 25},  # tempState:  
+            {'driver': 'GV10',    'value': 0, 'uom': 25},  # moisture(cap)State:  
+            {'driver': 'GV11',    'value': 0, 'uom': 25}   # lightState:  
         ]
 
         LOGGER.debug('wTag:__init__: address={0} name={1} type={2} uom={3}'.format(address,name,tag_type,uom))
@@ -187,6 +191,14 @@ class wTag(polyinterface.Node):
             self.set_lit(tdata['lit'])
         if 'eventState' in tdata:
             self.set_evst(tdata['eventState'])
+        if 'oor' in tdata:
+            self.set_oor(tdata['oor'])
+        if 'tempEventState' in tdata:
+            self.set_tmst(tdata['tempEventState'])
+        if 'capEventState' in tdata:
+            self.set_msst(tdata['capEventState'])
+        if 'lightEventState' in tdata:
+            self.set_list(tdata['lightEventState'])
 
     # This is the tag_type number, we don't really need to show it, but 
     # we need the info when recreating the tags from the config.
@@ -296,6 +308,40 @@ class wTag(polyinterface.Node):
         if not force and hasattr(self,"evst") and self.evst == value: return True
         self.evst = value
         self.setDriver('ALARM', self.evst)
+        
+    def set_oor(self,value,force=False):
+        value = int(value)
+        if not force and hasattr(self,"oor") and self.oor == value:
+            return True
+        self.oor = value
+        self.setDriver('GV7', value)
+      
+    def set_tmst(self,value,force=False):
+        if value is None: 
+            value = 0 
+        else: 
+            value = int(value)
+        if not force and hasattr(self,"tmst") and self.tmst == value: return True
+        self.tmst = value
+        self.setDriver('GV9', self.evst)
+        
+    def set_msst(self,value,force=False):
+        if value is None: 
+            value = 0 
+        else: 
+            value = int(value)
+        if not force and hasattr(self,"msst") and self.msst == value: return True
+        self.msst = value
+        self.setDriver('GV10', self.evst)
+        
+    def set_list(self,value,force=False):
+        if value is None: 
+            value = 0 
+        else: 
+            value = int(value)
+        if not force and hasattr(self,"list") and self.list == value: return True
+        self.list = value
+        self.setDriver('GV11', self.evst)
         
     """
     """
