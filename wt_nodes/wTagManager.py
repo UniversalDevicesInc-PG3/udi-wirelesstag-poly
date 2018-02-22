@@ -51,6 +51,7 @@ class wTagManager(polyinterface.Node):
         # These start in threads cause they take a while
         self.discover_thread = None
         self.set_url_thread = None
+        self.set_url_config_st = None
 
     def start(self):
         """
@@ -214,7 +215,6 @@ class wTagManager(polyinterface.Node):
         """
         Start the set_url_config in a thread so we don't cause timeouts :(
         """
-        self.set_url_config_st = None
         if thread:
             self.set_url_thread = Thread(target=self._set_url_config)
             self.set_url_thread.start()

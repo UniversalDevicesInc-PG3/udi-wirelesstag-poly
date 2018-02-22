@@ -132,7 +132,7 @@ class wtController(polyinterface.Controller):
         if not self.ready: return False
         # For now just pinging the serverto make sure it's alive
         self.is_signed_in()
-        if not self.st: return self.st 
+        if not self.comm: return self.comm 
         # Call long poll on the tags managers
         for address in self.nodes:
             if self.nodes[address].id == 'wTagManager':
@@ -253,7 +253,8 @@ class wtController(polyinterface.Controller):
         return True
 
     def is_signed_in(self):
-        if not self.authorized('is_signed_in') : return False
+        if not self.authorized('is_signed_in'): 
+            return False
         mgd = self.wtServer.IsSignedIn()
         if 'result' in mgd:
             st = mgd['result']
@@ -300,10 +301,10 @@ class wtController(polyinterface.Controller):
 
     def load_params(self):
         if 'oauth2_code' in self.polyConfig['customParams']:
-            self.oauth2_code = self.polyConfig['customParams']['oauth2_code']
+            self.set_oauth2(self.polyConfig['customParams']['oauth2_code'],save=False)
         else:
             self.l_error('load_params',"oauth2_code not defined in customParams, please authorizze")
-            self.oauth2_code = False
+            self.set_oauth2(False)
             st = False
 
     def save_params(self):
@@ -311,7 +312,10 @@ class wtController(polyinterface.Controller):
         self.addCustomParam({'oauth2_code': self.oauth2_code})
         self.removeNoticesAll()
         if self.oauth2_code == False:
-            self.addNotice('Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wtServer.url))
+            if hasattr(self,'wtServer'):
+                self.addNotice('Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wtServer.url))
+            else:
+                self.addNotice("No Athorization, and no REST Server running, this should not be possible!")                
 
     def set_url_config(self):
         # TODO: Should loop over tag managers, and call set_url_config on the tag manager
@@ -335,12 +339,13 @@ class wtController(polyinterface.Controller):
     """
     Set Functions
     """
-    def set_oauth2(self,value):
+    def set_oauth2(self,value,save=True):
+        if not hasattr(self,"oauth2_code"): self.oauth2_code = False
         if self.oauth2_code != value:
             self.oauth2_code = value
-            self.save_params()
-            self.discover()
-            self.set_url_config()
+            if (save):
+                self.save_params()
+                self.discover()
         if value is False:
             self.set_auth(False)
             self.set_comm(False)
