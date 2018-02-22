@@ -132,7 +132,7 @@ class wtController(polyinterface.Controller):
         if not self.ready: return False
         # For now just pinging the serverto make sure it's alive
         self.is_signed_in()
-        if not self.comm: return self.comm 
+        if not self.st: return self.st 
         # Call long poll on the tags managers
         for address in self.nodes:
             if self.nodes[address].id == 'wTagManager':
