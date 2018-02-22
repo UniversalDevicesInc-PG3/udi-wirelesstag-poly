@@ -121,9 +121,7 @@ class wTagManager(polyinterface.Node):
                 # Try again...
                 self.l_error('shortPoll',"Calling set_url_config since previous st={}".format(self.set_url_config_st))
                 self.set_url_config()
-        for node in self.get_tags():
-            self.l_debug("shortPoll","ptest-{}-node.drivers={}".format(node.address,node.drivers))
-            self.l_debug("shortPoll","getDriver(GV1)={}".format(node.getDriver('GV1')))
+
 
     def longPoll(self):
         """
@@ -173,17 +171,8 @@ class wTagManager(polyinterface.Node):
         self.set_url_config()
 
     def add_tag(self, address=None, name=None, tag_type=None, uom=None, tdata=None, node_data=None):
-        node = self.controller.addNode(wTag(self.controller, self.address, address, name=name, tag_type=tag_type, uom=uom, tdata=tdata, node_data=node_data))
-        self.l_debug("add_tag","dtest-{}-node._drivers={}".format(node.address,node._drivers))
-        self.l_debug("add_tag","dtest-{}-node.drivers={}".format(node.address,node.drivers))
-        if hasattr(self,'fnode'):
-            self.l_debug("add_tag","dtest-{}-fnode.drivers={}".format(self.fnode.address,self.fnode.drivers))
-            if hasattr(self,'snode'):
-                self.l_debug("add_tag","dtest-{}-snode.drivers={}".format(self.snode.address,self.snode.drivers))
-            else:
-                self.snode = node
-        else:
-            self.fnode = node
+        return self.controller.addNode(wTag(self.controller, self.address, address, name=name, tag_type=tag_type, uom=uom, tdata=tdata, node_data=node_data))
+
 
     """
     Misc functions

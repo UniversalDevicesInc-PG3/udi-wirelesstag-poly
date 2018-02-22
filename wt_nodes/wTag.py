@@ -41,7 +41,27 @@ class wTag(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
+        self.drivers = [
+            {'driver': 'ST',      'value': 0, 'uom': 2},
+            {'driver': 'GPV',     'value': 0, 'uom': 56}, # tag_id
+            {'driver': 'UOM',     'value': 0, 'uom': 56}, # UOM 0=C 1=F
+            {'driver': 'GV1',     'value': 0, 'uom': 56}, # tag_type: 
+            {'driver': 'ALARM',   'value': 0, 'uom': 25}, # evst: Event State   
+            {'driver': 'CLITEMP', 'value': 0, 'uom': 'temp_uom'}, # temp:   Curent temperature (17=F 4=C)
+            {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # batp:   Battery percent (51=percent)
+            {'driver': 'LUMIN',   'value': 0, 'uom': 36}, # lux:    Lux (36=lux)
+            {'driver': 'CLIHUM',  'value': 0, 'uom': 21}, # hum:    Humidity (21 = absolute humidity)
+            {'driver': 'CV',      'value': 0, 'uom': 72}, # batv:   Battery Voltag 72=Volt
+            {'driver': 'GV2',     'value': 0, 'uom': 25}, # motion: Might use True, False, Open for door mode?
+            {'driver': 'GV3',     'value': 0, 'uom': 56}, # orien:  Orientation
+            {'driver': 'GV4',     'value': 0, 'uom': 56}, # xaxis:  X-Axis
+            {'driver': 'GV5',     'value': 0, 'uom': 56}, # yasis:  Y-Axis
+            {'driver': 'GV6',     'value': 0, 'uom': 56}, # zaxis:  Z-Asis
+            {'driver': 'GV7',     'value': 0, 'uom': 78}  # lit:    Light 78=off/off
+        ]
+
         LOGGER.debug('wTag:__init__: address={0} name={1} type={2} uom={3}'.format(address,name,tag_type,uom))
+
         # Remove spaces from names since that messes with our return urls.
         if name is not None:
             name = re.sub(r"\s+", '', name)
@@ -118,11 +138,8 @@ class wTag(polyinterface.Node):
             self.set_zaxis(self.getDriver('GV6'),True)
             self.set_lit(self.getDriver('GV7'),True)
             self.set_evst(self.getDriver('ALARM'),True)
-        self.l_debug("start","dtest self._drivers={0}".format(self._drivers))
-        self.l_debug("start","dtest self.drivers={0}".format(self.drivers))
         self.reportDrivers()
-        self.l_debug("start","dtest self._drivers={0}".format(self._drivers))
-        self.l_debug("start","dtest self.drivers={0}".format(self.drivers))
+
 
     def query(self):
         """
@@ -138,11 +155,7 @@ class wTag(polyinterface.Node):
         mgd = self.controller.wtServer.RequestImmediatePostback({'id':self.tag_id})
         if mgd['st']: 
             self.set_from_tag_data(mgd['result'])
-            self.l_debug("query","dtest self._drivers={0}".format(self._drivers))
-            self.l_debug("query","dtest self.drivers={0}".format(self.drivers))
             self.reportDrivers()
-            self.l_debug("query","dtest self._drivers={0}".format(self._drivers))
-            self.l_debug("query","dtest self.drivers={0}".format(self.drivers))
 
     def l_info(self, name, string):
         LOGGER.info("%s:%s:%s:%s: %s" %  (self.id,self.address,self.name,name,string))
@@ -358,25 +371,6 @@ class wTag(polyinterface.Node):
       "batteryRemaining":1.13 # = 113% ?
     }]}
     """
-
-    drivers_template = [
-        {'driver': 'ST',      'value': 0, 'uom': 2},
-        {'driver': 'GPV',     'value': 0, 'uom': 56}, # tag_id
-        {'driver': 'UOM',     'value': 0, 'uom': 56}, # UOM 0=C 1=F
-        {'driver': 'GV1',     'value': 0, 'uom': 56}, # tag_type: 
-        {'driver': 'ALARM',   'value': 0, 'uom': 25}, # evst: Event State   
-        {'driver': 'CLITEMP', 'value': 0, 'uom': 'temp_uom'}, # temp:   Curent temperature (17=F 4=C)
-        {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # batp:   Battery percent (51=percent)
-        {'driver': 'LUMIN',   'value': 0, 'uom': 36}, # lux:    Lux (36=lux)
-        {'driver': 'CLIHUM',  'value': 0, 'uom': 21}, # hum:    Humidity (21 = absolute humidity)
-        {'driver': 'CV',      'value': 0, 'uom': 72}, # batv:   Battery Voltag 72=Volt
-        {'driver': 'GV2',     'value': 0, 'uom': 25}, # motion: Might use True, False, Open for door mode?
-        {'driver': 'GV3',     'value': 0, 'uom': 56}, # orien:  Orientation
-        {'driver': 'GV4',     'value': 0, 'uom': 56}, # xaxis:  X-Axis
-        {'driver': 'GV5',     'value': 0, 'uom': 56}, # yasis:  Y-Axis
-        {'driver': 'GV6',     'value': 0, 'uom': 56}, # zaxis:  Z-Asis
-        {'driver': 'GV7',     'value': 0, 'uom': 78}  # lit:    Light 78=off/off
-    ]
 
     commands = {
         'QUERY': query,
