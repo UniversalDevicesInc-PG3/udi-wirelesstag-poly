@@ -54,6 +54,8 @@ ST-GV3-NAME = Orientation
 ST-GV4-NAME = X-Axis
 ST-GV5-NAME = Y-Axis
 ST-GV6-NAME = Z-Axis
+ST-GV7-NAME = Light
+ST-ALARM-NAME = Event State
 
 ONOFF-0 = Off
 ONOFF-1 = On
@@ -62,3 +64,16 @@ MOT4-0  = False
 MOT4-1  = True
 MOT4-2  = Open
 MOT4-3  = Open Long
+
+# Properties
+
+# http://wirelesstag.net/kumoapp/44/eventstate
+EVST-0 = Disarmed
+EVST-1 = Armed
+EVST-2 = Moved
+EVST-3 = Opened
+EVST-4 = Closed
+EVST-5 = DetectedMovement
+EVST-6 = TimedOut
+
+

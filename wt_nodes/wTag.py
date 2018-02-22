@@ -6,6 +6,7 @@ import polyinterface
 import sys
 import time
 import re
+from copy import deepcopy
 from wt_funcs import id_to_address,myfloat
 
 LOGGER = polyinterface.LOGGER
@@ -58,6 +59,7 @@ class wTag(polyinterface.Node):
                     self.tag_uom  = driver['value']
         elif address is None or name is None or tag_type is None:
             # It's a new tag.
+            self.address = address
             if tdata is None:
                 self.l_error('__init__',"address ({0}), name ({1}), and type ({2}) must be specified when tdata is None".format(address,name,tag_type))
                 return False
@@ -72,7 +74,11 @@ class wTag(polyinterface.Node):
             name          = tdata['name']
         self.name = name
         self.tdata = tdata
-        # Fix our temp_uom in drivers, this wont' change an existing tag, only new ones.
+        #
+        # C or F?
+        # Fix our temp_uom in drivers
+        # This won't change an existing tag, only new ones.
+        #
         # TODO:  test changing it by forcing update?
         for driver in self.drivers:
             if driver['uom'] == 'temp_uom':
@@ -80,6 +86,7 @@ class wTag(polyinterface.Node):
                 driver['uom'] = 4 if self.tag_uom == 0 else 17
         uomS = "C" if self.tag_uom == 0 else "F"
         self.id = 'wTag' + str(self.tag_type) + uomS
+        self.address = address
         self.l_info('__init__','address={0} name={1} type={2} id={3} uom={4}'.format(address,name,self.tag_type,self.tag_id,self.tag_uom))
         super(wTag, self).__init__(controller, primary, address, name)
 
@@ -101,7 +108,6 @@ class wTag(polyinterface.Node):
             # These stay the same across reboots as the defaul.
             self.set_temp(self.getDriver('CLITEMP'),True,False)
             self.set_hum(self.getDriver('CLIHUM'),True)
-            self.set_lit(self.getDriver('GV7'),True)
             self.set_lux(self.getDriver('LUMIN'),True)
             self.set_batp(self.getDriver('BATLVL'),True)
             self.set_batv(self.getDriver('CV'),True)
@@ -110,7 +116,13 @@ class wTag(polyinterface.Node):
             self.set_xaxis(self.getDriver('GV4'),True)
             self.set_yaxis(self.getDriver('GV5'),True)
             self.set_zaxis(self.getDriver('GV6'),True)
+            self.set_lit(self.getDriver('GV7'),True)
+            self.set_evst(self.getDriver('ALARM'),True)
+        self.l_debug("start","dtest self._drivers={0}".format(self._drivers))
+        self.l_debug("start","dtest self.drivers={0}".format(self.drivers))
         self.reportDrivers()
+        self.l_debug("start","dtest self._drivers={0}".format(self._drivers))
+        self.l_debug("start","dtest self.drivers={0}".format(self.drivers))
 
     def query(self):
         """
@@ -118,22 +130,31 @@ class wTag(polyinterface.Node):
         the parent class, so you don't need to override this method unless
         there is a need.
         """
+        # Polyglot bug?  We have to set every driver before calling reportDrivers?
+        #self.set_tag_type(self.tag_type,True)
+        #self.set_tag_id(self.tag_id,True)
+        #self.set_tag_uom(self.tag_uom,True)
         # This askes for the sensor to report
         mgd = self.controller.wtServer.RequestImmediatePostback({'id':self.tag_id})
-        if mgd['st']: self.set_from_tag_data(mgd['result'])
-        self.reportDrivers()
+        if mgd['st']: 
+            self.set_from_tag_data(mgd['result'])
+            self.l_debug("query","dtest self._drivers={0}".format(self._drivers))
+            self.l_debug("query","dtest self.drivers={0}".format(self.drivers))
+            self.reportDrivers()
+            self.l_debug("query","dtest self._drivers={0}".format(self._drivers))
+            self.l_debug("query","dtest self.drivers={0}".format(self.drivers))
 
     def l_info(self, name, string):
-        LOGGER.info("%s:%s:%s: %s" %  (self.id,self.name,name,string))
+        LOGGER.info("%s:%s:%s:%s: %s" %  (self.id,self.address,self.name,name,string))
         
     def l_error(self, name, string):
-        LOGGER.error("%s:%s:%s: %s" % (self.id,self.name,name,string))
+        LOGGER.error("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
         
     def l_warning(self, name, string):
-        LOGGER.warning("%s:%s:%s: %s" % (self.id,self.name,name,string))
+        LOGGER.warning("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
         
     def l_debug(self, name, string):
-        LOGGER.debug("%s:%s:%s: %s" % (self.id,self.name,name,string))
+        LOGGER.debug("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
 
     """
     Set Functions
@@ -151,12 +172,15 @@ class wTag(polyinterface.Node):
             self.set_hum(tdata['hum'])
         if 'lit' in tdata:
             self.set_lit(tdata['lit'])
+        if 'eventState' in tdata:
+            self.set_evst(tdata['eventState'])
 
     # This is the tag_type number, we don't really need to show it, but 
     # we need the info when recreating the tags from the config.
     def set_tag_type(self,value,force=False):
         if not force and hasattr(self,"tag_type") and self.tag_type == value:
             return True
+        self.l_debug('set_tag_type','GV1 to {0}'.format(value))
         self.tag_type = value
         self.setDriver('GV1', value)
         
@@ -173,9 +197,8 @@ class wTag(polyinterface.Node):
         self.setDriver('UOM', value)
         
     def set_temp(self,value,force=False,convert=True):
-        if self.primary_n.degFC == 0:
-            value = myfloat(value,2)
-        else:
+        value = myfloat(value,2)
+        if convert and self.primary_n.degFC == 1:
             # Convert C to F
             value = myfloat(float(value) * 1.8 + 32.0,2)
         if not force and hasattr(self,"temp") and self.temp == value:
@@ -252,6 +275,15 @@ class wTag(polyinterface.Node):
         self.zaxis = value
         self.setDriver('GV6', self.zaxis)
         
+    def set_evst(self,value,force=False):
+        if value is None: 
+            value = 0 
+        else: 
+            value = int(value)
+        if not force and hasattr(self,"evst") and self.evst == value: return True
+        self.evst = value
+        self.setDriver('ALARM', self.evst)
+        
     """
     """
 
@@ -327,11 +359,12 @@ class wTag(polyinterface.Node):
     }]}
     """
 
-    drivers = [
+    drivers_template = [
         {'driver': 'ST',      'value': 0, 'uom': 2},
         {'driver': 'GPV',     'value': 0, 'uom': 56}, # tag_id
         {'driver': 'UOM',     'value': 0, 'uom': 56}, # UOM 0=C 1=F
-        {'driver': 'GV1',     'value': 0, 'uom': 56}, # tag_type:    
+        {'driver': 'GV1',     'value': 0, 'uom': 56}, # tag_type: 
+        {'driver': 'ALARM',   'value': 0, 'uom': 25}, # evst: Event State   
         {'driver': 'CLITEMP', 'value': 0, 'uom': 'temp_uom'}, # temp:   Curent temperature (17=F 4=C)
         {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # batp:   Battery percent (51=percent)
         {'driver': 'LUMIN',   'value': 0, 'uom': 36}, # lux:    Lux (36=lux)
@@ -342,7 +375,7 @@ class wTag(polyinterface.Node):
         {'driver': 'GV4',     'value': 0, 'uom': 56}, # xaxis:  X-Axis
         {'driver': 'GV5',     'value': 0, 'uom': 56}, # yasis:  Y-Axis
         {'driver': 'GV6',     'value': 0, 'uom': 56}, # zaxis:  Z-Asis
-        {'driver': 'GV7',     'value': 0, 'uom': 78}  # lit:    Lighth 78=off/off
+        {'driver': 'GV7',     'value': 0, 'uom': 78}  # lit:    Light 78=off/off
     ]
 
     commands = {

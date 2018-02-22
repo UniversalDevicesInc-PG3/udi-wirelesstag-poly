@@ -52,4 +52,9 @@
       <range uom="25" subset="0,1,2,3" nls="MOT4" />
    </editor>
    
+   <!-- Event State-->
+   <editor id="I_EVST">
+      <range uom="25" subset="0,1,2,3,4,5,6" nls="EVST" />
+   </editor>
+
 </editors>

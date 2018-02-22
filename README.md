@@ -1,7 +1,6 @@
 # MyNodeServer
 
 #### TODO Before release
-- Restart is setting all tag data back to zero :(
 - Test if slaveId changes when a tag is deleted and undeleted?
    - May need to link the mac & slave id in customData
 - Create C versions of all or some tags?
@@ -51,3 +50,6 @@ TODO: Need to add param on tag manager to enable/disable?
 #### Requirements
 
 Here is what is required to run this poly.
+
+
+
