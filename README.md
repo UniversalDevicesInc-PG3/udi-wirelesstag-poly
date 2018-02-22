@@ -40,7 +40,7 @@ with:
 ### Supported Drivers
 
 | Driver   | NLS   | Name          | 12 | 13 | 21 | 26 | 32 | 52 | 62 | 72 | 82 | 92 | Notes |
-| -------- | ----- | ------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |       |
+| -------- | ----- | ------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | ----- |
 | ST       | BOOL  | Online        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | UOM      | CORF  | Degree        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | GPV      | INT   | TagId (slaveId)|X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
