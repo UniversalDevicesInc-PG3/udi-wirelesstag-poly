@@ -13,7 +13,7 @@ MIT license.
 This node server is intended to eventually support all Wireless Tags used by the
 ISY Community.
 
-This list of all sensors is at
+The list of all sensors is at
 http://wirelesstag.net/kumoapp/17/tags-kumosensors-kumostats
 
 The list at this time is in the following table, and support level is denoted
@@ -37,50 +37,52 @@ with:
 | WeMo Switches/Maker/LED                          | 82   | 3       |
 | Webcams (Dropcam)                                | 92   | 3       |
 
-Supported Drivers
+### Supported Drivers
 
-| Driver   | NLS   | Name          | 12 | 13 | 21 | 26 | 32 | 52 | 62 | 72 | 82 | 92 |
-| -------- | ----- | ------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
-| ST       | BOOL  | Online        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| UOM      | CORF  | Degree        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| GPV      | INT   | TagId (slaveId)|X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| CLITEMP  | FLOAT | Temperature   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| ALARM    | EVST  | eventState    | X  | X  | X  | X  |    | X  |    | X  |    |    |
-| HUMIN    | FLOAT | hum           |    | X  | X  | X  |    | X  | X  | X  |    |    |
-| LUMIN    | FLOAT | lux           |    |    |    | X  |    |    |    |    |    |    |
-| BATLVL   | FLOAT | Battery Level | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| CV       | FLOAT | Battery Voltage | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| CLITEMP  | FLOAT | Temperature   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| NA1      |       | isClosed      | X  | X  | X  |    |    | X  |    |    |    |    | EVST-3
-| NA1      |       | isOpen        | X  | X  | X  |    |    | X  |    |    |    |    | EVST-4
-| NA1      |       | hasMoved      | X  | X  | X  |    |    |    |    |    |    |    | EVST-2
-| NA1      |       | isDetected    |    |    |    | X  |    |    |    | X  |    |    | EVST-5
-| NA1      |       | isTimedout    |    |    |    | X  |    |    |    | X  |    |    | EVST-6
-| GV3      | FLOAT | Orientation   | X  | X  | X  |    |    |    |    |    |    |    |
-| GV4      | FLOAT | angleX        | X  | X  | X  |    |    |    |    |    |    |    |
-| GV5      | FLOAT | angleY        | X  | X  | X  |    |    |    |    |    |    |    |
-| GV6      | FLOAT | angleZ        | X  | X  | X  |    |    |    |    |    |    |    |
-| GV7      | BONOFF| Light         | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| GV8      | BOOL  | outOfRange    | X  | X  | X  | X  | X  | X  |    | X  |    |    |
-| GV9      | TMST  | tempState     | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| GV10     | MSST  | moistureState |    | X  | X  | X  | X  | X  | X  | X  |    |    |
-| GV11     | LIST  | lightState    |    |    |    | X  |    |    |    |    |    |    |
-| NS1      | FLOAT | lowTH         | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| NS1      | FLOAT | highTH        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| NS1      | FLOAT | rssi          | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| NS1      | FLOAT | txpwr         | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |
-| NS1      | BOOL  | waterDetected2|    |    |    |    | X  |    |    |    |    |    |
-| NS2      |       | target        |    |    |    |    |    |    | X  |    |    |    |
-| NS2      |       | fanOn         |    |    |    |    |    |    | X  |    |    |    |
-| NS2      |       | hvacTurnOff   |    |    |    |    |    |    | X  |    |    |    |
-| NS2      |       | disableLocal  |    |    |    |    |    |    | X  |    |    |    |
+| Driver   | NLS   | Name          | 12 | 13 | 21 | 26 | 32 | 52 | 62 | 72 | 82 | 92 | Notes |
+| -------- | ----- | ------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |       |
+| ST       | BOOL  | Online        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| UOM      | CORF  | Degree        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GPV      | INT   | TagId (slaveId)|X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| CLITEMP  | FLOAT | Temperature   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| ALARM    | EVST  | eventState    | X  | X  | X  | X  |    | X  |    | X  |    |    |       |
+| HUMIN    | FLOAT | hum           |    | X  | X  | X  |    | X  | X  | X  |    |    |       |
+| LUMIN    | FLOAT | lux           |    |    |    | X  |    |    |    |    |    |    |       |
+| BATLVL   | FLOAT | batteryRemaining | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| CV       | FLOAT | batteryVolt   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| CLITEMP  | FLOAT | Temperature   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| NA1      |       | isClosed      | X  | X  | X  |    |    | X  |    |    |    |    | EVST-3 |
+| NA1      |       | isOpen        | X  | X  | X  |    |    | X  |    |    |    |    | EVST-4 |
+| NA1      |       | hasMoved      | X  | X  | X  |    |    |    |    |    |    |    | EVST-2 |
+| NA1      |       | isDetected    |    |    |    | X  |    |    |    | X  |    |    | EVST-5 |
+| NA1      |       | isTimedout    |    |    |    | X  |    |    |    | X  |    |    | EVST-6 |
+| GV3      | FLOAT | Orientation   | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV4      | FLOAT | angleX        | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV5      | FLOAT | angleY        | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV6      | FLOAT | angleZ        | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV7      | BONOFF| Light         | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GV8      | BOOL  | oor           | X  | X  | X  | X  | X  | X  |    | X  |    |    | Out Of Range |
+| GV9      | TMST  | tempState     | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GV10     | MSST  | moistureState |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
+| GV11     | LIST  | lightState    |    |    |    | X  |    |    |    |    |    |    |       |
+| NS1      | FLOAT | lowTH         | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| NS1      | FLOAT | highTH        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| NS1      | FLOAT | rssi          | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| NS1      | FLOAT | txpwr         | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| NS1      | BOOL  | waterDetected2|    |    |    |    | X  |    |    |    |    |    |       |
+| NS2      |       | target        |    |    |    |    |    |    | X  |    |    |    |       |
+| NS2      |       | fanOn         |    |    |    |    |    |    | X  |    |    |    |       |
+| NS2      |       | hvacTurnOff   |    |    |    |    |    |    | X  |    |    |    |       |
+| NS2      |       | disableLocal  |    |    |    |    |    |    | X  |    |    |    |       |
 
-NA1 = Not Applicable, since it's available in eventState?
-NS1 = Not Supported, likely to be added.
-NS2 = Not Supported, part of Kumostat, which nobody is using?
+  - NA1 = Not Applicable, since it's available in eventState?
+  - NS1 = Not Supported, likely to be added.
+  - NS2 = Not Supported, part of Kumostat, which nobody is using?
 
 ### NLS entries
 
+| Name | # | Text       |
+| ---- | - | ---------- |
 | CORF | 0 | Celsius    |
 |      | 1 | Fahrenheit |
 | EVST | 0 | Disarmed   |
@@ -115,22 +117,22 @@ NS2 = Not Supported, part of Kumostat, which nobody is using?
 2. Go to the Polyglot Store in the UI and install WirelessTags.
 3. Add WirelessTags NodeServer in Polyglot
 4. Once it starts up, you should see a message in Polyglot Web which shows a "Active" link to click.
-  * Seems the wirelesstags certificate is not up to date, so in chrome you may have to click continue anyway (unsafe) selection :(
-  * The link points to https://www.wirelesstag.net/oauth2/authorize.aspx?... with necessary info
-  * Including a redirect back to the nodeserver's REST Server
-  * After you 'Grant' access you should see a message saying "SUCCESS, received our token, ..." in your web browser
+    * Seems the wirelesstags certificate is not up to date, so in chrome you may have to click continue anyway (unsafe) selection :(
+    * The link points to https://www.wirelesstag.net/oauth2/authorize.aspx?... with necessary info
+    * Including a redirect back to the nodeserver's REST Server
+    * After you 'Grant' access you should see a message saying "SUCCESS, received our token, ..." in your web browser
 5. Open Admin Console (if you already had it open, then close and re-open)
 6. You should now have a node for each of your tag managers
 7. By default the "Monitor Tags" for each tag manager is turned off, if you want the tags to show up in your current ISY/nodeserver, then enable it.
-  * The nodeserver and tag manager must be on the same LAN since the tag mangaer sends updates directly to the nodeserver.
-  * Only one nodeserver can monitor the tags if you have multiple ISY/nodeserver's.
-  * This could be fixed by using Kumoapps, but not sure if it's necessary
+    * The nodeserver and tag manager must be on the same LAN since the tag mangaer sends updates directly to the nodeserver.
+    * Only one nodeserver can monitor the tags if you have multiple ISY/nodeserver's.
+    * This could be fixed by using Kumoapps, but not sure if it's necessary
 8. Once Monitor tags is enabled, you should see the tags be added to the ISY.
-  * Review the nodeserver log if they don't all show up.
+    * Review the nodeserver log if they don't all show up.
 
   ## Requirements
 
-1. Polyglot V2 itself should be run on Raspian Stretch.
+1. When using a RaspberryPi Polyglot V2 itself should be run on Raspian Stretch
   To check your version: ```cat /etc/os-release```
   and the first line should look like ```PRETTY_NAME="Raspbian GNU/Linux 9 (stretch)"```
   It is possible to upgrade from Jessie to Stretch, but I would recommend just
@@ -161,6 +163,7 @@ NS2 = Not Supported, part of Kumostat, which nobody is using?
 - Query to reset Motion when it's True?
   - Don't seem to get motion timout in updates?
 - Finish handling all GET commands, only update is currently handled.
+```
 2018-02-16 20:44:03,737 ERROR    wtController:get_handler: Unknown command '/too_humid'
 2018-02-16 20:44:03,738 ERROR    get_handler: code=500 message=Command /too_humid failed
 2018-02-16 20:44:03,739 INFO     wtHandler:log_message"GET /too_humid?tagname=WaterSensor&mois=38&tagid=1&ts=2018-02-16T20:43:59+00:00 HTTP/1.1" 500 -
@@ -178,3 +181,4 @@ NS2 = Not Supported, part of Kumostat, which nobody is using?
 2018-02-16 20:44:56,047 DEBUG    wtController:get_handler: processing command=/water_dried params={'tagname': 'WaterSensor', 'mois': '1', 'ts': '2018-02-16T20:44:51 00:00'}
 2018-02-16 20:44:56,048 ERROR    wtController:get_handler: Unknown command '/water_dried'
 2018-02-16 20:44:56,049 ERROR    get_handler: code=500 message=Command /water_dried failed
+```
