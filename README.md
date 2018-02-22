@@ -46,48 +46,49 @@ with:
 | Motion Sensor Tag Pro ALS (Ambient Light Sensor) | 26   | 2       |
 | Water/Soil moisture sensor                       | 32   | 1       |
 | Door/window (reed) KumoSensor                    | 52   | 2       |
-| Kumostat/Nest Thremostat                         | 62   | 3       |
+| Kumostat/Nest Thremostat                         | 62   | 4       |
 | Infra-Red (PIR) KumoSensor                       | 72   | 2       |
-| WeMo Switches/Maker/LED                          | 82   | 3       |
-| Webcams (Dropcam)                                | 92   | 3       |
+| WeMo Switches/Maker/LED                          | 82   | 4       |
+| Webcams (Dropcam)                                | 92   | 4       |
 
 ### Supported Drivers
 
-| Driver   | NLS   | Name          | 12 | 13 | 21 | 26 | 32 | 52 | 62 | 72 | 82 | 92 | Notes |
-| -------- | ----- | ------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | ----- |
-| ST       | BOOL  | Online        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| UOM      | CORF  | Degree        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GPV      | INT   | TagId (slaveId)|X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| CLITEMP  | FLOAT | temperature   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| ALARM    | EVST  | eventState    | X  | X  | X  | X  |    | X  |    | X  |    |    |       |
-| HUMIN    | FLOAT | hum           |    | X  | X  | X  |    | X  | X  | X  |    |    |       |
-| LUMIN    | FLOAT | lux           |    |    |    | X  |    |    |    |    |    |    |       |
+| Driver   | NLS   | Name             | 12 | 13 | 21 | 26 | 32 | 52 | 62 | 72 | 82 | 92 | Notes |
+| -------- | ----- | ---------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | ----- |
+| UOM      | CORF  | degree           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GPV      | INT   | tag_type         | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| ST       | BOOL  | Online           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GV1      | INT   | TagId (slaveId)  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| CLITEMP  | FLOAT | temperature      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| ALARM    | EVST  | eventState       | X  | X  | X  | X  |    | X  |    | X  |    |    |       |
+| CLIHUM   | FLOAT | hum              |    | X  | X  | X  |    | X  | X  | X  |    |    |       |
+| LUMIN    | FLOAT | lux              |    |    |    | X  |    |    |    |    |    |    |       |
 | BATLVL   | FLOAT | batteryRemaining | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| CV       | FLOAT | batteryVolt   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| CLITEMP  | FLOAT | temperature   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| NA1      |       | isClosed      | X  | X  | X  |    |    | X  |    |    |    |    | EVST-3 |
-| NA1      |       | isOpen        | X  | X  | X  |    |    | X  |    |    |    |    | EVST-4 |
-| NA1      |       | hasMoved      | X  | X  | X  |    |    |    |    |    |    |    | EVST-2 |
-| NA1      |       | isDetected    |    |    |    | X  |    |    |    | X  |    |    | EVST-5 |
-| NA1      |       | isTimedout    |    |    |    | X  |    |    |    | X  |    |    | EVST-6 |
-| GV3      | FLOAT | Orientation   | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV4      | FLOAT | xaxis         | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV5      | FLOAT | yaxis         | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV6      | FLOAT | zaxis         | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV7      | BONOFF| lit           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GV8      | BOOL  | oor           | X  | X  | X  | X  | X  | X  |    | X  |    |    | Out Of Range |
-| GV9      | TMST  | tempState     | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GV10     | MSST  | moistureState |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
-| GV11     | LIST  | lightState    |    |    |    | X  |    |    |    |    |    |    |       |
-| NS1      | FLOAT | lowTH         | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| NS1      | FLOAT | highTH        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| NS1      | FLOAT | rssi          | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| NS1      | FLOAT | txpwr         | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| NS1      | BOOL  | waterDetected2|    |    |    |    | X  |    |    |    |    |    |       |
-| NS2      |       | target        |    |    |    |    |    |    | X  |    |    |    |       |
-| NS2      |       | fanOn         |    |    |    |    |    |    | X  |    |    |    |       |
-| NS2      |       | hvacTurnOff   |    |    |    |    |    |    | X  |    |    |    |       |
-| NS2      |       | disableLocal  |    |    |    |    |    |    | X  |    |    |    |       |
+| CV       | FLOAT | batteryVolt      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| NA1      |       | isClosed         | X  | X  | X  |    |    | X  |    |    |    |    | EVST-3 |
+| NA1      |       | isOpen           | X  | X  | X  |    |    | X  |    |    |    |    | EVST-4 |
+| NA1      |       | hasMoved         | X  | X  | X  |    |    |    |    |    |    |    | EVST-2 |
+| NA1      |       | isDetected       |    |    |    | X  |    |    |    | X  |    |    | EVST-5 |
+| NA1      |       | isTimedout       |    |    |    | X  |    |    |    | X  |    |    | EVST-6 |
+| GV2      | BOOL  | motion           | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV3      | FLOAT | orien            | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV4      | FLOAT | xaxis            | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV5      | FLOAT | yaxis            | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV6      | FLOAT | zaxis            | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV7      | BONOFF| lit              | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GV8      | BOOL  | oor              | X  | X  | X  | X  | X  | X  |    | X  |    |    | Out Of Range |
+| GV9      | TMST  | tempState        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GV10     | MSST  | moistureState    |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
+| GV11     | LIST  | lightState       |    |    |    | X  |    |    |    |    |    |    |       |
+| NS1      | FLOAT | lowTH            | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| NS1      | FLOAT | highTH           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| NS1      | FLOAT | rssi             | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| NS1      | FLOAT | txpwr            | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| NS1      | BOOL  | waterDetected2   |    |    |    |    | X  |    |    |    |    |    |       |
+| NS2      |       | target           |    |    |    |    |    |    | X  |    |    |    |       |
+| NS2      |       | fanOn            |    |    |    |    |    |    | X  |    |    |    |       |
+| NS2      |       | hvacTurnOff      |    |    |    |    |    |    | X  |    |    |    |       |
+| NS2      |       | disableLocal     |    |    |    |    |    |    | X  |    |    |    |       |
 
   - NA1 = Not Applicable, since it's available in eventState?
   - NS1 = Not Supported, likely to be added.
@@ -168,6 +169,7 @@ with:
 ## TODO Before release
 - Double check all F nodedef's have proper Drivers
   - Copy F versions of all tags to C
+- Test that C works?  Can I switch mine to C?
 - Only add necessary drivers based on tag_type in wTag
 - What happens when authorization expires?
 - What happens when authorization is removed?

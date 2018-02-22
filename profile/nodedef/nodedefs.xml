@@ -82,7 +82,6 @@
       <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />
@@ -111,7 +110,7 @@
       <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
+      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />
@@ -125,8 +124,8 @@
   <nodeDef id="wTag21F" nls="tag21">
     <editors />
     <sts>
-      <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
@@ -141,7 +140,6 @@
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
-      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />
@@ -155,23 +153,18 @@
   <nodeDef id="wTag26F" nls="tag26">
     <editors />
     <sts>
-      <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="CLIHUM" editor="I_HUMIDITY" /> <!-- Humidity -->
+      <st id="LUMIN" editor="I_LUMIN" /> <!-- Lux -->
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
-      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
-      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
-      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
-      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
-      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
-      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />
@@ -185,23 +178,15 @@
   <nodeDef id="wTag32F" nls="tag32">
     <editors />
     <sts>
-      <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
-      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
-      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
-      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
-      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
-      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
-      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
-      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />
@@ -215,23 +200,17 @@
   <nodeDef id="wTag52F" nls="tag52">
     <editors />
     <sts>
-      <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
-      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
-      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
-      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
-      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
-      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
-      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />
@@ -268,15 +247,9 @@
       <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
-      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
-      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
-      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
-      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
-      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
-      <st id="GV11" editor="I_LIST" /> <!-- Light State -->
     </sts>
     <cmds>
       <sends />
