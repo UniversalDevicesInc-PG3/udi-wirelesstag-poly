@@ -15,11 +15,13 @@ server to handle data coming from the tag manager.  All communication from
 the tag manager to the REST server is on the local network, so no port
 forwarding is necessary.
 
-When the tag manager is "Monitor Tags" is enabled, the nodeserver updates
-all the Tag URL's so any updates are pushed to the REST server.
+The Tag Manager node created in the ISY has a "Monitor Tags" option, which by default
+is disabled in case you have multiple ISY's.  It should only be enabled on the ISY
+that is on the same LAN as the Tag Manger.  When this option is enabled, the nodeserver
+updates all the Tag URL's so any updates are pushed to the REST server.
 
 The authorization for communicating with your tag manager account handled
-by OAuth2 so no passwords are necessary, when the nodeserver is started up for
+by OAuth2 so no passwords are necessary. When the nodeserver is started up for
 the first time you will be asked to give permission.
 
 ## Supported Sensors
@@ -61,7 +63,7 @@ with:
 | GV1      | INT   | TagId (slaveId)  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | CLITEMP  | FLOAT | temperature      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | ALARM    | EVST  | eventState       | X  | X  | X  | X  |    | X  |    | X  |    |    |       |
-| CLIHUM   | FLOAT | hum              |    | X  | X  | X  |    | X  | X  | X  |    |    |       |
+| CLIHUM   | FLOAT | hum              |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
 | LUMIN    | FLOAT | lux              |    |    |    | X  |    |    |    |    |    |    |       |
 | BATLVL   | FLOAT | batteryRemaining | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | CV       | FLOAT | batteryVolt      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |

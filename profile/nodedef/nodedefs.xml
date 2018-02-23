@@ -175,7 +175,7 @@
   </nodeDef>
 
   <!-- Tag 21 F -->
-  <nodeDef id="wTag21CF" nls="tag21">
+  <nodeDef id="wTag21F" nls="tag21">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
@@ -288,6 +288,7 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
+      <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->

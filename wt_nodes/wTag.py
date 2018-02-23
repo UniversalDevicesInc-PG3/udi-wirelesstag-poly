@@ -108,14 +108,15 @@ class wTag(polyinterface.Node):
         ]
 
         if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26
-            or tag_type == 32 or tag_type == 52 or tag_type == 62 or tag_type == 72):
+            or tag_type == 32 or tag_type == 52 or tag_type == 62 or
+            tag_type == 72):
             # evst: Event State
             dv.append({'driver': 'ALARM',   'value': 0, 'uom': 25})
         if (tag_type == 26):
             # lux:    Lux (36=lux)
             dv.append({'driver': 'LUMIN',   'value': 0, 'uom': 36})
-        if (tag_type == 13 or tag_type == 21 or tag_type == 26 or tag_type == 52
-            or tag_type == 62 or tag_type == 72):
+        if (tag_type == 13 or tag_type == 21 or tag_type == 26 or tag_type == 32
+            or tag_type == 52 or tag_type == 62 or tag_type == 72):
             # hum:    Humidity (21 = absolute humidity)
             dv.append({'driver': 'CLIHUM',  'value': 0, 'uom': 21})
         if (tag_type == 12 or tag_type == 13 or tag_type == 21):
