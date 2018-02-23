@@ -30,7 +30,8 @@ class wTag(polyinterface.Node):
     reportDrivers(): Forces a full update of all drivers to Polyglot/ISY.
     query(): Called when ISY sends a query request to Polyglot for this specific node
     """
-    def __init__(self, controller, primary, address=None, name=None, tag_type=None, uom=None, tdata=None, node_data=None):
+    def __init__(self, controller, primary, address=None, name=None,
+                 tag_type=None, uom=None, tdata=None, node_data=None):
         """
         Optional.
         Super runs all the parent class necessities. You do NOT have
@@ -45,8 +46,8 @@ class wTag(polyinterface.Node):
             {'driver': 'ST',      'value': 0, 'uom': 2},
             {'driver': 'GPV',     'value': 0, 'uom': 56}, # tag_id
             {'driver': 'UOM',     'value': 0, 'uom': 56}, # UOM 0=C 1=F
-            {'driver': 'GV1',     'value': 0, 'uom': 56}, # tag_type: 
-            {'driver': 'ALARM',   'value': 0, 'uom': 25}, # evst: Event State   
+            {'driver': 'GV1',     'value': 0, 'uom': 56}, # tag_type:
+            {'driver': 'ALARM',   'value': 0, 'uom': 25}, # evst: Event State
             {'driver': 'CLITEMP', 'value': 0, 'uom': 'temp_uom'}, # temp:   Curent temperature (17=F 4=C)
             {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # batp:   Battery percent (51=percent)
             {'driver': 'LUMIN',   'value': 0, 'uom': 36}, # lux:    Lux (36=lux)
@@ -57,11 +58,11 @@ class wTag(polyinterface.Node):
             {'driver': 'GV4',     'value': 0, 'uom': 56}, # xaxis:  X-Axis
             {'driver': 'GV5',     'value': 0, 'uom': 56}, # yasis:  Y-Axis
             {'driver': 'GV6',     'value': 0, 'uom': 56}, # zaxis:  Z-Asis
-            {'driver': 'GV7',     'value': 0, 'uom': 78},  # lit:    Light 78=off/off
+            {'driver': 'GV7',     'value': 0, 'uom': 25},  # lit:    Light 78=off/on
             {'driver': 'GV8',     'value': 0, 'uom':  2},  # oor:    OutOfRange
-            {'driver': 'GV9',     'value': 0, 'uom': 25},  # tempState:  
-            {'driver': 'GV10',    'value': 0, 'uom': 25},  # moisture(cap)State:  
-            {'driver': 'GV11',    'value': 0, 'uom': 25}   # lightState:  
+            {'driver': 'GV9',     'value': 0, 'uom': 25},  # tempState:
+            {'driver': 'GV10',    'value': 0, 'uom': 25},  # moisture(cap)State:
+            {'driver': 'GV11',    'value': 0, 'uom': 25}   # lightState:
         ]
 
         LOGGER.debug('wTag:__init__: address={0} name={1} type={2} uom={3}'.format(address,name,tag_type,uom))
@@ -157,19 +158,19 @@ class wTag(polyinterface.Node):
         #self.set_tag_uom(self.tag_uom,True)
         # This askes for the sensor to report
         mgd = self.controller.wtServer.RequestImmediatePostback({'id':self.tag_id})
-        if mgd['st']: 
+        if mgd['st']:
             self.set_from_tag_data(mgd['result'])
             self.reportDrivers()
 
     def l_info(self, name, string):
         LOGGER.info("%s:%s:%s:%s: %s" %  (self.id,self.address,self.name,name,string))
-        
+
     def l_error(self, name, string):
         LOGGER.error("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
-        
+
     def l_warning(self, name, string):
         LOGGER.warning("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
-        
+
     def l_debug(self, name, string):
         LOGGER.debug("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
 
@@ -200,7 +201,7 @@ class wTag(polyinterface.Node):
         if 'lightEventState' in tdata:
             self.set_list(tdata['lightEventState'])
 
-    # This is the tag_type number, we don't really need to show it, but 
+    # This is the tag_type number, we don't really need to show it, but
     # we need the info when recreating the tags from the config.
     def set_tag_type(self,value,force=False):
         if not force and hasattr(self,"tag_type") and self.tag_type == value:
@@ -208,19 +209,19 @@ class wTag(polyinterface.Node):
         self.l_debug('set_tag_type','GV1 to {0}'.format(value))
         self.tag_type = value
         self.setDriver('GV1', value)
-        
+
     def set_tag_id(self,value,force=False):
         if not force and hasattr(self,"tag_id") and self.tag_id == value:
             return True
         self.tag_id = value
         self.setDriver('GPV', value)
-        
+
     def set_tag_uom(self,value,force=False):
         if not force and hasattr(self,"tag_uom") and self.tag_uom == value:
             return True
         self.tag_uom = value
         self.setDriver('UOM', value)
-        
+
     def set_temp(self,value,force=False,convert=True):
         value = myfloat(value,2)
         if convert and self.primary_n.degFC == 1:
@@ -230,119 +231,119 @@ class wTag(polyinterface.Node):
             return True
         self.temp = value
         self.setDriver('CLITEMP', self.temp)
-        
+
     def set_hum(self,value,force=False):
         value = int(value)
         if not force and hasattr(self,"hum") and self.hum == value:
             return True
         self.hum = value
         self.setDriver('CLIHUM', self.hum)
- 
+
     def set_lit(self,value,force=False):
         value = int(value)
         if not force and hasattr(self,"lit") and self.lit == value:
             return True
         self.lit = value
         self.setDriver('GV7', value)
-      
+
     def set_lux(self,value,force=False):
         value = int(value)
         if not force and hasattr(self,"lux") and self.lux == value:
             return True
         self.lux = value
         self.setDriver('LUMIN', self.lux)
-        
+
     def set_batp(self,value,force=False):
         value = myfloat(value,2)
         if not force and hasattr(self,"batp") and self.batp == value:
             return True
         self.batp = value
         self.setDriver('BATLVL', self.batp)
-        
+
     def set_batv(self,value,force=False):
         value = myfloat(value,3)
         if not force and hasattr(self,"batv") and self.batv == value:
             return True
         self.batv = value
         self.setDriver('CV', self.batv)
-        
+
     def set_motion(self,value,force=False):
         if not force and hasattr(self,"motion") and self.motion == value:
             return True
         self.motion = value
         self.setDriver('GV2', self.motion)
-        
+
     def set_orien(self,value,force=False):
         value = myfloat(value,1)
         if not force and hasattr(self,"orien") and self.orien == value:
             return True
         self.orien = value
         self.setDriver('GV3', self.orien)
-        
+
     def set_xaxis(self,value,force=False):
         value = int(value)
         if not force and hasattr(self,"xaxis") and self.xaxis == value:
             return True
         self.xaxis = value
         self.setDriver('GV4', self.xaxis)
-        
+
     def set_yaxis(self,value,force=False):
         value = int(value)
         if not force and hasattr(self,"yaxis") and self.yaxis == value:
             return True
         self.yaxis = value
         self.setDriver('GV5', self.yaxis)
-        
+
     def set_zaxis(self,value,force=False):
         value = int(value)
         if not force and hasattr(self,"zaxis") and self.zaxis == value:
             return True
         self.zaxis = value
         self.setDriver('GV6', self.zaxis)
-        
+
     def set_evst(self,value,force=False):
-        if value is None: 
-            value = 0 
-        else: 
+        if value is None:
+            value = 0
+        else:
             value = int(value)
         if not force and hasattr(self,"evst") and self.evst == value: return True
         self.evst = value
         self.setDriver('ALARM', self.evst)
-        
+
     def set_oor(self,value,force=False):
         value = int(value)
         if not force and hasattr(self,"oor") and self.oor == value:
             return True
         self.oor = value
         self.setDriver('GV7', value)
-      
+
     def set_tmst(self,value,force=False):
-        if value is None: 
-            value = 0 
-        else: 
+        if value is None:
+            value = 0
+        else:
             value = int(value)
         if not force and hasattr(self,"tmst") and self.tmst == value: return True
         self.tmst = value
         self.setDriver('GV9', self.evst)
-        
+
     def set_msst(self,value,force=False):
-        if value is None: 
-            value = 0 
-        else: 
+        if value is None:
+            value = 0
+        else:
             value = int(value)
         if not force and hasattr(self,"msst") and self.msst == value: return True
         self.msst = value
         self.setDriver('GV10', self.evst)
-        
+
     def set_list(self,value,force=False):
-        if value is None: 
-            value = 0 
-        else: 
+        if value is None:
+            value = 0
+        else:
             value = int(value)
         if not force and hasattr(self,"list") and self.list == value: return True
         self.list = value
         self.setDriver('GV11', self.evst)
-        
+
     """
     """
 
@@ -362,7 +363,7 @@ class wTag(polyinterface.Node):
         """
         self.setDriver('ST', 0)
 
-    
+
     """
     {"d":[
     {

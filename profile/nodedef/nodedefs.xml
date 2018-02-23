@@ -64,7 +64,7 @@
     </cmds>
   </nodeDef>
 
-  <!-- Tag 12 -->
+  <!-- Tag 12 F -->
   <nodeDef id="wTag12F" nls="tag12">
     <editors />
     <sts>
@@ -90,8 +90,34 @@
       </accepts>
     </cmds>
   </nodeDef>
+  <!-- Tag 12 C -->
+  <nodeDef id="wTag12C" nls="tag12">
+    <editors />
+    <sts>
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
+      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
+      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
+      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
+      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="QUERY" />
+      </accepts>
+    </cmds>
+  </nodeDef>
 
-  <!-- Tag 13 -->
+  <!-- Tag 13 F -->
   <nodeDef id="wTag13F" nls="tag13">
     <editors />
     <sts>
@@ -119,9 +145,37 @@
       </accepts>
     </cmds>
   </nodeDef>
+  <!-- Tag 13 C -->
+  <nodeDef id="wTag13C" nls="tag13">
+    <editors />
+    <sts>
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
+      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
+      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
+      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
+      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
+      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="QUERY" />
+      </accepts>
+    </cmds>
+  </nodeDef>
 
-  <!-- Tag 21 -->
-  <nodeDef id="wTag21F" nls="tag21">
+  <!-- Tag 21 F -->
+  <nodeDef id="wTag21CF" nls="tag21">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
@@ -148,8 +202,36 @@
       </accepts>
     </cmds>
   </nodeDef>
+  <!-- Tag 21 C -->
+  <nodeDef id="wTag21C" nls="tag21">
+    <editors />
+    <sts>
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
+      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
+      <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
+      <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
+      <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
+      <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="QUERY" />
+      </accepts>
+    </cmds>
+  </nodeDef>
 
-  <!-- Tag 26 -->
+  <!-- Tag 26 F -->
   <nodeDef id="wTag26F" nls="tag26">
     <editors />
     <sts>
@@ -173,8 +255,32 @@
       </accepts>
     </cmds>
   </nodeDef>
+  <!-- Tag 26 C -->
+  <nodeDef id="wTag26C" nls="tag26">
+    <editors />
+    <sts>
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
+      <st id="CLIHUM" editor="I_HUMIDITY" /> <!-- Humidity -->
+      <st id="LUMIN" editor="I_LUMIN" /> <!-- Lux -->
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="QUERY" />
+      </accepts>
+    </cmds>
+  </nodeDef>
 
-  <!-- Tag 32 -->
+  <!-- Tag 32 F -->
   <nodeDef id="wTag32F" nls="tag32">
     <editors />
     <sts>
@@ -195,8 +301,29 @@
       </accepts>
     </cmds>
   </nodeDef>
+  <!-- Tag 32 C -->
+  <nodeDef id="wTag32C" nls="tag32">
+    <editors />
+    <sts>
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="QUERY" />
+      </accepts>
+    </cmds>
+  </nodeDef>
 
-  <!-- Tag 52 -->
+  <!-- Tag 52 F -->
   <nodeDef id="wTag52F" nls="tag52">
     <editors />
     <sts>
@@ -219,8 +346,31 @@
       </accepts>
     </cmds>
   </nodeDef>
+  <!-- Tag 52 C -->
+  <nodeDef id="wTag52C" nls="tag52">
+    <editors />
+    <sts>
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
+      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="QUERY" />
+      </accepts>
+    </cmds>
+  </nodeDef>
 
-  <!-- Tag 62 -->
+  <!-- Tag 62 F -->
   <nodeDef id="wTag62F" nls="tag62">
     <editors />
     <sts>
@@ -234,8 +384,22 @@
       </accepts>
     </cmds>
   </nodeDef>
+  <!-- Tag 62 C -->
+  <nodeDef id="wTag62C" nls="tag62">
+    <editors />
+    <sts>
+      <st id="ST" editor="BOOL" />
+      <st id="GV1" editor="I_TAGID" />
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="QUERY" />
+      </accepts>
+    </cmds>
+  </nodeDef>
 
-  <!-- Tag 72 -->
+  <!-- Tag 72 F -->
   <nodeDef id="wTag72F" nls="tag72">
     <editors />
     <sts>
@@ -258,8 +422,31 @@
       </accepts>
     </cmds>
   </nodeDef>
+  <!-- Tag 72 C -->
+  <nodeDef id="wTag72C" nls="tag72">
+    <editors />
+    <sts>
+      <st id="ST" editor="BOOL" />
+      <st id="GV1" editor="I_TAGID" />
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
+      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="QUERY" />
+      </accepts>
+    </cmds>
+  </nodeDef>
 
-  <!-- Tag 82 -->
+  <!-- Tag 82 F -->
   <nodeDef id="wTag82F" nls="tag82">
     <editors />
     <sts>
@@ -273,9 +460,37 @@
       </accepts>
     </cmds>
   </nodeDef>
+  <!-- Tag 82 C -->
+  <nodeDef id="wTag82C" nls="tag82">
+    <editors />
+    <sts>
+      <st id="ST" editor="BOOL" />
+      <st id="GV1" editor="I_TAGID" />
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="QUERY" />
+      </accepts>
+    </cmds>
+  </nodeDef>
 
-  <!-- Tag 92 -->
+  <!-- Tag 92 F -->
   <nodeDef id="wTag92F" nls="tag92">
+    <editors />
+    <sts>
+      <st id="ST" editor="BOOL" />
+      <st id="GV1" editor="I_TAGID" />
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="QUERY" />
+      </accepts>
+    </cmds>
+  </nodeDef>
+  <!-- Tag 92 C -->
+  <nodeDef id="wTag92C" nls="tag92">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />

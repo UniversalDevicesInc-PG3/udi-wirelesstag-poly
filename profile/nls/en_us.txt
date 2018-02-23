@@ -45,6 +45,17 @@ ND-wTag72F-NAME = Infra-Red (PIR) KumoSensor (72) (F)
 ND-wTag82F-NAME = WeMo Switches/Maker/LED (82) (F)
 ND-wTag92F-NAME = Webcams (Dropcam) (92) (F)
 
+ND-wTag12C-NAME = Motion Sensor Tag (8-bit temperature) (12) (C)
+ND-wTag13C-NAME = Motion Sensor Tag (13-bit temperature+humidity) (13) (C)
+ND-wTag21C-NAME = Motion Sensor Tag Pro (21) (F)
+ND-wTag26C-NAME = Motion Sensor Tag Pro ALS (Ambient Light Sensor) (26) (C)
+ND-wTag32C-NAME = Water/Soil moisture sensor (32) (C)
+ND-wTag52C-NAME = Door/window (reed) KumoSensor (52) (C)
+ND-wTag62C-NAME = Kumostat/Nest Thremostat (62) (C)
+ND-wTag72C-NAME = Infra-Red (PIR) KumoSensor (72) (C)
+ND-wTag82C-NAME = WeMo Switches/Maker/LED (82) (C)
+ND-wTag92C-NAME = Webcams (Dropcam) (92) (C)
+
 # These are the defaults for all tags
 ST-ST-NAME = Tag Status
 ST-ALARM-NAME = Event State
@@ -96,6 +107,3 @@ LIST-1 = Not enabled
 LIST-2 = Normal
 LIST-3 = Too Dark
 LIST-4 = Too Bright
-
-
-
