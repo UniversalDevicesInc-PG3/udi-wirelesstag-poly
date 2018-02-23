@@ -166,7 +166,7 @@ class wTag(polyinterface.Node):
         if self.tdata is not None:
             self.set_from_tag_data(self.tdata)
         else:
-            # These stay the same across reboots as the defaul.
+            # These stay the same across reboots as the default.
             self.set_temp(self.getDriver('CLITEMP'),True,False)
             self.set_hum(self.getDriver('CLIHUM'),True)
             self.set_lux(self.getDriver('LUMIN'),True)
@@ -226,8 +226,8 @@ class wTag(polyinterface.Node):
             self.set_batp(float(tdata['batteryRemaining']) * 100)
         if 'lux' in tdata:
             self.set_lux(tdata['lux'])
-        if 'hum' in tdata:
-            self.set_hum(tdata['hum'])
+        if 'cap' in tdata:
+            self.set_hum(tdata['cap'])
         if 'lit' in tdata:
             self.set_lit(tdata['lit'])
         if 'eventState' in tdata:
@@ -270,7 +270,7 @@ class wTag(polyinterface.Node):
         if not force and hasattr(self,"temp") and self.temp == value:
             return True
         self.temp = value
-        self.setDriver('CLITEMP', self.temp)
+        self.setDriver('CLITEMP', value)
 
     def set_hum(self,value,force=False):
         if value is None: return
@@ -278,7 +278,7 @@ class wTag(polyinterface.Node):
         if not force and hasattr(self,"hum") and self.hum == value:
             return True
         self.hum = value
-        self.setDriver('CLIHUM', self.hum)
+        self.setDriver('CLIHUM', value)
 
     def set_lit(self,value,force=False):
         value = int(value)
@@ -293,28 +293,28 @@ class wTag(polyinterface.Node):
         if not force and hasattr(self,"lux") and self.lux == value:
             return True
         self.lux = value
-        self.setDriver('LUMIN', self.lux)
+        self.setDriver('LUMIN', value)
 
     def set_batp(self,value,force=False):
         value = myfloat(value,2)
         if not force and hasattr(self,"batp") and self.batp == value:
             return True
         self.batp = value
-        self.setDriver('BATLVL', self.batp)
+        self.setDriver('BATLVL', value)
 
     def set_batv(self,value,force=False):
         value = myfloat(value,3)
         if not force and hasattr(self,"batv") and self.batv == value:
             return True
         self.batv = value
-        self.setDriver('CV', self.batv)
+        self.setDriver('CV', value)
 
     def set_motion(self,value,force=False):
         if value is None: return
         if not force and hasattr(self,"motion") and self.motion == value:
             return True
         self.motion = value
-        self.setDriver('GV2', self.motion)
+        self.setDriver('GV2', value)
 
     def set_orien(self,value,force=False):
         if value is None: return
@@ -322,7 +322,7 @@ class wTag(polyinterface.Node):
         if not force and hasattr(self,"orien") and self.orien == value:
             return True
         self.orien = value
-        self.setDriver('GV3', self.orien)
+        self.setDriver('GV3', value)
 
     def set_xaxis(self,value,force=False):
         if value is None: return
@@ -330,7 +330,7 @@ class wTag(polyinterface.Node):
         if not force and hasattr(self,"xaxis") and self.xaxis == value:
             return True
         self.xaxis = value
-        self.setDriver('GV4', self.xaxis)
+        self.setDriver('GV4', value)
 
     def set_yaxis(self,value,force=False):
         if value is None: return
@@ -338,7 +338,7 @@ class wTag(polyinterface.Node):
         if not force and hasattr(self,"yaxis") and self.yaxis == value:
             return True
         self.yaxis = value
-        self.setDriver('GV5', self.yaxis)
+        self.setDriver('GV5', value)
 
     def set_zaxis(self,value,force=False):
         if value is None: return
@@ -346,17 +346,14 @@ class wTag(polyinterface.Node):
         if not force and hasattr(self,"zaxis") and self.zaxis == value:
             return True
         self.zaxis = value
-        self.setDriver('GV6', self.zaxis)
+        self.setDriver('GV6', value)
 
     def set_evst(self,value,force=False):
         if value is None: return
-        if value is None:
-            value = 0
-        else:
-            value = int(value)
+        value = int(value)
         if not force and hasattr(self,"evst") and self.evst == value: return True
         self.evst = value
-        self.setDriver('ALARM', self.evst)
+        self.setDriver('ALARM', value)
 
     def set_oor(self,value,force=False):
         if value is None: return
@@ -368,33 +365,25 @@ class wTag(polyinterface.Node):
 
     def set_tmst(self,value,force=False):
         if value is None: return
-        if value is None:
-            value = 0
-        else:
-            value = int(value)
+        value = int(value)
         if not force and hasattr(self,"tmst") and self.tmst == value: return True
         self.tmst = value
-        self.setDriver('GV9', self.evst)
+        self.setDriver('GV9', value)
 
     def set_msst(self,value,force=False):
+        self.l_debug('set_msst','{0},{1}'.format(value,force))
         if value is None: return
-        if value is None:
-            value = 0
-        else:
-            value = int(value)
+        value = int(value)
         if not force and hasattr(self,"msst") and self.msst == value: return True
         self.msst = value
-        self.setDriver('GV10', self.evst)
+        self.setDriver('GV10', value)
 
     def set_list(self,value,force=False):
         if value is None: return
-        if value is None:
-            value = 0
-        else:
-            value = int(value)
+        value = int(value)
         if not force and hasattr(self,"list") and self.list == value: return True
         self.list = value
-        self.setDriver('GV11', self.evst)
+        self.setDriver('GV11', value)
 
     """
     """

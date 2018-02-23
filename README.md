@@ -24,6 +24,9 @@ The authorization for communicating with your tag manager account handled
 by OAuth2 so no passwords are necessary. When the nodeserver is started up for
 the first time you will be asked to give permission.
 
+If the Tag Manager is configured for Fahrenheit then all temperatures should be
+shown in Fahrenheit, same with Celsius, although that has not been tested yet.
+
 ## Supported Sensors
 
 This node server is intended to eventually support all Wireless Tags used by the
@@ -169,6 +172,8 @@ with:
      - Still not released, see TODO list below.
 
 ## TODO Before release
+- Add last update time from ts? Or do a heartbeat?
+- Call getTagList on restart to update values.
 - Triple check all F nodedef's have proper Drivers
 - Test that C works?  Can I switch mine to C?
 - Only add necessary drivers based on tag_type in wTag

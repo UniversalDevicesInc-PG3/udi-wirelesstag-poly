@@ -73,6 +73,7 @@ class wTagManager(polyinterface.Node):
             self.discover(thread=False)
         else:
             self.add_existing_tags()
+            self.query() # To get latest tag info.
         self.reportDrivers()
         self.ready = True
         self.l_info('start','done')
@@ -158,6 +159,7 @@ class wTagManager(polyinterface.Node):
         for tag in ret['result']:
             self.l_debug('discover','Got Tag: {}'.format(tag))
             self.add_tag(tdata=tag, uom=self.get_tag_temp_unit(tag))
+        self.reportDrivers() # Report now so they show up while set_url runs.
         self.set_url_config(thread=False)
 
     def add_existing_tags(self):
@@ -273,13 +275,13 @@ class wTagManager(polyinterface.Node):
 
     def l_info(self, name, string):
         LOGGER.info("%s:%s:%s:%s: %s" %  (self.id,self.address,self.name,name,string))
-        
+
     def l_error(self, name, string):
         LOGGER.error("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
-        
+
     def l_warning(self, name, string):
         LOGGER.warning("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
-        
+
     def l_debug(self, name, string):
         LOGGER.debug("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
 
@@ -333,7 +335,7 @@ class wTagManager(polyinterface.Node):
         """
         self.setDriver('ST', 0)
 
-    
+
     id = 'wTagManager'
     drivers = [
         {'driver': 'ST',  'value': 0, 'uom': 2},
