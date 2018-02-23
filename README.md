@@ -143,11 +143,11 @@ with:
     * Only one nodeserver can monitor the tags if you have multiple ISY/nodeserver's.
     * This could be fixed by using Kumoapps, but not sure if it's necessary
 8. Once Monitor tags is enabled, you should see the tags be added to the ISY.
-    * Review the nodeserver log if they don't all show up.
+    * Review the nodeserver log if they don't all show up, it may take a minute or so.
 
   ## Requirements
-
-1. When using a RaspberryPi Polyglot V2 itself should be run on Raspian Stretch
+1. [Polyglot V2](https://github.com/UniversalDevicesInc/polyglot-v2) >= 2.1.0
+1. When using a RaspberryPi it should be run on Raspian Stretch
   To check your version: ```cat /etc/os-release```
   and the first line should look like ```PRETTY_NAME="Raspbian GNU/Linux 9 (stretch)"```
   It is possible to upgrade from Jessie to Stretch, but I would recommend just
@@ -167,8 +167,7 @@ with:
      - Still not released, see TODO list below.
 
 ## TODO Before release
-- Double check all F nodedef's have proper Drivers
-  - Copy F versions of all tags to C
+- Triple check all F nodedef's have proper Drivers
 - Test that C works?  Can I switch mine to C?
 - Only add necessary drivers based on tag_type in wTag
 - What happens when authorization expires?
@@ -179,12 +178,13 @@ with:
   - Online
 - Test if slaveId changes when a tag is deleted and undeleted?
    - May need to link the mac & slave id in customData
-- Query Tag's on startup?
+- Query Tag's on startup?  Don't think this is necessary?  Just means some data will not be populated.
 - Short poll query when Motion=True to change motion
 - What are the other motion settings door_open...
 - Query to reset Motion when it's True?
-  - Don't seem to get motion timout in updates?
+  - Don't seem to get motion timeout in updates?
 - Finish handling all GET commands, only update is currently handled?
+
 ```
 2018-02-16 20:44:03,737 ERROR    wtController:get_handler: Unknown command '/too_humid'
 2018-02-16 20:44:03,738 ERROR    get_handler: code=500 message=Command /too_humid failed

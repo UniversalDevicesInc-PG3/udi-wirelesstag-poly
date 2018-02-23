@@ -42,29 +42,6 @@ class wTag(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
-        self.drivers = [
-            {'driver': 'ST',      'value': 0, 'uom': 2},
-            {'driver': 'GPV',     'value': 0, 'uom': 56}, # tag_id
-            {'driver': 'UOM',     'value': 0, 'uom': 56}, # UOM 0=C 1=F
-            {'driver': 'GV1',     'value': 0, 'uom': 56}, # tag_type:
-            {'driver': 'ALARM',   'value': 0, 'uom': 25}, # evst: Event State
-            {'driver': 'CLITEMP', 'value': 0, 'uom': 'temp_uom'}, # temp:   Curent temperature (17=F 4=C)
-            {'driver': 'BATLVL',  'value': 0, 'uom': 51}, # batp:   Battery percent (51=percent)
-            {'driver': 'LUMIN',   'value': 0, 'uom': 36}, # lux:    Lux (36=lux)
-            {'driver': 'CLIHUM',  'value': 0, 'uom': 21}, # hum:    Humidity (21 = absolute humidity)
-            {'driver': 'CV',      'value': 0, 'uom': 72}, # batv:   Battery Voltag 72=Volt
-            {'driver': 'GV2',     'value': 0, 'uom': 25}, # motion: Might use True, False, Open for door mode?
-            {'driver': 'GV3',     'value': 0, 'uom': 56}, # orien:  Orientation
-            {'driver': 'GV4',     'value': 0, 'uom': 56}, # xaxis:  X-Axis
-            {'driver': 'GV5',     'value': 0, 'uom': 56}, # yasis:  Y-Axis
-            {'driver': 'GV6',     'value': 0, 'uom': 56}, # zaxis:  Z-Asis
-            {'driver': 'GV7',     'value': 0, 'uom': 25},  # lit:    Light 78=off/on
-            {'driver': 'GV8',     'value': 0, 'uom':  2},  # oor:    OutOfRange
-            {'driver': 'GV9',     'value': 0, 'uom': 25},  # tempState:
-            {'driver': 'GV10',    'value': 0, 'uom': 25},  # moisture(cap)State:
-            {'driver': 'GV11',    'value': 0, 'uom': 25}   # lightState:
-        ]
-
         LOGGER.debug('wTag:__init__: address={0} name={1} type={2} uom={3}'.format(address,name,tag_type,uom))
 
         # Remove spaces from names since that messes with our return urls.
@@ -77,9 +54,9 @@ class wTag(polyinterface.Node):
             self.tag_uom = -1 # Should never happen, just need for old data added before it existed.
             for driver in node_data['drivers']:
                 if driver['driver'] == 'GV1':
-                    self.tag_type = driver['value']
+                    tag_type = driver['value']
                 elif driver['driver'] == 'GPV':
-                    self.tag_id   = driver['value']
+                    tag_id   = driver['value']
                 elif driver['driver'] == 'UOM':
                     self.tag_uom  = driver['value']
         elif address is None or name is None or tag_type is None:
@@ -91,24 +68,82 @@ class wTag(polyinterface.Node):
             if uom is None:
                 self.l_error('__init__',"uom ({0}) must be specified for new tags.".format(uom))
             self.is_new   = True
-            self.tag_type = tdata['tagType']
+            tag_type = tdata['tagType']
             self.tag_uom  = uom
-            self.tag_id   = tdata['slaveId']
+            tag_id   = tdata['slaveId']
             self.uuid     = tdata['uuid']
             address       = id_to_address(self.uuid)
             name          = tdata['name']
+        tag_id = int(tag_id)
+        tag_type = int(tag_type)
         self.name = name
         self.tdata = tdata
+        self.tag_id = tag_id
+        self.tag_type = tag_type
         #
         # C or F?
         # Fix our temp_uom in drivers
         # This won't change an existing tag, only new ones.
         #
         # TODO:  test changing it by forcing update?
-        for driver in self.drivers:
-            if driver['uom'] == 'temp_uom':
-                # (17=F 4=C)
-                driver['uom'] = 4 if self.tag_uom == 0 else 17
+        temp_uom = 4 if self.tag_uom == 0 else 17
+        dv = [
+            {'driver': 'ST',      'value': 0, 'uom': 2},
+             # tag_id
+            {'driver': 'GPV',     'value': 0, 'uom': 56},
+            # UOM 0=C 1=F
+            {'driver': 'UOM',     'value': 0, 'uom': 56},
+            # tag_type:
+            {'driver': 'GV1',     'value': 0, 'uom': 56},
+            # temp:   Curent temperature (17=F 4=C)
+            {'driver': 'CLITEMP', 'value': 0, 'uom': temp_uom},
+            # batp:   Battery percent (51=percent)
+            {'driver': 'BATLVL',  'value': 0, 'uom': 51},
+            # batv:   Battery Voltag 72=Volt
+            {'driver': 'CV',      'value': 0, 'uom': 72},
+            # lit:    Light 78=off/on
+            {'driver': 'GV7',     'value': 0, 'uom': 25},
+            # tempState:
+            {'driver': 'GV9',     'value': 0, 'uom': 25},
+        ]
+
+        if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26
+            or tag_type == 32 or tag_type == 52 or tag_type == 62 or tag_type == 72):
+            # evst: Event State
+            dv.append({'driver': 'ALARM',   'value': 0, 'uom': 25})
+        if (tag_type == 26):
+            # lux:    Lux (36=lux)
+            dv.append({'driver': 'LUMIN',   'value': 0, 'uom': 36})
+        if (tag_type == 13 or tag_type == 21 or tag_type == 26 or tag_type == 52
+            or tag_type == 62 or tag_type == 72):
+            # hum:    Humidity (21 = absolute humidity)
+            dv.append({'driver': 'CLIHUM',  'value': 0, 'uom': 21})
+        if (tag_type == 12 or tag_type == 13 or tag_type == 21):
+            # motion: Might use True, False, Open for door mode?
+            dv.append({'driver': 'GV2',     'value': 0, 'uom': 25})
+            # orien:  Orientation
+            dv.append({'driver': 'GV3',     'value': 0, 'uom': 56})
+            # xaxis:  X-Axis
+            dv.append({'driver': 'GV4',     'value': 0, 'uom': 56})
+            # yasis:  Y-Axis
+            dv.append({'driver': 'GV5',     'value': 0, 'uom': 56})
+            # zaxis:  Z-Asis
+            dv.append({'driver': 'GV6',     'value': 0, 'uom': 56})
+        if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26
+            or tag_type == 32 or tag_type == 52 or tag_type == 72):
+            # oor:    OutOfRange
+            dv.append({'driver': 'GV8',     'value': 0, 'uom':  2})
+        if (tag_type == 13 or tag_type == 21 or tag_type == 26
+            or tag_type == 32 or tag_type == 52 or tag_type == 62
+            or tag_type == 72):
+            # moisture(cap)State:
+            dv.append({'driver': 'GV10',    'value': 0, 'uom': 25})
+        if (tag_type == 26):
+            # lightState:
+            dv.append({'driver': 'GV11',    'value': 0, 'uom': 25})
+
+        self.drivers = dv
+
         uomS = "C" if self.tag_uom == 0 else "F"
         self.id = 'wTag' + str(self.tag_type) + uomS
         self.address = address
@@ -143,6 +178,10 @@ class wTag(polyinterface.Node):
             self.set_zaxis(self.getDriver('GV6'),True)
             self.set_lit(self.getDriver('GV7'),True)
             self.set_evst(self.getDriver('ALARM'),True)
+            self.set_oor(self.getDriver('GV8'),True)
+            self.set_tmst(self.getDriver('GV9'),True)
+            self.set_msst(self.getDriver('GV10'),True)
+            self.set_list(self.getDriver('GV11'),True)
         self.reportDrivers()
 
 
@@ -233,6 +272,7 @@ class wTag(polyinterface.Node):
         self.setDriver('CLITEMP', self.temp)
 
     def set_hum(self,value,force=False):
+        if value is None: return
         value = int(value)
         if not force and hasattr(self,"hum") and self.hum == value:
             return True
@@ -247,6 +287,7 @@ class wTag(polyinterface.Node):
         self.setDriver('GV7', value)
 
     def set_lux(self,value,force=False):
+        if value is None: return
         value = int(value)
         if not force and hasattr(self,"lux") and self.lux == value:
             return True
@@ -268,12 +309,14 @@ class wTag(polyinterface.Node):
         self.setDriver('CV', self.batv)
 
     def set_motion(self,value,force=False):
+        if value is None: return
         if not force and hasattr(self,"motion") and self.motion == value:
             return True
         self.motion = value
         self.setDriver('GV2', self.motion)
 
     def set_orien(self,value,force=False):
+        if value is None: return
         value = myfloat(value,1)
         if not force and hasattr(self,"orien") and self.orien == value:
             return True
@@ -281,6 +324,7 @@ class wTag(polyinterface.Node):
         self.setDriver('GV3', self.orien)
 
     def set_xaxis(self,value,force=False):
+        if value is None: return
         value = int(value)
         if not force and hasattr(self,"xaxis") and self.xaxis == value:
             return True
@@ -288,6 +332,7 @@ class wTag(polyinterface.Node):
         self.setDriver('GV4', self.xaxis)
 
     def set_yaxis(self,value,force=False):
+        if value is None: return
         value = int(value)
         if not force and hasattr(self,"yaxis") and self.yaxis == value:
             return True
@@ -295,6 +340,7 @@ class wTag(polyinterface.Node):
         self.setDriver('GV5', self.yaxis)
 
     def set_zaxis(self,value,force=False):
+        if value is None: return
         value = int(value)
         if not force and hasattr(self,"zaxis") and self.zaxis == value:
             return True
@@ -302,6 +348,7 @@ class wTag(polyinterface.Node):
         self.setDriver('GV6', self.zaxis)
 
     def set_evst(self,value,force=False):
+        if value is None: return
         if value is None:
             value = 0
         else:
@@ -311,6 +358,7 @@ class wTag(polyinterface.Node):
         self.setDriver('ALARM', self.evst)
 
     def set_oor(self,value,force=False):
+        if value is None: return
         value = int(value)
         if not force and hasattr(self,"oor") and self.oor == value:
             return True
@@ -318,6 +366,7 @@ class wTag(polyinterface.Node):
         self.setDriver('GV7', value)
 
     def set_tmst(self,value,force=False):
+        if value is None: return
         if value is None:
             value = 0
         else:
@@ -327,6 +376,7 @@ class wTag(polyinterface.Node):
         self.setDriver('GV9', self.evst)
 
     def set_msst(self,value,force=False):
+        if value is None: return
         if value is None:
             value = 0
         else:
@@ -336,6 +386,7 @@ class wTag(polyinterface.Node):
         self.setDriver('GV10', self.evst)
 
     def set_list(self,value,force=False):
+        if value is None: return
         if value is None:
             value = 0
         else:
