@@ -71,39 +71,50 @@ ST-GV8-NAME = Out Of Range
 ST-GV9-NAME = Temp State
 ST-GV10-NAME = Moisture State
 ST-GV11-NAME = Light State
+ST-GV12-NAME = Wet State
 
 ONOFF-0 = Off
 ONOFF-1 = On
 
-MOT4-0  = False
-MOT4-1  = True
-MOT4-2  = Open
-MOT4-3  = Open Long
+MOT4-0 = False
+MOT4-1 = True
+MOT4-2 = Door Open
+MOT4-3 = Open Too Long
+MOT4-4 = Closed
 
 # Properties
-
 # http://wirelesstag.net/kumoapp/44/eventstate
 EVST-0 = Disarmed
 EVST-1 = Armed
 EVST-2 = Moved
 EVST-3 = Opened
 EVST-4 = Closed
-EVST-5 = DetectedMovement
+EVST-5 = Detected Movement
 EVST-6 = TimedOut
+EVST-7 = Stabilizing
+EVST-8 = Carried Away
+EVST-9 = In Free Fall
 
-TMST-0 = Not Enabled
+TMST-0 = Disarmed
 TMST-1 = Normal
 TMST-2 = Too High
 TMST-3 = Too Low
+TMST-4 = Threshold Pending
 
-MSST-0 = Cannot monitor
-MSST-1 = Not enabled
-MSST-2 = Normal
-MSST-3 = Too Dry
-MSST-4 = Too Wet
+CPST-0 = Not Applicable
+CPST-1 = Disarmed
+CPST-2 = Normal
+CPST-3 = Too Dry
+CPST-4 = Too Humid
+CPST-5 = Threshold Pending
 
-LIST-0 = Cannot monitor
-LIST-1 = Not enabled
+WTST-0 = Not Applicable
+WTST-1 = Dry
+WTST-2 = Wet
+
+LIST-0 = Not Applicable
+LIST-1 = Disarmed
 LIST-2 = Normal
 LIST-3 = Too Dark
 LIST-4 = Too Bright
+LIST-5 = Threshold Pending

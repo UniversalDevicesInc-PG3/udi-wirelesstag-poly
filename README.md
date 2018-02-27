@@ -122,6 +122,7 @@ data is shown in the following table along with information passed back from the
 |      | 3 | Too Dry           |
 |      | 4 | Too Humid         |
 |      | 5 | Threshold Pending |
+|      | 6 | Water Detected    |
 | LIST | 0 | Not Applicable    |
 |      | 1 | Disarmed          |
 |      | 2 | Normal            |
@@ -177,11 +178,9 @@ data is shown in the following table along with information passed back from the
 - Add last update time from ts? Or do a heartbeat?
 - Triple check all F nodedef's have proper Drivers
 - Test that C works?  Can I switch mine to C?
-- Only add necessary drivers based on tag_type in wTag
 - What happens when authorization expires?
 - What happens when authorization is removed?
 - Really test sensor changes when I am home
-  - Humidity & water detected.
   - Out of Range
   - Online
 - Test if slaveId changes when a tag is deleted and undeleted?
@@ -191,24 +190,9 @@ data is shown in the following table along with information passed back from the
 - What are the other motion settings door_open...
 - Query to reset Motion when it's True?
   - Don't seem to get motion timeout in updates?
-- Finish handling all GET commands, only update is currently handled?
-
+- Handle not responding Query
 ```
-2018-02-16 20:44:03,737 ERROR    wtController:get_handler: Unknown command '/too_humid'
-2018-02-16 20:44:03,738 ERROR    get_handler: code=500 message=Command /too_humid failed
-2018-02-16 20:44:03,739 INFO     wtHandler:log_message"GET /too_humid?tagname=WaterSensor&mois=38&tagid=1&ts=2018-02-16T20:43:59+00:00 HTTP/1.1" 500 -
-2018-02-16 20:44:10,642 DEBUG    get_handler: command=/cap_normal
-2018-02-16 20:44:10,643 DEBUG    wtController:get_handler: processing command=/cap_normal params={'tagname': 'WaterSensor', 'mois': '2', 'ts': '2018-02-16T20:44:06 00:00', 'tagid': '1'}
-2018-02-16 20:44:10,644 ERROR    wtController:get_handler: Unknown command '/cap_normal'
-2018-02-16 20:44:10,645 ERROR    get_handler: code=500 message=Command /cap_normal failed
-2018-02-16 20:44:10,646 INFO     wtHandler:log_message"GET /cap_normal?tagname=WaterSensor&mois=2&tagid=1&ts=2018-02-16T20:44:06+00:00 HTTP/1.1" 500 -
-2018-02-16 20:44:43,516 DEBUG    get_handler: command=/water_detected
-2018-02-16 20:44:43,518 DEBUG    wtController:get_handler: processing command=/water_detected params={'tagname': 'WaterSensor', 'mois': '1', 'ts': '2018-02-16T20:44:38 00:00'}
-2018-02-16 20:44:43,519 ERROR    wtController:get_handler: Unknown command '/water_detected'
-2018-02-16 20:44:43,520 ERROR    get_handler: code=500 message=Command /water_detected failed
-2018-02-16 20:44:43,521 INFO     wtHandler:log_message"GET /water_detected?tagname=WaterSensor&mois=1&ts=2018-02-16T20:44:38+00:00 HTTP/1.1" 500 -
-2018-02-16 20:44:56,046 DEBUG    get_handler: command=/water_dried
-2018-02-16 20:44:56,047 DEBUG    wtController:get_handler: processing command=/water_dried params={'tagname': 'WaterSensor', 'mois': '1', 'ts': '2018-02-16T20:44:51 00:00'}
-2018-02-16 20:44:56,048 ERROR    wtController:get_handler: Unknown command '/water_dried'
-2018-02-16 20:44:56,049 ERROR    get_handler: code=500 message=Command /water_dried failed
+2018-02-26 18:54:12,699 ERROR    http_post: Unknown response 500: http://wirelesstag.net/ethClient.asmx/RequestImmediatePostback {"Message":"The tag did not respond this time, please try again","StackTrace":"   at MyTagList.ethClient.RequestImmediatePostback(Int32 id) in C:\\z560_backup\\MyTagList\\MyTagList\\ethClient.asmx.cs:line 3216","ExceptionType":"MyTagList.ethClient+TagDidNotRespondException"}
+2018-02-26 18:54:12,700 DEBUG    api_post_d: path=ethClient.asmx/RequestImmediatePostback got=False
+2018-02-26 18:54:12,702 DEBUG    api_post_d: ret={'st': False}
 ```

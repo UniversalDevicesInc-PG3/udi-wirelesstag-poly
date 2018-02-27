@@ -132,7 +132,7 @@ class wtController(polyinterface.Controller):
         if not self.ready: return False
         # For now just pinging the serverto make sure it's alive
         self.is_signed_in()
-        if not self.comm: return self.comm 
+        if not self.comm: return self.comm
         # Call long poll on the tags managers
         for address in self.nodes:
             if self.nodes[address].id == 'wTagManager':
@@ -180,7 +180,7 @@ class wtController(polyinterface.Controller):
         self.set_auth(True)
         self.save_params()
         mgd = self.get_tag_managers()
-        if not 'macs' in self.polyConfig['customData']: 
+        if not 'macs' in self.polyConfig['customData']:
             self.polyConfig['customData']['macs'] = dict()
         if mgd['st']:
             for mgr in mgd['result']:
@@ -222,25 +222,7 @@ class wtController(polyinterface.Controller):
         if node is None:
             self.l_error('get_handler',"Did not find node with name '{0}' id '{1}'".format(params['tagname'],params['tagid']))
             return False
-        if command == '/motion_detected':
-            # {'ts': '2018-02-15T12:44:04 00:00', 'tagid': '0', 'zaxis': '-81', 'xaxis': '51', 'tagname': 'GarageFreezer', 'orien': '100', 'yaxis': '129'}
-            node.set_motion(1)
-            node.set_orien(params['orien'])
-            node.set_xaxis(params['xaxis'])
-            node.set_yaxis(params['yaxis'])
-            node.set_zaxis(params['zaxis'])
-        elif command == '/update':
-            #tagname=Garage Freezer&tagid=0&temp=-21.4213935329179&hum=0&lux=0&ts=2018-02-15T11:18:02+00:00 HTTP/1.1" 400 -
-            if 'temp' in params:
-                node.set_temp(params['temp'])
-            if 'hum' in params:
-                node.set_hum(params['hum'])
-            if 'lux' in params:
-                node.set_lux(params['lux'])
-        else:
-            self.l_error('get_handler',"Unknown command '{0}'".format(command))
-            return False
-        return True
+        return node.get_handler(command,params)
 
     """
      Misc funcs
@@ -253,7 +235,7 @@ class wtController(polyinterface.Controller):
         return True
 
     def is_signed_in(self):
-        if not self.authorized('is_signed_in'): 
+        if not self.authorized('is_signed_in'):
             return False
         mgd = self.wtServer.IsSignedIn()
         if 'result' in mgd:
@@ -315,7 +297,7 @@ class wtController(polyinterface.Controller):
             if hasattr(self,'wtServer'):
                 self.addNotice('Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wtServer.url))
             else:
-                self.addNotice("No Athorization, and no REST Server running, this should not be possible!")                
+                self.addNotice("No Athorization, and no REST Server running, this should not be possible!")
 
     def set_url_config(self):
         # TODO: Should loop over tag managers, and call set_url_config on the tag manager
@@ -363,7 +345,7 @@ class wtController(polyinterface.Controller):
         self.debug_mode = level
         self.setDriver('GV5', level)
         # 0=All 10=Debug are the same because 0 (NOTSET) doesn't show everything.
-        if level == 0 or level == 10: 
+        if level == 0 or level == 10:
             self.set_all_logs(logging.DEBUG)
         elif level == 20:
             self.set_all_logs(logging.INFO)

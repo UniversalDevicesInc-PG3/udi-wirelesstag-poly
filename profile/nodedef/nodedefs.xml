@@ -136,7 +136,7 @@
       <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />
@@ -164,7 +164,7 @@
       <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />
@@ -193,7 +193,7 @@
       <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />
@@ -221,7 +221,7 @@
       <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />
@@ -246,7 +246,7 @@
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />
@@ -270,7 +270,7 @@
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />
@@ -293,7 +293,8 @@
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
+      <st id="GV12" editor="I_WTST" /> <!-- Water State -->
     </sts>
     <cmds>
       <sends />
@@ -315,7 +316,8 @@
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
+      <st id="GV12" editor="I_WTST" /> <!-- Water State -->
     </sts>
     <cmds>
       <sends />
@@ -339,7 +341,7 @@
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />
@@ -362,7 +364,7 @@
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />
@@ -415,7 +417,7 @@
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />
@@ -438,7 +440,7 @@
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
-      <st id="GV10" editor="I_MSST" /> <!-- Moisture State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />

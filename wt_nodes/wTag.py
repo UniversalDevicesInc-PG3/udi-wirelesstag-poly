@@ -119,6 +119,8 @@ class wTag(polyinterface.Node):
             or tag_type == 52 or tag_type == 62 or tag_type == 72):
             # hum:    Humidity (21 = absolute humidity)
             dv.append({'driver': 'CLIHUM',  'value': 0, 'uom': 21})
+            # TODO: ONly 32 has water sensor?
+            dv.append({'driver': 'GV12',  'value': 0, 'uom': 25})
         if (tag_type == 12 or tag_type == 13 or tag_type == 21):
             # motion: Might use True, False, Open for door mode?
             dv.append({'driver': 'GV2',     'value': 0, 'uom': 25})
@@ -181,7 +183,7 @@ class wTag(polyinterface.Node):
             self.set_evst(self.getDriver('ALARM'),True)
             self.set_oor(self.getDriver('GV8'),True)
             self.set_tmst(self.getDriver('GV9'),True)
-            self.set_msst(self.getDriver('GV10'),True)
+            self.set_cpst(self.getDriver('GV10'),True)
             self.set_list(self.getDriver('GV11'),True)
         self.reportDrivers()
 
@@ -214,6 +216,74 @@ class wTag(polyinterface.Node):
     def l_debug(self, name, string):
         LOGGER.debug("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
 
+    def get_handler(self,command,params):
+        """
+        This is called by the controller get_handler after parsing the node_data
+        """
+        if command == '/update':
+            #tagname=Garage Freezer&tagid=0&temp=-21.4213935329179&hum=0&lux=0&ts=2018-02-15T11:18:02+00:00 HTTP/1.1" 400 -
+            pass
+        if command == '/motion_detected':
+            self.set_motion(1)
+        elif command == '/motion_timedout':
+            self.set_motion(0)
+        elif command == '/door_opened':
+            self.set_motion(2)
+        elif command == '/door_closed':
+            self.set_motion(4)
+        elif command == '/door_open_toolong':
+            self.set_motion(2)
+        elif command == '/oor':
+            self.set_oor(1)
+        elif command == '/back_in_range':
+            self.set_oor(0)
+        elif command == '/temp_normal':
+            self.set_tmst(1)
+        elif command == '/temp_toohigh':
+            self.set_tmst(2)
+        elif command == '/temp_toolow':
+            self.set_tmst(3)
+        elif command == '/too_humid':
+            self.set_cpst(4)
+        elif command == '/too_dry':
+            self.set_cpst(3)
+        elif command == '/cap_normal':
+            self.set_cpst(2)
+        elif command == '/water_detected':
+            self.set_wtst(2)
+        elif command == '/water_dried':
+            self.set_wtst(1)
+        elif command == '/low_battery':
+            self.set_batl(1)
+        elif command == '/too_bright':
+            self.set_list(4)
+        elif command == '/too_dark':
+            self.set_list(3)
+        elif command == '/light_normal':
+            self.set_list(2)
+
+        else:
+            self.l_error('get_handler',"Unknown command '{0}'".format(command))
+        if 'tempc' in params and self.tag_uom == 0:
+            self.set_temp(params['tempc'],convert=False)
+        if 'tempf' in params and self.tag_uom == 1:
+            self.set_temp(params['tempf'],convert=False)
+        if 'temp' in params:
+            self.set_temp(params['temp'])
+        if 'hum' in params:
+            self.set_hum(params['hum'])
+        if 'lux' in params:
+            self.set_lux(params['lux'])
+        if 'orien' in params:
+            self.set_orien(params['orien'])
+        if 'xaxis' in params:
+            self.set_xaxis(params['xaxis'])
+        if 'yaxis' in params:
+            self.set_yaxis(params['yaxis'])
+        if 'zaxis' in params:
+            self.set_zaxis(params['zaxis'])
+        return True
+
     """
     Set Functions
     """
@@ -237,7 +307,7 @@ class wTag(polyinterface.Node):
         if 'tempEventState' in tdata:
             self.set_tmst(tdata['tempEventState'])
         if 'capEventState' in tdata:
-            self.set_msst(tdata['capEventState'])
+            self.set_cpst(tdata['capEventState'])
         if 'lightEventState' in tdata:
             self.set_list(tdata['lightEventState'])
 
@@ -354,6 +424,9 @@ class wTag(polyinterface.Node):
         if not force and hasattr(self,"evst") and self.evst == value: return True
         self.evst = value
         self.setDriver('ALARM', value)
+        # eventState 1=Armed, so no more motion
+        if value == 1:
+            self.set_motion(0)
 
     def set_oor(self,value,force=False):
         if value is None: return
@@ -370,12 +443,12 @@ class wTag(polyinterface.Node):
         self.tmst = value
         self.setDriver('GV9', value)
 
-    def set_msst(self,value,force=False):
-        self.l_debug('set_msst','{0},{1}'.format(value,force))
+    def set_cpst(self,value,force=False):
+        self.l_debug('set_cpst','{0},{1}'.format(value,force))
         if value is None: return
         value = int(value)
-        if not force and hasattr(self,"msst") and self.msst == value: return True
-        self.msst = value
+        if not force and hasattr(self,"cpst") and self.cpst == value: return True
+        self.cpst = value
         self.setDriver('GV10', value)
 
     def set_list(self,value,force=False):
@@ -384,6 +457,14 @@ class wTag(polyinterface.Node):
         if not force and hasattr(self,"list") and self.list == value: return True
         self.list = value
         self.setDriver('GV11', value)
+
+    def set_wtst(self,value,force=False):
+        self.l_debug('set_wtst','{0},{1}'.format(value,force))
+        if value is None: return
+        value = int(value)
+        if not force and hasattr(self,"wtst") and self.wtst == value: return True
+        self.wtst = value
+        self.setDriver('GV12', value)
 
     """
     """
