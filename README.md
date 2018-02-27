@@ -5,6 +5,8 @@
 This is the Wireless Tags Poly for the [Universal Devices ISY994i](https://www.universal-devices.com/residential/ISY) [Polyglot interface](http://www.universal-devices.com/developers/polyglot/docs/) with  [Polyglot V2](https://github.com/Einstein42/udi-polyglotv2)
 to support [CAO Gadgets Wireless Sensor Tags](http://wirelesstag.net/)
 
+This is discussed on the forum post [Polglot V2 CAO Wireless Tags Nodeserver](https://forum.universal-devices.com/topic/23724-polglot-v2-cao-wireless-tags-nodeserver/)
+
 (c) JimBoCA aka Jim Searle
 MIT license.
 
