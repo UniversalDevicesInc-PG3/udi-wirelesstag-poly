@@ -58,42 +58,36 @@ with:
 
 ### Supported Drivers
 
+The supported drivers that are used from the [GetTagList](http://wirelesstag.net/ethClient.asmx?op=GetTagList)
+data is shown in the following table along with information passed back from the [LoadEventURLConfig](http://wirelesstag.net/ethClient.asmx?op=LoadEventURLConfig)
+
 | Driver   | NLS   | Name             | 12 | 13 | 21 | 26 | 32 | 52 | 62 | 72 | 82 | 92 | Notes |
 | -------- | ----- | ---------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | ----- |
-| UOM      | CORF  | degree           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GPV      | INT   | tag_type         | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| ST       | BOOL  | Online           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| UOM      | CORF  | degree           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       | From Tag Manager
+| GPV      | INT   | tagType          | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | GV1      | INT   | TagId (slaveId)  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| CLITEMP  | FLOAT | temperature      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| ALARM    | EVST  | eventState       | X  | X  | X  | X  |    | X  |    | X  |    |    |       |
-| CLIHUM   | FLOAT | hum              |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
-| LUMIN    | FLOAT | lux              |    |    |    | X  |    |    |    |    |    |    |       |
-| BATLVL   | FLOAT | batteryRemaining | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| ST       | BOOL  | alive            | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | CV       | FLOAT | batteryVolt      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| NA1      |       | isClosed         | X  | X  | X  |    |    | X  |    |    |    |    | EVST-3 |
-| NA1      |       | isOpen           | X  | X  | X  |    |    | X  |    |    |    |    | EVST-4 |
-| NA1      |       | hasMoved         | X  | X  | X  |    |    |    |    |    |    |    | EVST-2 |
-| NA1      |       | isDetected       |    |    |    | X  |    |    |    | X  |    |    | EVST-5 |
-| NA1      |       | isTimedout       |    |    |    | X  |    |    |    | X  |    |    | EVST-6 |
+| GV7      | BONOFF| lit              | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| ALARM    | EVST  | eventState       | X  | X  | X  | X  |    | X  |    | X  |    |    |       |
+| GV9      | TMST  | tempEventState   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GV8      | BOOL  | OutOfRange       | X  | X  | X  | X  | X  | X  |    | X  |    |    | Out Of Range |
+| LUMIN    | FLOAT | lux              |    |    |    | X  |    |    |    |    |    |    |       |
+| CLITEMP  | FLOAT | temperature      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| CLIHUM   | FLOAT | cap              |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
+| GV10     | CPST  | CapEventState    |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
+| GV11     | LIST  | lightEventState  |    |    |    | X  |    |    |    |    |    |    |       |
+| BATLVL   | FLOAT | batteryRemaining | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | GV2      | BOOL  | motion           | X  | X  | X  |    |    |    |    |    |    |    |       |
 | GV3      | FLOAT | orien            | X  | X  | X  |    |    |    |    |    |    |    |       |
 | GV4      | FLOAT | xaxis            | X  | X  | X  |    |    |    |    |    |    |    |       |
 | GV5      | FLOAT | yaxis            | X  | X  | X  |    |    |    |    |    |    |    |       |
 | GV6      | FLOAT | zaxis            | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV7      | BONOFF| lit              | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GV8      | BOOL  | oor              | X  | X  | X  | X  | X  | X  |    | X  |    |    | Out Of Range |
-| GV9      | TMST  | tempState        | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GV10     | MSST  | moistureState    |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
-| GV11     | LIST  | lightState       |    |    |    | X  |    |    |    |    |    |    |       |
 | NS1      | FLOAT | lowTH            | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | NS1      | FLOAT | highTH           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | NS1      | FLOAT | rssi             | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | NS1      | FLOAT | txpwr            | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| NS1      | BOOL  | waterDetected2   |    |    |    |    | X  |    |    |    |    |    |       |
-| NS2      |       | target           |    |    |    |    |    |    | X  |    |    |    |       |
-| NS2      |       | fanOn            |    |    |    |    |    |    | X  |    |    |    |       |
-| NS2      |       | hvacTurnOff      |    |    |    |    |    |    | X  |    |    |    |       |
-| NS2      |       | disableLocal     |    |    |    |    |    |    | X  |    |    |    |       |
+
 
   - NA1 = Not Applicable, since it's available in eventState?
   - NS1 = Not Supported, likely to be added.
@@ -112,22 +106,29 @@ with:
 |      | 4 | Closed     |
 |      | 5 | DetectedMovement  |
 |      | 6 | TimedOut          |
+|      | 7 | Stabilizing       |
+|      | 8 | CarriedAway       |
+|      | 9 | InFreeFall        |
 | BONOFF | 0 | Off             |
 |        | 1 | On              |
-| TMST | 0 | Not Enabled       |
+| TMST | 0 | Disarmed          |
 |      | 1 | Normal            |
 |      | 2 | Too High          |
 |      | 3 | Too Low           |
-| MSST | 0 | Cannot monitor    |
-|      | 1 | Not Enabled       |
+|      | 4 | Threshold Pending |
+| CPST | 0 | Not Applicable    |
+|      | 1 | Disarmed          |
 |      | 2 | Normal            |
-|      | 3 | Too High          |
-|      | 4 | Too Low           |
-| LIST | 0 | Cannot monitor    |
-|      | 1 | Not Enabled       |
+|      | 3 | Too Dry           |
+|      | 4 | Too Humid         |
+|      | 5 | Threshold Pending |
+| LIST | 0 | Not Applicable    |
+|      | 1 | Disarmed          |
 |      | 2 | Normal            |
 |      | 3 | Too Dark          |
 |      | 4 | Too Bright        |
+|      | 5 | Threshold Pending |
+
 
 
 ## Installation
@@ -172,8 +173,8 @@ with:
      - Still not released, see TODO list below.
 
 ## TODO Before release
+- Update code and documentation from using kumoapp events to http://wirelesstag.net/apidoc.html
 - Add last update time from ts? Or do a heartbeat?
-- Call getTagList on restart to update values.
 - Triple check all F nodedef's have proper Drivers
 - Test that C works?  Can I switch mine to C?
 - Only add necessary drivers based on tag_type in wTag
