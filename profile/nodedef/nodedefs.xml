@@ -112,6 +112,10 @@
     <cmds>
       <sends />
       <accepts>
+        <!--  Authoirzation Mode -->
+      <cmd id="SET_LIGHT">
+        <p id="" editor="B_ONOFF" init="GV7" />
+      </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
