@@ -14,7 +14,7 @@ This is discussed on the forum post [Polglot V2 CAO Wireless Tags Nodeserver](ht
 
 ## How it works
 
-This nodeserver starts a backgroud process which implements a minimal REST
+This nodeserver starts a background process which implements a minimal REST
 server to handle data coming from the tag manager.  All communication from
 the tag manager to the REST server is on the local network, so no port
 forwarding is necessary.
