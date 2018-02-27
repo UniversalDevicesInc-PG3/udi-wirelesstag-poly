@@ -6,14 +6,14 @@
     "install": "install.sh",
     "description": "Node Server for CAO Gadgets Wireless Sensor Tags www.wirelesstag.net",
     "notice": "No disclaimer here",
-    "shortPoll": "5",
-    "longPoll": "60",
+    "shortPoll": "60",
+    "longPoll": "600",
     "credits": [
         {
             "title": "udi-WirelessSensorTags-poly: A NodeServer for CAO Gadgets Wireless Sensor Tags",
             "author": "JimBoCA",
-            "version": "0.0.3",
-            "date": "February 11, 2017",
+            "version": "0.0.4",
+            "date": "February 27, 2018",
             "source": "https://github.com/jimboca/udi-wirelesstag-poly",
             "license": "https://raw.githubusercontent.com/jimboca/udi-wirelesstag-poly/master/LICENSE"
         }

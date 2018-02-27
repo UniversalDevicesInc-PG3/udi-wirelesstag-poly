@@ -168,26 +168,21 @@ data is shown in the following table along with information passed back from the
 1. Open the Polyglot web page, go to nodeserver store and click "Update" for "WirelessTags".
 2. Go to the WirelessTags Control Page, and click restart
 
-## Release Notes
+## TODO
 
-  - 0.0.3 02/22/2018
-     - Still not released, see TODO list below.
-
-## TODO Before release
-- Update code and documentation from using kumoapp events to http://wirelesstag.net/apidoc.html
+- Test more responses
+  - Out of range and back in range
+  - Online
 - Add last update time from ts? Or do a heartbeat?
-- Triple check all F nodedef's have proper Drivers
-- Test that C works?  Can I switch mine to C?
 - What happens when authorization expires?
 - What happens when authorization is removed?
-- Really test sensor changes when I am home
-  - Out of Range
-  - Online
 - Test if slaveId changes when a tag is deleted and undeleted?
    - May need to link the mac & slave id in customData
-- Query Tag's on startup?  Don't think this is necessary?  Just means some data will not be populated.
+- Query Tag's on startup?  Don't think this is necessary?
+  - Uses Battery, but then data would be up-to-date
+  - otherwise ISY will have last known state
 - Short poll query when Motion=True to change motion
-- What are the other motion settings door_open...
+  - I don't seem to ever get a motion timout repsonse?
 - Query to reset Motion when it's True?
   - Don't seem to get motion timeout in updates?
 - Handle not responding Query
@@ -196,3 +191,10 @@ data is shown in the following table along with information passed back from the
 2018-02-26 18:54:12,700 DEBUG    api_post_d: path=ethClient.asmx/RequestImmediatePostback got=False
 2018-02-26 18:54:12,702 DEBUG    api_post_d: ret={'st': False}
 ```
+
+## Release Notes
+
+  - 0.0.4 02/27/2018
+    - First release
+  - 0.0.3 02/22/2018
+    - Still not released, see TODO list
