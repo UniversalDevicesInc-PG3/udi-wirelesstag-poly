@@ -171,6 +171,8 @@ data is shown in the following table along with information passed back from the
 
 ## TODO
 
+- Wet State initializes to Not Applicable for new tags
+  - Should set to Dry if Moisture State is Normal since it can't be queried
 - Test more responses
   - Out of range and back in range
   - Online
