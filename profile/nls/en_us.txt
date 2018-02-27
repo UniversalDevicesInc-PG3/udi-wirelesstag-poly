@@ -73,6 +73,8 @@ ST-GV10-NAME = Moisture State
 ST-GV11-NAME = Light State
 ST-GV12-NAME = Wet State
 
+CMD-SET_LIGHT-NAME = Set Light
+
 ONOFF-0 = Off
 ONOFF-1 = On
 

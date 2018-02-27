@@ -69,6 +69,24 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <!--  Authoirzation Mode -->
+        <cmd id="SET_LIGHT">
+          <p id="" editor="B_ONOFF" init="GV7" />
+        </cmd>
+        <cmd id="QUERY" />
+      </accepts>
+    </cmds>
+  </nodeDef>
+
+  <!-- Tag 12 F -->
+  <nodeDef id="wTag12FBad" nls="tag12">
+    <editors />
+    <sts>
+      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="B_ONOFF" /> <!-- Light -->

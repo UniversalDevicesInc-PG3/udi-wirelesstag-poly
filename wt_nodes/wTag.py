@@ -469,22 +469,9 @@ class wTag(polyinterface.Node):
     """
     """
 
-    def cmd_set_on(self, command):
-        """
-        Example command received from ISY.
-        Set DON on MyNode.
-        Sets the ST (status) driver to 1 or 'True'
-        """
-        self.setDriver('ST', 1)
-
-    def cmd_set_off(self, command):
-        """
-        Example command received from ISY.
-        Set DOF on MyNode
-        Sets the ST (status) driver to 0 or 'False'
-        """
-        self.setDriver('ST', 0)
-
+    def cmd_set_light(self,command):
+        value = command.get("value")
+        self.l_error('Need to implement turning setting light to {0}'.format(value))
 
     """
     {"d":[
@@ -543,5 +530,5 @@ class wTag(polyinterface.Node):
 
     commands = {
         'QUERY': query,
-        'DOF': cmd_set_off,
+        'SET_LIGHT': cmd_set_light,
     }
