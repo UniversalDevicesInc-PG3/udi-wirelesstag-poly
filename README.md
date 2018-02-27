@@ -71,18 +71,18 @@ data is shown in the following table along with information passed back from the
 | GV7      | BONOFF| lit              | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | ALARM    | EVST  | eventState       | X  | X  | X  | X  |    | X  |    | X  |    |    |       |
 | GV9      | TMST  | tempEventState   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GV8      | BOOL  | OutOfRange       | X  | X  | X  | X  | X  | X  |    | X  |    |    | Out Of Range |
+| GV8      | BOOL  | oor              | X  | X  | X  | X  | X  | X  |    | X  |    |    | Out Of Range |
 | LUMIN    | FLOAT | lux              |    |    |    | X  |    |    |    |    |    |    |       |
 | CLITEMP  | FLOAT | temperature      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | CLIHUM   | FLOAT | cap              |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
 | GV10     | CPST  | CapEventState    |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
 | GV11     | LIST  | lightEventState  |    |    |    | X  |    |    |    |    |    |    |       |
 | BATLVL   | FLOAT | batteryRemaining | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GV2      | BOOL  | motion           | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV3      | FLOAT | orien            | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV4      | FLOAT | xaxis            | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV5      | FLOAT | yaxis            | X  | X  | X  |    |    |    |    |    |    |    |       |
-| GV6      | FLOAT | zaxis            | X  | X  | X  |    |    |    |    |    |    |    |       |
+| GV2      | BOOL  | motion           | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
+| GV3      | FLOAT | orien            | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
+| GV4      | FLOAT | xaxis            | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
+| GV5      | FLOAT | yaxis            | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
+| GV6      | FLOAT | zaxis            | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
 | NS1      | FLOAT | lowTH            | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | NS1      | FLOAT | highTH           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | NS1      | FLOAT | rssi             | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
@@ -92,6 +92,7 @@ data is shown in the following table along with information passed back from the
   - NA1 = Not Applicable, since it's available in eventState?
   - NS1 = Not Supported, likely to be added.
   - NS2 = Not Supported, part of Kumostat, which nobody is using?
+  - N1 = Only updated on change, so not intially populated.
 
 ### NLS entries
 
