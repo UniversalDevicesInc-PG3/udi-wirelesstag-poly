@@ -47,9 +47,14 @@
       <range uom="72" min="0" max="10" prec="3" />
    </editor>
 
-    <!-- Motion -->
+   <!-- Motion -->
+   <editor id="BATLVL">
+     <range uom="51" min="0" max="100" prec="2" />
+   </editor>
+
+   <!-- Motion -->
    <editor id="I_MOTION">
-      <range uom="25" subset="0,1,2,3,4" nls="MOT4" />
+     <range uom="25" subset="0,1,2,3,4" nls="MOT4" />
    </editor>
 
    <!-- Event State-->

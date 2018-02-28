@@ -65,7 +65,7 @@
   </nodeDef>
 
   <!-- Tag 12 F -->
-  <nodeDef id="wTag12F" nls="tag12">
+  <nodeDef id="wTag12FTest" nls="tag12">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
@@ -87,7 +87,7 @@
   </nodeDef>
 
   <!-- Tag 12 F -->
-  <nodeDef id="wTag12FBad" nls="tag12">
+  <nodeDef id="wTag12F" nls="tag12">
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? x -->
