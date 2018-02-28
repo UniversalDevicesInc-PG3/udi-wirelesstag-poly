@@ -61,7 +61,10 @@ class wTag(polyinterface.Node):
                 elif driver['driver'] == 'UOM':
                     self.tag_uom  = driver['value']
             if tag_id is None:
-                self.l_error('__init__','No tag_id in node_data={0}'.format(node_data))
+                self.l_error('__init__','No tag_id (GPV) in node_data={0}'.format(node_data))
+                return False
+            if tag_type is None:
+                self.l_error('__init__','No tag_type (GV1) in node_data={0}'.format(node_data))
                 return False
         elif address is None or name is None or tag_type is None:
             # It's a new tag.
