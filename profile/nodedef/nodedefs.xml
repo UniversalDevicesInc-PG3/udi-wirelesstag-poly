@@ -69,6 +69,11 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
     </sts>
     <cmds>
       <sends />
