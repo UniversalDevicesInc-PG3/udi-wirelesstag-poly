@@ -43,6 +43,7 @@ class wTag(polyinterface.Node):
         :param name: This nodes name
         """
         LOGGER.debug('wTag:__init__: address={0} name={1} type={2} uom={3}'.format(address,name,tag_type,uom))
+        tag_id = None
 
         # Remove spaces from names since that messes with our return urls.
         if name is not None:
@@ -59,6 +60,9 @@ class wTag(polyinterface.Node):
                     tag_id   = driver['value']
                 elif driver['driver'] == 'UOM':
                     self.tag_uom  = driver['value']
+            if tag_id is None:
+                self.l_error('__init__','No tag_id in node_data={0}'.format(node_data))
+                return False
         elif address is None or name is None or tag_type is None:
             # It's a new tag.
             self.address = address

@@ -175,8 +175,6 @@ data is shown in the following table along with information passed back from the
 
 ## TODO
 
-- Wet State initializes to Not Applicable for new tags
-  - Should set to Dry if Moisture State is Normal since it can't be queried
 - Test more responses
   - Out of range and back in range
   - Online
@@ -201,6 +199,8 @@ data is shown in the following table along with information passed back from the
 
 ## Release Notes
 
+  - 0.0.7 02/27/2018
+    - Catch missing tag id in node_data
   - 0.0.6 02/27/2018
     - Fixed initial Wet State to be Dry on startup if it's NA
     - Added requests to requirements
