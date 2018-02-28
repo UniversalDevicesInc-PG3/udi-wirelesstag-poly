@@ -119,8 +119,9 @@ class wTag(polyinterface.Node):
             or tag_type == 52 or tag_type == 62 or tag_type == 72):
             # hum:    Humidity (21 = absolute humidity)
             dv.append({'driver': 'CLIHUM',  'value': 0, 'uom': 21})
-            # TODO: ONly 32 has water sensor?
-            dv.append({'driver': 'GV12',  'value': 0, 'uom': 25})
+        if (tag_type == 32):
+            # TODO: Only 32 has water sensor?
+            dv.append({'driver': 'GV12',  'value': 1, 'uom': 25})
         if (tag_type == 12 or tag_type == 13 or tag_type == 21):
             # motion: Might use True, False, Open for door mode?
             dv.append({'driver': 'GV2',     'value': 0, 'uom': 25})
@@ -185,6 +186,7 @@ class wTag(polyinterface.Node):
             self.set_tmst(self.getDriver('GV9'),True)
             self.set_cpst(self.getDriver('GV10'),True)
             self.set_list(self.getDriver('GV11'),True)
+            self.set_wtst(self.getDriver('GV12'),True)
         self.reportDrivers()
 
 
@@ -462,6 +464,8 @@ class wTag(polyinterface.Node):
         self.l_debug('set_wtst','{0},{1}'.format(value,force))
         if value is None: return
         value = int(value)
+        # Force to 1, Dry state on initialization since polyglot ignores the init value
+        if value == 0: value = 1
         if not force and hasattr(self,"wtst") and self.wtst == value: return True
         self.wtst = value
         self.setDriver('GV12', value)
