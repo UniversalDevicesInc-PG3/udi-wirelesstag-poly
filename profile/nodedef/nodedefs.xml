@@ -71,6 +71,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
     </sts>
     <cmds>
       <sends />
@@ -88,12 +89,12 @@
   <nodeDef id="wTag12FBad" nls="tag12">
     <editors />
     <sts>
-      <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+      <st id="ST" editor="BOOL" /> <!-- Status, online? x -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
-      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage ? -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
       <st id="GV3" editor="FLOAT" /> <!-- Orientation -->
