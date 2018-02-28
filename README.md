@@ -201,6 +201,8 @@ data is shown in the following table along with information passed back from the
 
 ## Release Notes
 
+  - 0.0.6 02/27/2018
+    - Fixed initial Wet State to be Dry on startup if it's NA
   - 0.0.5 02/27/2018
     - Fixed BATLVL Editor so tag conditions show up in programs
     - Added 'Set Light', but it doesn't actually work yet
