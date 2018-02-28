@@ -201,6 +201,9 @@ data is shown in the following table along with information passed back from the
 
 ## Release Notes
 
+  - 0.0.5 02/27/2018
+    - Fixed BATLVL Editor so tag conditions show up in programs
+    - Added 'Set Light', but it doesn't actually work yet
   - 0.0.4 02/27/2018
     - First release
   - 0.0.3 02/22/2018
