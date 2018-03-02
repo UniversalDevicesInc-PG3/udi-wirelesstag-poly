@@ -318,6 +318,7 @@
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
@@ -344,6 +345,7 @@
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
