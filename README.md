@@ -202,6 +202,7 @@ data is shown in the following table along with information passed back from the
 
   - 0.0.9 03/02/2018
     - Add "Last Update" to all tags
+    - Profile Update: 0.0.9
   - 0.0.8 03/01/2018
     - Add "Last Update" seconds since epoch time of last update sent from the tag
     - Allow hum to be a float
