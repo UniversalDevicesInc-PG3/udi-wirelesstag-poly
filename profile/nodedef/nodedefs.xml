@@ -70,8 +70,9 @@
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? x -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) x -->
+      <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State x -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light x -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light x -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature ? -->
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage ? -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
@@ -86,9 +87,8 @@
     <cmds>
       <sends />
       <accepts>
-        <!--  Authoirzation Mode -->
         <cmd id="SET_LIGHT">
-          <p id="" editor="B_ONOFF" init="GV7" />
+          <p id="" editor="I_LIT" init="GV7" />
         </cmd>
         <cmd id="QUERY" />
       </accepts>
@@ -101,7 +101,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
@@ -116,6 +116,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -128,7 +131,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
@@ -145,6 +148,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -156,7 +162,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
@@ -173,6 +179,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -185,7 +194,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
@@ -202,6 +211,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -213,7 +225,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
@@ -230,6 +242,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -242,7 +257,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" /> <!-- Humidity -->
       <st id="LUMIN" editor="I_LUMIN" /> <!-- Lux -->
@@ -255,6 +270,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -266,7 +284,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" /> <!-- Humidity -->
       <st id="LUMIN" editor="I_LUMIN" /> <!-- Lux -->
@@ -279,6 +297,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -290,7 +311,7 @@
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
@@ -303,6 +324,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -313,7 +337,7 @@
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
@@ -326,6 +350,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -338,7 +365,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
@@ -350,6 +377,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -361,7 +391,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
@@ -373,6 +403,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -414,7 +447,7 @@
       <st id="ST" editor="BOOL" />
       <st id="GV1" editor="I_TAGID" />
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
@@ -426,6 +459,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -437,7 +473,7 @@
       <st id="ST" editor="BOOL" />
       <st id="GV1" editor="I_TAGID" />
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
-      <st id="GV7" editor="B_ONOFF" /> <!-- Light -->
+      <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
@@ -449,6 +485,9 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_LIGHT">
+          <p id="" editor="I_LIT" init="GV7" />
+        </cmd>
         <cmd id="QUERY" />
       </accepts>
     </cmds>

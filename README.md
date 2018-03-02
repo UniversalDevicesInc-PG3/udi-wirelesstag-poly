@@ -171,6 +171,7 @@ data is shown in the following table along with information passed back from the
 ## Upgrading
 
 1. Open the Polyglot web page, go to nodeserver store and click "Update" for "WirelessTags".
+  - If the profile has changed since your last version then answer yes when prompted to update the profile
 2. Go to the WirelessTags Control Page, and click restart
 
 ## TODO
@@ -199,6 +200,10 @@ data is shown in the following table along with information passed back from the
 
 ## Release Notes
 
+  - 0.0.8 03/01/2018
+    - Add "Last Update" seconds since epoch time of last update sent from the tag
+    - Allow hum to be a float
+    - Profile Update: 0.0.8
   - 0.0.7 02/27/2018
     - Catch missing tag id in node_data
   - 0.0.6 02/27/2018

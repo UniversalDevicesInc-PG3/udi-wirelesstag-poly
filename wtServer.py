@@ -262,7 +262,7 @@ class wtServer():
         return mret
 
     # These match the names used in the API
-    
+
     # http://wirelesstag.net/ethAccount.asmx?op=IsSignedIn
     def IsSignedIn(self):
         return self.api_post_d('ethAccount.asmx/IsSignedIn',{})
@@ -308,6 +308,18 @@ class wtServer():
     # http://wirelesstag.net/ethClient.asmx?op=RequestImmediatePostback
     def RequestImmediatePostback(self,params):
         return self.api_post_d('ethClient.asmx/RequestImmediatePostback',params)
+
+    def LightOn(self,mgr_mac,id,flash):
+        ret = self.SelectTagManager(mgr_mac)
+        if ret['st']:
+            ret = self.api_post_d('ethClient.asmx/LightOn',{'id': id, 'flash':flash})
+        return ret
+
+    def LightOff(self,mgr_mac,id):
+        ret = self.SelectTagManager(mgr_mac)
+        if ret['st']:
+            ret = self.api_post_d('ethClient.asmx/LightOff',{'id': id})
+        return ret
 
 def my_ghandler(command,params):
     return True

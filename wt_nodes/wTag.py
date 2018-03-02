@@ -87,6 +87,7 @@ class wTag(polyinterface.Node):
         self.tdata = tdata
         self.tag_id = tag_id
         self.tag_type = tag_type
+        self.primary_n = controller.nodes[primary]
         #
         # C or F?
         # Fix our temp_uom in drivers
@@ -108,10 +109,12 @@ class wTag(polyinterface.Node):
             {'driver': 'BATLVL',  'value': 0, 'uom': 51},
             # batv:   Battery Voltag 72=Volt
             {'driver': 'CV',      'value': 0, 'uom': 72},
-            # lit:    Light 78=off/on
+            # lit:    Light
             {'driver': 'GV7',     'value': 0, 'uom': 25},
             # tempState:
             {'driver': 'GV9',     'value': 0, 'uom': 25},
+            # time:
+            {'driver': 'GV13',     'value': 0, 'uom': 25},
         ]
 
         if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26
@@ -126,9 +129,6 @@ class wTag(polyinterface.Node):
             or tag_type == 52 or tag_type == 62 or tag_type == 72):
             # hum:    Humidity (21 = absolute humidity)
             dv.append({'driver': 'CLIHUM',  'value': 0, 'uom': 21})
-        if (tag_type == 32):
-            # TODO: Only 32 has water sensor?
-            dv.append({'driver': 'GV12',  'value': 1, 'uom': 25})
         if (tag_type == 12 or tag_type == 13 or tag_type == 21):
             # motion: Might use True, False, Open for door mode?
             dv.append({'driver': 'GV2',     'value': 0, 'uom': 25})
@@ -152,9 +152,10 @@ class wTag(polyinterface.Node):
         if (tag_type == 26):
             # lightState:
             dv.append({'driver': 'GV11',    'value': 0, 'uom': 25})
-
+        if (tag_type == 32):
+            # TODO: Only 32 has water sensor?
+            dv.append({'driver': 'GV12',  'value': 1, 'uom': 25})
         self.drivers = dv
-
         uomS = "C" if self.tag_uom == 0 else "F"
         self.id = 'wTag' + str(self.tag_type) + uomS
         self.address = address
@@ -168,7 +169,6 @@ class wTag(polyinterface.Node):
         and we get a return result from Polyglot. Only happens once.
         """
         self.setDriver('ST', 1)
-        self.primary_n = self.controller.nodes[self.primary]
         # Always set driver from tag type
         self.set_tag_type(self.tag_type,True)
         self.set_tag_id(self.tag_id,True)
@@ -194,7 +194,13 @@ class wTag(polyinterface.Node):
             self.set_cpst(self.getDriver('GV10'),True)
             self.set_list(self.getDriver('GV11'),True)
             self.set_wtst(self.getDriver('GV12'),True)
-        self.reportDrivers()
+            self.set_time(self.getDriver('GV13'),True)
+        if self.controller.update_profile:
+            # Drivers were updated, need to query
+            self.query()
+        else:
+            # Otherwise just report previous values
+            self.reportDrivers()
 
 
     def query(self):
@@ -270,7 +276,6 @@ class wTag(polyinterface.Node):
             self.set_list(3)
         elif command == '/light_normal':
             self.set_list(2)
-
         else:
             self.l_error('get_handler',"Unknown command '{0}'".format(command))
         if 'tempc' in params and self.tag_uom == 0:
@@ -291,6 +296,7 @@ class wTag(polyinterface.Node):
             self.set_yaxis(params['yaxis'])
         if 'zaxis' in params:
             self.set_zaxis(params['zaxis'])
+        self.set_time_now()
         return True
 
     """
@@ -353,7 +359,7 @@ class wTag(polyinterface.Node):
 
     def set_hum(self,value,force=False):
         if value is None: return
-        value = int(value)
+        value = myfloat(value)
         if not force and hasattr(self,"hum") and self.hum == value:
             return True
         self.hum = value
@@ -477,67 +483,36 @@ class wTag(polyinterface.Node):
         self.wtst = value
         self.setDriver('GV12', value)
 
+    def set_time(self,value,force=False):
+        self.l_debug('set_time','{0},{1}'.format(value,force))
+        if value is None: return
+        value = int(value)
+        if not force and hasattr(self,"time") and self.time == value: return True
+        self.time = value
+        self.setDriver('GV13', value)
+
+    def set_time_now(self):
+        self.set_time(int(time.time()))
+
     """
     """
 
     def cmd_set_light(self,command):
-        value = command.get("value")
-        self.l_error('Need to implement turning setting light to {0}'.format(value))
-
-    """
-    {"d":[
-    {
-      "__type":"MyTagList.Tag2",
-      "managerName":"Rangwood",
-      "mac":"0E994A04A300",
-      "dbid":1,
-      "mirrors":[],
-      "notificationJS":"",
-      "name":"Garage Freezer",
-      "uuid":"7911937f-c758-4b88-a33a-0761ed284f29",
-      "comment":"",
-      "slaveId":0,
-      "tag_type":12,
-      "lastComm":131628820472086602,
-      "alive":true,
-      "signaldBm":-64,
-      "batteryVolt":3.3048022377777824,
-      "beeping":false,
-      "lit":false,
-      "migrationPending":false,
-      "beepDurationDefault":15,
-      "eventState":0,
-      "tempEventState":1,
-      "OutOfRange":false,
-      "lux":0,
-      "temperature":-21.421393532917921,
-      "tempCalOffset":0,
-      "capCalOffset":0,
-      "image_md5":null,
-      "cap":0,
-      "capRaw":0,
-      "az2":0,
-      "capEventState":0,
-      "lightEventState":0,
-      "shorted":false,
-      "thermostat":null,
-      "playback":null,
-      "postBackInterval":3600,
-      "rev":12,
-      "version1":1,
-      "freqOffset":12828,
-      "freqCalApplied":0,
-      "reviveEvery":4,
-      "oorGrace":2,
-      "LBTh":2.5,
-      "enLBN":true,
-      "txpwr":204,
-      "rssiMode":false,
-      "ds18":false,
-      "v2flag":16,
-      "batteryRemaining":1.13 # = 113% ?
-    }]}
-    """
+        value = int(command.get("value"))
+        # Save current value, and change it.
+        slit = self.lit
+        self.set_lit(value)
+        if value == 0:
+            ret = self.controller.wtServer.LightOff(self.primary_n.mac,self.tag_id)
+        elif value == 1:
+            ret = self.controller.wtServer.LightOn(self.primary_n.mac,self.tag_id,False)
+        elif value == 2:
+            ret = self.controller.wtServer.LightOn(self.primary_n.mac,self.tag_id,True)
+        if ret['st']:
+            self.set_from_tag_data(ret['result'])
+        else:
+            # Command failed, restore status
+            self.set_lit(slit)
 
     commands = {
         'QUERY': query,

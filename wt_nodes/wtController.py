@@ -3,10 +3,11 @@ import polyinterface
 import sys
 import time
 from threading import Thread
+from copy import deepcopy
 
 from wt_nodes import wTagManager
 from wtServer import wtServer
-from wt_funcs import get_server_data,get_valid_node_name
+from wt_funcs import get_server_data,get_valid_node_name,get_profile_info
 
 LOGGER = polyinterface.LOGGER
 
@@ -98,10 +99,26 @@ class wtController(polyinterface.Controller):
         self.long_poll = val
         self.set_port(self.wtServer.listen_port)
         self.save_params()
+        self.check_profile()
         self.add_existing_tag_managers()
         self.query()
         self.ready = True
         self.l_info('start','done')
+
+    def check_profile(self):
+        self.profile_info = get_profile_info(LOGGER)
+        # Set Default profile version if not Found
+        cdata = deepcopy(self.polyConfig['customData'])
+        self.l_info('check_profile','profile_info={0} customData={1}'.format(self.profile_info,cdata))
+        if not 'profile_info' in cdata:
+            cdata['profile_info'] = { 'version': 0 }
+        if self.profile_info['version'] == cdata['profile_info']['version']:
+            self.update_profile = False
+        else:
+            self.update_profile = True
+        self.l_info('check_profile','update_profile={}'.format(self.update_profile))
+        cdata['profile_info'] = self.profile_info
+        self.saveCustomData(cdata)
 
     def shortPoll(self):
         """
@@ -160,8 +177,8 @@ class wtController(polyinterface.Controller):
         for address in self.controller._nodes:
             node = self.controller._nodes[address]
             if node['node_def_id'] == 'wTagManager':
-                self.l_info('add_existing_tag_managers','node={0}'.format(node))
-                self.addNode(wTagManager(self, address, node['name'], address.upper(), node_data=node))
+                self.l_info('add_existing_tag_managers','node={0} update={1}'.format(node,self.update_profile))
+                self.addNode(wTagManager(self, address, node['name'], address.upper(), node_data=node),update=self.update_profile)
 
     def discover(self, *args, **kwargs):
         """
@@ -285,7 +302,7 @@ class wtController(polyinterface.Controller):
         if 'oauth2_code' in self.polyConfig['customParams']:
             self.set_oauth2(self.polyConfig['customParams']['oauth2_code'],save=False)
         else:
-            self.l_error('load_params',"oauth2_code not defined in customParams, please authorizze")
+            self.l_error('load_params',"oauth2_code not defined in customParams, please authorize")
             self.set_oauth2(False)
             st = False
 
