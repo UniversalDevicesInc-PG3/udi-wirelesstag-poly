@@ -140,7 +140,7 @@
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="CLIHUM" editor="HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
@@ -173,7 +173,7 @@
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="CLIHUM" editor="HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
@@ -207,7 +207,7 @@
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="CLIHUM" editor="HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
@@ -240,7 +240,7 @@
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="CLIHUM" editor="HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
@@ -274,8 +274,8 @@
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" /> <!-- Humidity -->
-      <st id="LUMIN" editor="I_LUMIN" /> <!-- Lux -->
+      <st id="CLIHUM" editor="HUMIDITY" /> <!-- Humidity -->
+      <st id="LUMIN" editor="LUMIN" /> <!-- Lux -->
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -303,8 +303,8 @@
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" /> <!-- Humidity -->
-      <st id="LUMIN" editor="I_LUMIN" /> <!-- Lux -->
+      <st id="CLIHUM" editor="HUMIDITY" /> <!-- Humidity -->
+      <st id="LUMIN" editor="LUMIN" /> <!-- Lux -->
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -332,7 +332,7 @@
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="CLIHUM" editor="HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -360,7 +360,7 @@
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="CLIHUM" editor="HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -390,7 +390,7 @@
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="CLIHUM" editor="HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -418,7 +418,7 @@
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="CLIHUM" editor="HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -476,7 +476,7 @@
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="CLIHUM" editor="HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -504,7 +504,7 @@
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
-      <st id="CLIHUM" editor="I_HUMIDITY" />
+      <st id="CLIHUM" editor="HUMIDITY" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->

@@ -365,7 +365,7 @@ class wTag(polyinterface.Node):
 
     def set_hum(self,value,force=False):
         if value is None: return
-        value = myfloat(value)
+        value = myfloat(value,2)
         if not force and hasattr(self,"hum") and self.hum == value:
             return True
         self.hum = value
@@ -380,7 +380,7 @@ class wTag(polyinterface.Node):
 
     def set_lux(self,value,force=False):
         if value is None: return
-        value = int(value)
+        value = myfloat(value,2)
         if not force and hasattr(self,"lux") and self.lux == value:
             return True
         self.lux = value

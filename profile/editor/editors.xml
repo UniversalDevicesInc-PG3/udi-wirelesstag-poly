@@ -35,12 +35,12 @@
       <range uom="17" min="-50" max="150" prec="2" />
    </editor>
 
-   <editor id="I_HUMIDITY">
+   <editor id="HUMIDITY">
      <range uom="51" min="0" max="100" prec="2" />
    </editor>
 
-   <editor id="I_LUMIN">
-     <range uom="36" min="0" max="100" prec="0" />
+   <editor id="LUMIN">
+     <range uom="36" min="0" max="100" prec="2" />
    </editor>
 
    <!-- Voltage -->
