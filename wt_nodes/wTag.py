@@ -115,6 +115,8 @@ class wTag(polyinterface.Node):
             {'driver': 'GV9',     'value': 0, 'uom': 25},
             # time:
             {'driver': 'GV13',     'value': 0, 'uom': 25},
+            # seconds since update
+            {'driver': 'GV14',     'value': 0, 'uom': 25},
         ]
 
         if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26
@@ -195,6 +197,7 @@ class wTag(polyinterface.Node):
             self.set_list(self.getDriver('GV11'),True)
             self.set_wtst(self.getDriver('GV12'),True)
             self.set_time(self.getDriver('GV13'),True)
+            self.set_seconds(True)
         if self.controller.update_profile:
             # Drivers were updated, need to query
             self.query()
@@ -202,6 +205,8 @@ class wTag(polyinterface.Node):
             # Otherwise just report previous values
             self.reportDrivers()
 
+    def shortPoll(self):
+        self.set_seconds()
 
     def query(self):
         """
@@ -493,6 +498,11 @@ class wTag(polyinterface.Node):
 
     def set_time_now(self):
         self.set_time(int(time.time()))
+
+    def set_seconds(self,force=True):
+        value = int(time.time()) - self.time
+        self.seconds = value
+        self.setDriver('GV14', value)
 
     """
     """

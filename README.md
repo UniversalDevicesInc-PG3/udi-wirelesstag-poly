@@ -200,6 +200,9 @@ data is shown in the following table along with information passed back from the
 
 ## Release Notes
 
+  - 0.0.11 03/02/2018
+    - Add Seconds Since Update
+    - Profile Update: 0.0.11
   - 0.0.10 03/02/2018
     - Really add "Last Update" to all tags
     - Profile Update: 0.0.10

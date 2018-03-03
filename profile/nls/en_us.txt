@@ -72,7 +72,8 @@ ST-GV9-NAME = Temp State
 ST-GV10-NAME = Moisture State
 ST-GV11-NAME = Light State
 ST-GV12-NAME = Wet State
-ST-GV13-NAME = Last Update
+ST-GV13-NAME = Last Update Time
+ST-GV14-NAME = Seconds Since Update
 
 CMD-SET_LIGHT-NAME = Set Light
 

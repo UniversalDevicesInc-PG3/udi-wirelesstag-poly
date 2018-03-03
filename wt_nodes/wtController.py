@@ -137,6 +137,9 @@ class wtController(polyinterface.Controller):
         for address in self.nodes:
             if self.nodes[address].id == 'wTagManager':
                 self.nodes[address].shortPoll()
+        for address in self.nodes:
+            if not (self.nodes[address].id == 'wtController' or self.nodes[address].id == 'wTagManager'):
+                self.nodes[address].shortPoll()
 
     def longPoll(self):
         """

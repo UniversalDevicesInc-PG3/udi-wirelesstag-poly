@@ -71,6 +71,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? x -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) x -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State x -->
       <st id="GV7" editor="I_LIT" /> <!-- Light x -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature ? -->
@@ -101,6 +102,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
@@ -132,6 +134,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
@@ -164,6 +167,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
@@ -197,6 +201,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
@@ -229,6 +234,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
@@ -262,6 +268,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
@@ -290,6 +297,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
@@ -319,6 +327,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
@@ -346,6 +355,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
       <st id="CLIHUM" editor="I_HUMIDITY" />
@@ -374,6 +384,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
@@ -401,6 +412,7 @@
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
@@ -458,6 +470,7 @@
       <st id="ST" editor="BOOL" />
       <st id="GV1" editor="I_TAGID" />
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
@@ -485,6 +498,7 @@
       <st id="ST" editor="BOOL" />
       <st id="GV1" editor="I_TAGID" />
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
