@@ -259,6 +259,7 @@ data is shown in the following table along with information passed back from the
     - Fix race condition when starting up causing error in set_seconds
     - Change URL's to not pass tag name since they are not properly encoded, adding passing of tag manager mac to identify tags on multiple tag managers.
       - If you previously added tags that had spaces in the names, then delete them from inside the Polyglot -> WirelessTag -> Nodes page and run discover again.
+    - It should work much better with multiple tag managers, but there may still be some issues. Will review the code more and test further.
   - 0.0.12 03/02/2018
     - https://github.com/jimboca/udi-wirelesstag-poly/issues/1
     - Added a lot to documentation
