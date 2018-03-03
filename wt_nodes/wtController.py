@@ -136,9 +136,7 @@ class wtController(polyinterface.Controller):
         for address in self.nodes:
             if self.nodes[address].id == 'wTagManager':
                 self.nodes[address].shortPoll()
-        for address in self.nodes:
-            if not (self.nodes[address].id == 'wtController' or self.nodes[address].id == 'wTagManager'):
-                self.nodes[address].shortPoll()
+
 
     def longPoll(self):
         """
@@ -237,14 +235,22 @@ class wtController(polyinterface.Controller):
         if command == '/code':
             return self.set_oauth2(params['oauth2_code'])
         node = None
-        if not 'tagname' in params:
-            self.l_error('get_handler','Tag name not in params? command={0} params={1}'.format(command,params))
+        if not 'tagid' in params:
+            self.l_error('get_handler','tagid not in params? command={0} params={1}'.format(command,params))
+            return False
+        if not 'tmgr_mac' in params:
+            self.l_error('get_handler','tmgr_mac not in params? command={0} params={1}'.format(command,params))
             return False
         for address in self.nodes:
-            if self.nodes[address].name == params['tagname']:
+            tnode = self.nodes[address]
+            if hasattr(tnode,'tag_id') and int(tnode.tag_id) == int(params['tagid']) and tnode.primary_n.mac == params['tmgr_mac']:
                 node = self.nodes[address]
         if node is None:
-            self.l_error('get_handler',"Did not find node with name '{0}' id '{1}'".format(params['tagname'],params['tagid']))
+            self.l_error('get_handler',"Did not find node for tag manager '{0}' with id '{1}'".format(params['tmgr_mac'],params['tagid']))
+            for address in self.nodes:
+                tnode = self.nodes[address]
+                if hasattr(tnode,'tag_id'):
+                    self.l_debug('get_handler',' tmgr_mac={0} tagid={1}'.format(tnode.primary_n.mac,tnode.tag_id))
             return False
         return node.get_handler(command,params)
 

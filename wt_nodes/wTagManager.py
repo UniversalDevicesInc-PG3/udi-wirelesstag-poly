@@ -123,7 +123,8 @@ class wTagManager(polyinterface.Node):
                 # Try again...
                 self.l_error('shortPoll',"Calling set_url_config since previous st={}".format(self.set_url_config_st))
                 self.set_url_config()
-
+        for tag in self.get_tags():
+            tag.shortPoll()
 
     def longPoll(self):
         """
@@ -254,7 +255,7 @@ class wTagManager(polyinterface.Node):
                         param = def_param
                     self.l_debug('set_url_config',"key={0} value={1}".format(key,value))
                     value['disabled'] = False
-                    value['url'] = '{0}/{1}?{2}'.format(url,key,param)
+                    value['url'] = '{0}/{1}?tmgr_mac={2}&{3}'.format(url,key,self.mac,param)
                     value['nat'] = True
                     newconfig[key] = value
             # Changed to applyAll True for now?

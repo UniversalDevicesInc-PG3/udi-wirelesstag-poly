@@ -46,8 +46,9 @@ class wTag(polyinterface.Node):
         tag_id = None
 
         # Remove spaces from names since that messes with our return urls.
-        if name is not None:
-            name = re.sub(r"\s+", '', name)
+        # no longer needed, we no longer pass the name in urls
+        #if name is not None:
+        #    name = re.sub(r"\s+", '', name)
         if node_data is not None:
             # An existing node,
             self.is_new = False
@@ -75,9 +76,9 @@ class wTag(polyinterface.Node):
             if uom is None:
                 self.l_error('__init__',"uom ({0}) must be specified for new tags.".format(uom))
             self.is_new   = True
-            tag_type = tdata['tagType']
+            tag_type      = tdata['tagType']
             self.tag_uom  = uom
-            tag_id   = tdata['slaveId']
+            tag_id        = tdata['slaveId']
             self.uuid     = tdata['uuid']
             address       = id_to_address(self.uuid)
             name          = tdata['name']
@@ -243,7 +244,7 @@ class wTag(polyinterface.Node):
         if command == '/update':
             #tagname=Garage Freezer&tagid=0&temp=-21.4213935329179&hum=0&lux=0&ts=2018-02-15T11:18:02+00:00 HTTP/1.1" 400 -
             pass
-        if command == '/motion_detected':
+        elif command == '/motion_detected':
             self.set_motion(1)
         elif command == '/motion_timedout':
             self.set_motion(0)
