@@ -1,7 +1,6 @@
 
 import polyinterface
-import sys
-import time
+import sys,time,logging
 from threading import Thread
 from copy import deepcopy
 
@@ -224,6 +223,11 @@ class wtController(polyinterface.Controller):
 
     def stop(self):
         LOGGER.debug('NodeServer stopped.')
+
+    def set_all_logs(self,level):
+        LOGGER.setLevel(level)
+        logging.getLogger('requests').setLevel(level)
+        logging.getLogger('urllib3').setLevel(level)
 
     """
     This handle's all the 'get's from the tag URL calling.
