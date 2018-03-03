@@ -235,6 +235,8 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 ## Release Notes
 
+  - 0.0.14 03/03/2018
+    - https://github.com/jimboca/udi-wirelesstag-poly/issues/10
   - 0.0.13 03/03/2018
     - Fix race condition when starting up causing error in set_seconds
     - Change URL's to not pass tag name since they are not properly encoded, adding passing of tag manager mac to identify tags on multiple tag managers.

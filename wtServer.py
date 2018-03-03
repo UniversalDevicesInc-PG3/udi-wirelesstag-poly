@@ -75,8 +75,9 @@ class wtREST():
         self.url     = 'http://{0}:{1}'.format(self.server.server_address[0],self.server.server_address[1])
         self.listen_port = self.server.server_address[1]
         self.logger.info("wtREST: Running on: {0}".format(self.url))
-        self.thread  = threading.Thread(target=self.server.serve_forever,daemon=True)
-        #t.setDaemon(True) # don't hang on exit
+        self.thread  = threading.Thread(target=self.server.serve_forever)
+        # Need this so the thread will die when the main process dies
+        self.thread.daemon = True
         self.thread.start()
         #try:
         #    self.server.serve_forever()

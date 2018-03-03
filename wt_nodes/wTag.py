@@ -508,9 +508,14 @@ class wTag(polyinterface.Node):
 
     def set_time_now(self):
         self.set_time(int(time.time()))
+        self.set_seconds()
 
     def set_seconds(self,force=True):
-        value = int(time.time()) - self.time
+        if not hasattr(self,"time"): return False
+        if self.time == 0:
+            value = -1
+        else:
+            value = int(time.time()) - self.time
         self.seconds = value
         self.setDriver('GV14', value)
 
