@@ -12,7 +12,7 @@
         {
             "title": "udi-WirelessSensorTags-poly: A NodeServer for CAO Gadgets Wireless Sensor Tags",
             "author": "JimBoCA",
-            "version": "0.0.13",
+            "version": "0.0.15",
             "date": "February 27, 2018",
             "source": "https://github.com/jimboca/udi-wirelesstag-poly",
             "license": "https://raw.githubusercontent.com/jimboca/udi-wirelesstag-poly/master/LICENSE"

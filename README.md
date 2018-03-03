@@ -235,6 +235,12 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 ## Release Notes
 
+  Please make sure to yes to the Update Profile question when upgrading if the Profile Update version has changed from the current version you are using.
+
+  - 0.0.15 03/03/2018
+    - https://github.com/jimboca/udi-wirelesstag-poly/issues/11
+    - https://github.com/jimboca/udi-wirelesstag-poly/issues/12
+    - Profile Update: 0.0.15
   - 0.0.14 03/03/2018
     - https://github.com/jimboca/udi-wirelesstag-poly/issues/10
   - 0.0.13 03/03/2018
