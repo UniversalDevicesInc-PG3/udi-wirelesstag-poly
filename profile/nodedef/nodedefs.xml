@@ -59,6 +59,8 @@
           <p id="" editor="BOOL" init="GV1" />
         </cmd>
         <cmd id="QUERY" />
+        <cmd id="PING_ALL_TAGS" />
+        <cmd id="REBOOT" />
         <cmd id="DISCOVER" />
       </accepts>
     </cmds>

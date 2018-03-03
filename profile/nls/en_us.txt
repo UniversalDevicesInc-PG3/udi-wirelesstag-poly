@@ -2,10 +2,12 @@
 # All
 CMD-DISCOVER-NAME = Discover
 CMD-QUERY-NAME = Query
+CMD-PING_ALL_TAGS-NAME = Ping All Tags
+CMD-REBOOT-NAME = Reboot Tag Manager
+CMD-INSTALL_PROFILE-NAME = Install Profile
 
 # controller
 ND-wtController-NAME = Wireless Tags Controller
-CMD-cntl-INSTALL_PROFILE-NAME = Install Profile
 ST-cntl-ST-NAME = NodeServer Online
 ST-cntl-GV1-NAME = Version Major
 ST-cntl-GV2-NAME = Version Minor

@@ -31,7 +31,58 @@ the first time you will be asked to give permission.
 If the Tag Manager is configured for Fahrenheit then all temperatures should be
 shown in Fahrenheit, same with Celsius, although that has not been tested yet.
 
-## Supported Sensors
+# Node Types
+
+## WirelessTagsController
+
+The is the main controller node for Polyglot.
+
+### Drivers
+
+* Node Server Online
+  * Indicates that the nodeserver is running.
+* Version Major
+  * The first two digits of version of this node server
+* Version Minor
+  * The last digit of the version of this node server
+* Communicating
+  * Node server communicating with WirelessTags server
+* OAUTH2
+  * Status of OAuth2 authoization to access the tag managers
+* Debug Mode
+  * The Logger debug level
+* Short Poll
+  * The seconds between each short poll.  This updates the "Seconds since update" value of each Tag
+* Long Poll
+  * What is run in long poll?
+* Listen Port
+  * The port the REST server is running on, this should match the URL's in the tag manager
+
+## Tag Manager
+
+There is one node create for each of your Tag Managers
+
+### Drivers
+
+* Status
+  * Indicates if the tag manager is online.
+* Monitor Tags
+  * Enable if the Tag Manager's tags should be added to the current ISY.  This is False by default in case you have multiple ISY's and Tag Managers
+
+### Commands
+
+* Query
+  * Queries all Tags, but only requests the data Cached in the Tag Manager so it may not be the latest.
+* Ping All Tags
+  * Request all Tags to report back their latest data, so only run when necessary since it will use Tag battery power.
+* Reboot Tag Manager
+  * Only works with newer Tag Managers which are greater than version 6.
+* Discover
+  * Look for all Tags registered in the Tag Manager, this is run by default when "Monitor Tags" is changed from False to True.
+
+## Tags
+
+### Supported Sensors Types
 
 This node server is intended to eventually support all Wireless Tags used by the
 ISY Community.
@@ -60,7 +111,7 @@ with:
 | WeMo Switches/Maker/LED                          | 82   | 4       |
 | Webcams (Dropcam)                                | 92   | 4       |
 
-### Supported Drivers
+#### Supported Drivers
 
 The supported drivers that are used from the [GetTagList](http://wirelesstag.net/ethClient.asmx?op=GetTagList)
 data is shown in the following table along with information passed back from the [LoadEventURLConfig](http://wirelesstag.net/ethClient.asmx?op=LoadEventURLConfig)
@@ -98,7 +149,7 @@ data is shown in the following table along with information passed back from the
   - NS2 = Not Supported, part of Kumostat, which nobody is using?
   - N1 = Only updated on change, so not intially populated.
 
-### NLS entries
+#### NLS entries
 
 | Name | # | Text       |
 | ---- | - | ---------- |
@@ -135,7 +186,10 @@ data is shown in the following table along with information passed back from the
 |      | 4 | Too Bright        |
 |      | 5 | Threshold Pending |
 
+### Commands
 
+* Query
+  * Requests the Tag to post back with it's data.  May take a few seconds to show up
 
 ## Installation
 
@@ -201,6 +255,10 @@ data is shown in the following table along with information passed back from the
 
 ## Release Notes
 
+  - 0.0.12 03/02/2019
+    - https://github.com/jimboca/udi-wirelesstag-poly/issues/1
+    - Added a lot to documentation
+    - Profile Update: 0.0.12
   - 0.0.11 03/02/2018
     - Add Seconds Since Update
     - Fixed setting logging/debug moe

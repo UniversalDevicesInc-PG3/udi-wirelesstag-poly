@@ -399,6 +399,15 @@ class wTag(polyinterface.Node):
         self.batv = value
         self.setDriver('CV', value)
 
+    def set_batl(self,value,force=False):
+        # TODO: Implement battery low!
+        return
+        value = myfloat(value,3)
+        if not force and hasattr(self,"batv") and self.batv == value:
+            return True
+        self.batv = value
+        self.setDriver('CV', value)
+
     def set_motion(self,value,force=False):
         if value is None: return
         if not force and hasattr(self,"motion") and self.motion == value:

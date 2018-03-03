@@ -309,6 +309,18 @@ class wtServer():
     def RequestImmediatePostback(self,params):
         return self.api_post_d('ethClient.asmx/RequestImmediatePostback',params)
 
+    def RebootTagManager(self,mgr_mac):
+        ret = self.SelectTagManager(mgr_mac)
+        if ret['st']:
+            ret = self.api_post_d('ethClient.asmx/RebootTagManager',{})
+        return ret
+
+    def PingAllTags(self,mgr_mac):
+        ret = self.SelectTagManager(mgr_mac)
+        if ret['st']:
+            ret = self.api_post_d('ethClient.asmx/PingAllTags',{'autoRetry':True})
+        return ret
+
     def LightOn(self,mgr_mac,id,flash):
         ret = self.SelectTagManager(mgr_mac)
         if ret['st']:

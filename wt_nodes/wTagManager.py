@@ -321,6 +321,12 @@ class wTagManager(polyinterface.Node):
     def cmd_set_use_tags(self,command):
         self.set_use_tags(command.get("value"))
 
+    def cmd_ping_all_tags(self,command):
+        self.controller.wtServer.PingAllTags(self.mac)
+
+    def cmd_reboot(self,command):
+        self.controller.wtServer.RebootTagManager(self.mac)
+
     def cmd_set_on(self, command):
         """
         Example command received from ISY.
@@ -346,5 +352,7 @@ class wTagManager(polyinterface.Node):
     commands = {
         'SET_USE_TAGS': cmd_set_use_tags,
         'QUERY': query,
+        'PING_ALL_TAGS': cmd_ping_all_tags,
         'DISCOVER': discover,
+        'REBOOT': cmd_reboot,
     }
