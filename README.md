@@ -168,12 +168,6 @@ data is shown in the following table along with information passed back from the
     * https://linuxconfig.org/raspbian-gnu-linux-upgrade-from-jessie-to-raspbian-stretch-9
 1. This has only been tested with ISY 5.0.11 so it is not confirmed to work with any prior version.
 
-## Upgrading
-
-1. Open the Polyglot web page, go to nodeserver store and click "Update" for "WirelessTags".
-  - If the profile has changed since your last version then answer yes when prompted to update the profile
-2. Go to the WirelessTags Control Page, and click restart
-
 ## TODO
 
 - Test more responses
@@ -197,6 +191,13 @@ data is shown in the following table along with information passed back from the
 2018-02-26 18:54:12,700 DEBUG    api_post_d: path=ethClient.asmx/RequestImmediatePostback got=False
 2018-02-26 18:54:12,702 DEBUG    api_post_d: ret={'st': False}
 ```
+
+## Upgrading
+
+1. Open the Polyglot web page, go to nodeserver store and click "Update" for "WirelessTags".
+    * If there is a "Profile Update" since your last version then answer yes when prompted to update the profile
+    * If profile is updated, you need to close and re-open the Admin Console if you had it open
+2. Go to the WirelessTags Control Page, and click restart
 
 ## Release Notes
 
