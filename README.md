@@ -224,27 +224,7 @@ data is shown in the following table along with information passed back from the
 
 ## TODO
 
-- Test more responses
-  - Out of range and back in range
-  - Online
-- Add last update time from ts? Or do a heartbeat?
-- What happens when authorization expires?
-- What happens when authorization is removed?
-- Test if slaveId changes when a tag is deleted and undeleted?
-   - May need to link the mac & slave id in customData
-- Query Tag's on startup?  Don't think this is necessary?
-  - Uses Battery, but then data would be up-to-date
-  - otherwise ISY will have last known state
-- Short poll query when Motion=True to change motion
-  - I don't seem to ever get a motion timout repsonse?
-- Query to reset Motion when it's True?
-  - Don't seem to get motion timeout in updates?
-- Handle not responding Query
-```
-2018-02-26 18:54:12,699 ERROR    http_post: Unknown response 500: http://wirelesstag.net/ethClient.asmx/RequestImmediatePostback {"Message":"The tag did not respond this time, please try again","StackTrace":"   at MyTagList.ethClient.RequestImmediatePostback(Int32 id) in C:\\z560_backup\\MyTagList\\MyTagList\\ethClient.asmx.cs:line 3216","ExceptionType":"MyTagList.ethClient+TagDidNotRespondException"}
-2018-02-26 18:54:12,700 DEBUG    api_post_d: path=ethClient.asmx/RequestImmediatePostback got=False
-2018-02-26 18:54:12,702 DEBUG    api_post_d: ret={'st': False}
-```
+See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 ## Upgrading
 
