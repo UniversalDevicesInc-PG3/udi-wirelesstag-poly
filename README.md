@@ -237,6 +237,9 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
   Please make sure to yes to the Update Profile question when upgrading if the Profile Update version has changed from the current version you are using.
 
+  - 0.0.16 03/03/2018
+    - Attempt to fix issue with restart for multiple Tag Managers
+    - https://github.com/jimboca/udi-wirelesstag-poly/issues/12
   - 0.0.15 03/03/2018
     - https://github.com/jimboca/udi-wirelesstag-poly/issues/11
     - https://github.com/jimboca/udi-wirelesstag-poly/issues/12
