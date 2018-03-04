@@ -240,6 +240,7 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
   - 0.0.16 03/03/2018
     - Attempt to fix issue with restart for multiple Tag Managers
     - https://github.com/jimboca/udi-wirelesstag-poly/issues/12
+    - Profile Version: 0.0.16
   - 0.0.15 03/03/2018
     - https://github.com/jimboca/udi-wirelesstag-poly/issues/11
     - https://github.com/jimboca/udi-wirelesstag-poly/issues/12
