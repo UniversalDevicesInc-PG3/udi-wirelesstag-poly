@@ -228,10 +228,24 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 ## Upgrading
 
+### From the store
+
 1. Open the Polyglot web page, go to nodeserver store and click "Update" for "WirelessTags".
     * If there is a "Profile Update" since your last version then answer yes when prompted to update the profile
     * If profile is updated, you need to close and re-open the Admin Console if you had it open
 2. Go to the WirelessTags Control Page, and click restart
+
+### The manual way
+
+1. ```cd ~/.polyglot/nodeservers/WirelessTag```
+2. ```git pull```
+3. Open the polyglot web page, and restart the node server
+4. If there is a new Profile Version
+    * Open the Admin Console
+    * Select the WirelessTagsController
+    * Clock 'Install Profile'
+    * Close and re-open the Admin Console
+
 
 ## Release Notes
 
