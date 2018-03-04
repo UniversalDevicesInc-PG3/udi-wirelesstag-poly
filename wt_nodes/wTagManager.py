@@ -169,7 +169,7 @@ class wTagManager(polyinterface.Node):
         """
         for address in self.controller._nodes:
             node = self.controller._nodes[address]
-            if node['address'] != self.address and node['node_def_id'] != 'wtController':
+            if hasattr(node,'tag_id') and node.primary_n.mac != self.mac:
                 self.l_info("add_existing_tags","node={0} = {1}, update={2}".format(address,node,self.controller.update_profile))
                 self.add_tag(address=node['address'], name=node['name'], node_data=node, update=self.controller.update_profile)
         self.set_url_config()

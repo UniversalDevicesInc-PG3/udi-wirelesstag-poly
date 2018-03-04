@@ -44,7 +44,10 @@ class wTag(polyinterface.Node):
         """
         LOGGER.debug('wTag:__init__: address={0} name={1} type={2} uom={3}'.format(address,name,tag_type,uom))
         tag_id = None
-
+         # So logger calls won't crash
+        self.address = address
+        self.id = 'wTag' # Until we figure out the uom
+        self.name = name
         # Remove spaces from names since that messes with our return urls.
         # no longer needed, we no longer pass the name in urls
         #if name is not None:
@@ -131,7 +134,7 @@ class wTag(polyinterface.Node):
         if (tag_type == 13 or tag_type == 21 or tag_type == 26 or tag_type == 32
             or tag_type == 52 or tag_type == 62 or tag_type == 72):
             # hum:    Humidity (21 = absolute humidity)
-            dv.append({'driver': 'CLIHUM',  'value': 0, 'uom': 21})
+            dv.append({'driver': 'CLIHUM',  'value': 0, 'uom': 22})
         if (tag_type == 12 or tag_type == 13 or tag_type == 21):
             # motion: Might use True, False, Open for door mode?
             dv.append({'driver': 'GV2',     'value': 0, 'uom': 25})
