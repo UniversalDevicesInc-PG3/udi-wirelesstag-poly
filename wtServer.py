@@ -66,7 +66,7 @@ class wtREST():
 
     def start(self):
         port    = 0
-        self.myip    = self.get_network_ip()
+        self.myip    = self.get_network_ip_rhost('8.8.8.8')
         if self.myip is False:
             self.logger.error("wtREST: Can not start on IP={0}".format(self.myip))
             return False
@@ -104,20 +104,26 @@ class wtREST():
         self.logger.info("wtREST:get_network_ip: {0}".format(rhost))
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect((rhost, 0))
+            s.connect((rhost, 80))
+            rt = s.getsockname()[0]
         except Exception as err:
             self.logger.error('wtREST:get_network_id: failed: {0}'.format(err), exc_info=True)
-            return False
-        rt = s.getsockname()[0]
-        s.close()
-        self.logger.info("wtREST:get_network_ip: Got {0}".format(rt))
+            rt = False
+        finally:
+            s.close()
+        self.logger.info("wtREST:get_network_ip: Returning {0}".format(rt))
         return rt
 
+    # This didn't work on a mac, needs a try/except, which I didn't like...
     def get_network_ip(self):
-        for iface in ni.interfaces():
-	        ifaddr = ni.ifaddresses(iface)[ni.AF_INET][0]
-	        if ifaddr['addr'] != '127.0.0.1':
-		        return ifaddr['addr']
+        try:
+            ifaddr = ni.ifaddresses(iface)[ni.AF_INET][0]
+            if 'addr' in ifaddr and ifaddr['addr'] != '127.0.0.1':
+                self.logger.info("wtREST:get_network_ip: Got {0}".format(rt))
+                return ifaddr['addr']
+        except:
+            pass
+        self.logger.info("wtREST:get_network_ip: Failed")
         return False
 
 class wtServer():

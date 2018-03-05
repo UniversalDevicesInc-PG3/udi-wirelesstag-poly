@@ -124,7 +124,7 @@ data is shown in the following table along with information passed back from the
 
 | Driver   | NLS   | Name             | 12 | 13 | 21 | 26 | 32 | 52 | 62 | 72 | 82 | 92 | Notes |
 | -------- | ----- | ---------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | ----- |
-| UOM      | CORF  | degree           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       | From Tag Manager
+| UOM      | CORF  | degree           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | GPV      | INT   | tagType          | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | GV1      | INT   | TagId (slaveId)  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | ST       | BOOL  | alive            | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
@@ -136,7 +136,7 @@ data is shown in the following table along with information passed back from the
 | LUMIN    | FLOAT | lux              |    |    |    | X  |    |    |    |    |    |    |       |
 | CLITEMP  | FLOAT | temperature      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | CLIHUM   | FLOAT | cap              |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
-| GV10     | CPST  | CapEventState    |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
+| GV10     | CPST  | CapEventState    |    | X  | X  | X  | X  | X  |    | X  |    |    |       |
 | GV11     | LIST  | lightEventState  |    |    |    | X  |    |    |    |    |    |    |       |
 | BATLVL   | FLOAT | batteryRemaining | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | GV2      | BOOL  | motion           | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
@@ -252,6 +252,9 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
   Please make sure to yes to the Update Profile question when upgrading if the Profile Update version has changed from the current version you are using.
 
+  - 0.0.18 03/04/2018
+    - Another fix for get_network_ip that should now work on MacOS
+    - https://github.com/jimboca/udi-wirelesstag-poly/issues/14
   - 0.0.17 03/04/2018
     - Fixed bug where tag_id's don't get properly set. ALL USERS: Please select the WirelessTagsController and run a discover after updating and restarting the node server.
     - Added more info to Tag Type 62
