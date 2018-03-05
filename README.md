@@ -244,13 +244,12 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 1. ```cd ~/.polyglot/nodeservers/WirelessTag```
 2. ```git pull```
-3. Open the polyglot web page, and restart the node server
-4. If you had the Admin Console open, then close and re-open.
+3. ```./install.sh```
+4. Open the polyglot web page, and restart the node server
+5. If you had the Admin Console open, then close and re-open.
 
 
 ## Release Notes
-
-  Please make sure to yes to the Update Profile question when upgrading if the Profile Update version has changed from the current version you are using.
 
   - 0.0.18 03/04/2018
     - Another fix for get_network_ip that should now work on MacOS
@@ -274,7 +273,7 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
   - 0.0.13 03/03/2018
     - Fix race condition when starting up causing error in set_seconds
     - Change URL's to not pass tag name since they are not properly encoded, adding passing of tag manager mac to identify tags on multiple tag managers.
-      - If you previously added tags that had spaces in the names, then delete them from inside the Polyglot -> WirelessTag -> Nodes page and run discover again.
+     - If you previously added tags that had spaces in the names, then delete them from inside the Polyglot -> WirelessTag -> Nodes page and run discover again.
     - It should work much better with multiple tag managers, but there may still be some issues. Will review the code more and test further.
   - 0.0.12 03/02/2018
     - https://github.com/jimboca/udi-wirelesstag-poly/issues/1
