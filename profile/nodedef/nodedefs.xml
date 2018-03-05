@@ -442,6 +442,15 @@
     <sts>
       <st id="ST" editor="BOOL" />
       <st id="GV1" editor="I_TAGID" />
+      <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
+      <st id="CLIHUM" editor="T_HUM" />
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />
@@ -456,6 +465,15 @@
     <sts>
       <st id="ST" editor="BOOL" />
       <st id="GV1" editor="I_TAGID" />
+      <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+      <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+      <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
+      <st id="CLIHUM" editor="T_HUM" />
+      <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
+      <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+      <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
     <cmds>
       <sends />

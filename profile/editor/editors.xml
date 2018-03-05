@@ -36,7 +36,7 @@
    </editor>
 
    <editor id="T_HUM">
-     <range uom="22" min="0" max="100" prec="2" />
+     <range uom="22" min="0" max="100" prec="1" />
    </editor>
 
    <editor id="LUMIN">

@@ -8,6 +8,7 @@ from http.server import HTTPServer,BaseHTTPRequestHandler
 from urllib import parse
 from urllib.parse import parse_qsl
 import socket, threading, sys, requests, json
+import netifaces as ni
 
 class wtHandler(BaseHTTPRequestHandler):
 
@@ -65,7 +66,11 @@ class wtREST():
 
     def start(self):
         port    = 0
-        self.myip    = self.get_network_ip('8.8.8.8')
+        self.myip    = self.get_network_ip()
+        if self.myip is False:
+            self.logger.error("wtREST: Can not start on IP={0}".format(self.myip))
+            return False
+        self.logger.info("wtREST: Running on IP={0}".format(self.myip))
         self.address = (self.myip, port) # let the kernel give us a port
         self.logger.debug("wtREST: address={0}".format(self.address))
         # Get a handler and set parent to myself, so we can process the requests.
@@ -79,6 +84,7 @@ class wtREST():
         # Need this so the thread will die when the main process dies
         self.thread.daemon = True
         self.thread.start()
+        return True
         #try:
         #    self.server.serve_forever()
         #except KeyboardInterrupt:
@@ -94,16 +100,25 @@ class wtREST():
     def get_handler(self,path,query):
         return self.parent.get_handler(path,query)
 
-    def get_network_ip(self,rhost):
+    def get_network_ip_rhost(self,rhost):
+        self.logger.info("wtREST:get_network_ip: {0}".format(rhost))
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             s.connect((rhost, 0))
-        except:
-            self.l_error("get_network_ip","Failed to open socket to " + rhost)
+        except Exception as err:
+            self.logger.error('wtREST:get_network_id: failed: {0}'.format(err), exc_info=True)
             return False
         rt = s.getsockname()[0]
         s.close()
+        self.logger.info("wtREST:get_network_ip: Got {0}".format(rt))
         return rt
+
+    def get_network_ip(self):
+        for iface in ni.interfaces():
+	        ifaddr = ni.ifaddresses(iface)[ni.AF_INET][0]
+	        if ifaddr['addr'] != '127.0.0.1':
+		        return ifaddr['addr']
+        return False
 
 class wtServer():
 
@@ -118,12 +133,16 @@ class wtServer():
 
     def start(self):
         self.rest = wtREST(self,self.logger)
-        self.rest.start()
+        self.st = self.rest.start()
+        if self.st is False:
+            self.l_error('wtServer:start','REST server not started {}'.format(self.st))
+            return False
         self.listen_url  = self.rest.url
         self.listen_port = self.rest.listen_port
         self.url = self.rest.url
         if self.oauth2_code != False:
             self.get_access_token()
+        return True
 
     def get_handler(self,command,params):
         """

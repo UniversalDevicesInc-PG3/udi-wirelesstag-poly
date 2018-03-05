@@ -96,7 +96,10 @@ class wtController(polyinterface.Controller):
         else:
             self.polyConfig['longPoll'] = int(val)
         self.long_poll = val
-        self.set_port(self.wtServer.listen_port)
+        if self.wtServer.st:
+            self.set_port(self.wtServer.listen_port,True)
+        else:
+            self.set_port(-1)
         self.save_params()
         self.check_profile()
         self.add_existing_tag_managers()
@@ -115,6 +118,7 @@ class wtController(polyinterface.Controller):
             self.update_profile = False
         else:
             self.update_profile = True
+            self.poly.installprofile()
         self.l_info('check_profile','update_profile={}'.format(self.update_profile))
         cdata['profile_info'] = self.profile_info
         self.saveCustomData(cdata)

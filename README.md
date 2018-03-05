@@ -31,6 +31,12 @@ the first time you will be asked to give permission.
 If the Tag Manager is configured for Fahrenheit then all temperatures should be
 shown in Fahrenheit, same with Celsius, although that has not been tested yet.
 
+## IP Address
+
+The code tries to figure out the machines IP address for starting the local REST server.
+This should always work, unless you have multiple network interfaces.  We will need to
+allow users to set the IP Address manually if this happens.
+
 # Node Types
 
 ## WirelessTagsController
@@ -231,8 +237,7 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 ### From the store
 
 1. Open the Polyglot web page, go to nodeserver store and click "Update" for "WirelessTags".
-    * If there is a "Profile Update" since your last version then answer yes when prompted to update the profile
-    * If profile is updated, you need to close and re-open the Admin Console if you had it open
+    * You can always answer "No" when asked to install profile.  The nodeserver will handle this for you.
 2. Go to the WirelessTags Control Page, and click restart
 
 ### The manual way
@@ -240,17 +245,19 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 1. ```cd ~/.polyglot/nodeservers/WirelessTag```
 2. ```git pull```
 3. Open the polyglot web page, and restart the node server
-4. If there is a new Profile Version
-    * Open the Admin Console
-    * Select the WirelessTagsController
-    * Clock 'Install Profile'
-    * Close and re-open the Admin Console
+4. If you had the Admin Console open, then close and re-open.
 
 
 ## Release Notes
 
   Please make sure to yes to the Update Profile question when upgrading if the Profile Update version has changed from the current version you are using.
 
+  - 0.0.17 03/04/2018
+    - Fixed bug where tag_id's don't get properly set. ALL USERS: Please select the WirelessTagsController and run a discover after updating and restarting the node server.
+    - Added more info to Tag Type 62
+    - Changed how to figure out the local IP address, thanks @xKing. See IP Address section above
+    - Changed Humidity to prec=1
+    - Profile Version: 0.0.17
   - 0.0.16 03/03/2018
     - Attempt to fix issue with restart for multiple Tag Managers
     - https://github.com/jimboca/udi-wirelesstag-poly/issues/12

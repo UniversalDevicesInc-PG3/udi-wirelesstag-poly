@@ -90,7 +90,7 @@ class wTagManager(polyinterface.Node):
             for tag in mgd['result']:
                 tag_o = self.get_tag_by_id(tag['slaveId'])
                 if tag_o is None:
-                    self.l_error('query','Unable to get tag with id={0}'.format(tag['slaveId']))
+                    self.l_error('query','No tag with id={0}'.format(tag['slaveId']))
                 else:
                     tag_o.set_from_tag_data(tag)
                     tag_o.reportDrivers()
@@ -165,13 +165,17 @@ class wTagManager(polyinterface.Node):
 
     def add_existing_tags(self):
         """
-        Called on startup to add the tags from the config
+        Called on startup to add the tags from the config.
+        This has to loop thru the _nodes list to figure out if it's one of the
+        tags for this tag manager.
         """
         for address in self.controller._nodes:
-            node = self.controller._nodes[address]
-            if hasattr(node,'tag_id') and node.primary_n.mac != self.mac:
-                self.l_info("add_existing_tags","node={0} = {1}, update={2}".format(address,node,self.controller.update_profile))
-                self.add_tag(address=node['address'], name=node['name'], node_data=node, update=self.controller.update_profile)
+            if address != self.address:
+                node = self.controller._nodes[address]
+                # One of my tags?
+                if node['primary'] == self.address:
+                    self.l_info("add_existing_tags","node={0} = {1}, update={2}".format(address,node,self.controller.update_profile))
+                    self.add_tag(address=node['address'], name=node['name'], node_data=node, update=self.controller.update_profile)
         self.set_url_config()
 
     def add_tag(self, address=None, name=None, tag_type=None, uom=None, tdata=None, node_data=None, update=False):
@@ -197,19 +201,21 @@ class wTagManager(polyinterface.Node):
 
     def get_tags(self):
         """
-        Get all the tags stored in the polyglot DB
+        Get all the actove tags for this tag manager.
         """
         nodes = list()
         for address in self.controller.nodes:
             node = self.controller.nodes[address]
-            if hasattr(node,'tag_id'):
+            if hasattr(node,'tag_id') and node.primary_n.mac == self.mac:
                 nodes.append(node)
+        #self.l_debug('get_tags','nodes={0}'.format(nodes))
         return nodes
 
     def get_tag_by_id(self,tid):
+        tid = int(tid)
         for tag in self.get_tags():
-            #self.l_debug('get_tag_by_id','tag_id={0} tid={1}'.format(tag.tag_id,tid))
-            if int(tag.tag_id) == int(tid):
+            self.l_debug('get_tag_by_id','tag_id={0} tid={1}'.format(tag.tag_id,tid))
+            if int(tag.tag_id) == tid:
                 return tag
         return None
     """
