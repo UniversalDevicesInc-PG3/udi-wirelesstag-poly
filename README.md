@@ -138,6 +138,7 @@ data is shown in the following table along with information passed back from the
 | CLIHUM   | FLOAT | cap              |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
 | GV10     | CPST  | CapEventState    |    | X  | X  | X  | X  | X  |    | X  |    |    |       |
 | GV11     | LIST  | lightEventState  |    |    |    | X  |    |    |    |    |    |    |       |
+| GV12     | WTST  | water detected/dried |    |    |    |    |  X |    |    |    |    |    |   N1   |
 | BATLVL   | FLOAT | batteryRemaining | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | GV2      | BOOL  | motion           | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
 | GV3      | FLOAT | orien            | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
@@ -148,12 +149,15 @@ data is shown in the following table along with information passed back from the
 | NS1      | FLOAT | highTH           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | NS1      | FLOAT | rssi             | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
 | NS1      | FLOAT | txpwr            | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GV13     | INT   | time             | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |   N2  |
+| GV14     | INT   | seconds since update | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |   N2  |
 
 
   - NA1 = Not Applicable, since it's available in eventState?
   - NS1 = Not Supported, likely to be added.
   - NS2 = Not Supported, part of Kumostat, which nobody is using?
-  - N1 = Only updated on change, so not intially populated.
+  - N1 = Only updated on change, so not populated on restart
+  - N2 = Time is UNIX epoch time of last update, seconds since update is the number of seconds since an update was seen from the tag and is updated each shortPoll run. So it won't be updated if the nodeserver dies! (which of course never happens)
 
 #### NLS entries
 
