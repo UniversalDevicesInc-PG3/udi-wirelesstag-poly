@@ -244,8 +244,9 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 1. ```cd ~/.polyglot/nodeservers/WirelessTag```
 2. ```git pull```
-3. Open the polyglot web page, and restart the node server
-4. If you had the Admin Console open, then close and re-open.
+3. ```./install.sh```
+4. Open the polyglot web page, and restart the node server
+5. If you had the Admin Console open, then close and re-open.
 
 
 ## Release Notes
