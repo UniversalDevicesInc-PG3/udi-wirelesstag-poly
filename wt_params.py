@@ -1,4 +1,8 @@
 
+"""
+Tag Names are not included because the spaces or other characters are
+not properly transalted. Also, same for last which contains a space :(
+"""
 wt_params = {
 
     # When tag sends a temperature/humidity/brightness update -
@@ -7,11 +11,13 @@ wt_params = {
 
     # When lost link to a tag -
     # {0}: Tag name, {1}: Time since last update, {2}: Tag ID, {3}: timestamp
-    'oor':    'tagid={2}&last={1}&ts={3}',
+    # Can't include last, it has a space :(
+    #wtHandler:log_messagecode 400, message Bad request syntax ('GET /oor?tmgr_mac=0E994A04A300&tagid=3&last=23 minutes&ts=2018-03-04T20:46:18+00:00 HTTP/1.1')
+    'oor':    'tagid={2}&ts={3}',
 
     # When re-established link to a tag
     # {0}: Tag name, {1}: Time since last update (lost link duration), {2}: Tag ID, {3}: timestamp
-    'back_in_range': 'tagid={2}&last={1}&ts={3}',
+    'back_in_range': 'tagid={2}&ts={3}',
 
     # When motion is detected - {0}: Tag name,
     # (For motion tag {1}: Orientation change, {2}: x axis reading, {3}: y axis, {4}; z axis, {5}: tag ID, {6}: timestamp)
