@@ -413,13 +413,16 @@ class wTag(polyinterface.Node):
         self.setDriver('CV', value)
 
     def set_motion(self,value,force=False):
+        self.l_debug('set_motion','value={0} force={1}'.format(value,force))
         if value is None: return
+        value = int(value)
         if not force and hasattr(self,"motion") and self.motion == value:
             return True
         self.motion = value
         self.setDriver('GV2', value)
 
     def set_orien(self,value,force=False):
+        self.l_debug('set_orien','value={0} force={1}'.format(value,force))
         if value is None: return
         value = myfloat(value,1)
         if not force and hasattr(self,"orien") and self.orien == value:
