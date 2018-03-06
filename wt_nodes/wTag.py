@@ -178,9 +178,9 @@ class wTag(polyinterface.Node):
         """
         self.setDriver('ST', 1)
         # Always set driver from tag type
-        self.set_tag_type(self.tag_type,True)
-        self.set_tag_id(self.tag_id,True)
-        self.set_tag_uom(self.tag_uom,True)
+        self.set_tag_type(self.tag_type)
+        self.set_tag_id(self.tag_id)
+        self.set_tag_uom(self.tag_uom)
         if self.tdata is not None:
             self.set_from_tag_data(self.tdata)
         else:
