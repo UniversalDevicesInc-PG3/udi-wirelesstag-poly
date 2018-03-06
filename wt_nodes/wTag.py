@@ -185,26 +185,25 @@ class wTag(polyinterface.Node):
             self.set_from_tag_data(self.tdata)
         else:
             # These stay the same across reboots as the default.
-            self.set_temp(self.getDriver('CLITEMP'),True,False)
-            self.set_hum(self.getDriver('CLIHUM'),True)
-            self.set_lux(self.getDriver('LUMIN'),True)
-            self.set_batp(self.getDriver('BATLVL'),True)
-            self.set_batv(self.getDriver('CV'),True)
-            self.set_motion(self.getDriver('GV2'),True)
-            self.set_orien(self.getDriver('GV3'),True)
-            self.set_xaxis(self.getDriver('GV4'),True)
-            self.set_yaxis(self.getDriver('GV5'),True)
-            self.set_zaxis(self.getDriver('GV6'),True)
-            self.set_lit(self.getDriver('GV7'),True)
-            self.set_evst(self.getDriver('ALARM'),True)
-            self.set_oor(self.getDriver('GV8'),True)
-            self.set_signaldbm(self.getDriver('CC'),True)
-            self.set_tmst(self.getDriver('GV9'),True)
-            self.set_cpst(self.getDriver('GV10'),True)
-            self.set_list(self.getDriver('GV11'),True)
-            self.set_wtst(self.getDriver('GV12'),True)
-            self.set_time(self.getDriver('GV13'),True)
-            self.set_seconds(True)
+            self.get_set_temp()
+            self.get_set_hum()
+            self.get_set_lux(
+            self.get_set_batp()
+            self.get_set_batv()
+            self.get_set_motion()
+            self.get_set_orien()
+            self.get_set_xaxis()
+            self.get_set_yaxis()
+            self.get_set_zaxis()
+            self.get_set_lit()
+            self.get_set_evst()
+            self.get_set_oor()
+            self.get_set_signaldbm()
+            self.get_set_tmst()
+            self.get_set_cpst()
+            self.get_set_list()
+            self.get_set_wtst()
+            self.get_set_now()
         if self.controller.update_profile:
             # Drivers were updated, need to query
             self.query()
@@ -342,193 +341,220 @@ class wTag(polyinterface.Node):
 
     # This is the tag_type number, we don't really need to show it, but
     # we need the info when recreating the tags from the config.
-    def set_tag_type(self,value,force=False):
-        if not force and hasattr(self,"tag_type") and self.tag_type == value:
-            return True
+    def set_tag_type(self,value):
         self.l_debug('set_tag_type','GV1 to {0}'.format(value))
         self.tag_type = value
         self.setDriver('GV1', value)
 
-    def set_tag_id(self,value,force=False):
-        if not force and hasattr(self,"tag_id") and self.tag_id == value:
-            return True
+    def set_tag_id(self,value):
+        self.l_debug('set_tag_id','GPV to {0}'.format(value))
         self.tag_id = value
         self.setDriver('GPV', value)
 
-    def set_tag_uom(self,value,force=False):
-        if not force and hasattr(self,"tag_uom") and self.tag_uom == value:
-            return True
+    def set_tag_uom(self,value):
+        self.l_debug('set_tag_uom','UOM to {0}'.format(value))
         self.tag_uom = value
         self.setDriver('UOM', value)
 
-    def set_temp(self,value,force=False,convert=True):
+    def get_set_temp(self):
+        self.set_temp(self.getDriver('CLITEMP'),False)
+
+    def set_temp(self,value,convert=True):
+        self.l_debug('set_temp','{0}'.format(value))
         value = myfloat(value,2)
         if convert and self.primary_n.degFC == 1:
             # Convert C to F
             value = myfloat(float(value) * 1.8 + 32.0,2)
-        if not force and hasattr(self,"temp") and self.temp == value:
-            return True
-        self.temp = value
         self.setDriver('CLITEMP', value)
 
-    def set_hum(self,value,force=False):
+    def get_set_hum(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('CLIHUM')
         if value is None: return
-        value = myfloat(value,1)
-        if not force and hasattr(self,"hum") and self.hum == value:
-            return True
-        self.hum = value
+        self.set_hum(value)
+
+    def set_hum(self,value):
+        self.l_debug('set_hum','{0}'.format(value))
         self.setDriver('CLIHUM', value)
 
-    def set_lit(self,value,force=False):
-        value = int(value)
-        if not force and hasattr(self,"lit") and self.lit == value:
-            return True
-        self.lit = value
+    def get_set_lit(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('GV7')
+        if value is None: return
+        self.set_lit(value)
+
+    def set_lit(self,value):
+        self.l_debug('set_lit','{0},{1}'.format(value))
         self.setDriver('GV7', value)
 
-    def set_lux(self,value,force=False):
+    def get_set_lux(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('LUMIN')
         if value is None: return
-        value = myfloat(value,2)
-        if not force and hasattr(self,"lux") and self.lux == value:
-            return True
-        self.lux = value
-        self.setDriver('LUMIN', value)
+        self.set_lit(value)
+
+    def set_lux(self,value):
+        self.l_debug('set_lux','{0}'.format(value))
+        self.setDriver('LUMIN', myfloat(value,2))
+
+    def get_set_batp(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('BATLVL')
+        if value is None: return
+        self.set_batp(value)
 
     def set_batp(self,value,force=False):
-        value = myfloat(value,2)
-        if not force and hasattr(self,"batp") and self.batp == value:
-            return True
-        self.batp = value
-        self.setDriver('BATLVL', value)
+        self.l_debug('set_batp','{0}'.format(value))
+        self.setDriver('BATLVL', myfloat(value,2))
 
-    def set_batv(self,value,force=False):
-        value = myfloat(value,3)
-        if not force and hasattr(self,"batv") and self.batv == value:
-            return True
-        self.batv = value
-        self.setDriver('CV', value)
+    def get_set_batv(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('CV')
+        if value is None: return
+        self.set_batv(value)
+
+    def set_batv(self,value):
+        self.setDriver('CV', myfloat(value,3))
 
     def set_batl(self,value,force=False):
         # TODO: Implement battery low!
         return
-        value = myfloat(value,3)
-        if not force and hasattr(self,"batv") and self.batv == value:
-            return True
-        self.batv = value
         self.setDriver('CV', value)
 
-    def set_motion(self,value,force=False):
-        self.l_debug('set_motion','value={0} force={1}'.format(value,force))
+    def get_set_motion(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('GV2')
         if value is None: return
-        value = int(value)
-        if not force and hasattr(self,"motion") and self.motion == value:
-            return True
-        self.motion = value
-        self.setDriver('GV2', value)
+        self.set_motion(value)
 
-    def set_orien(self,value,force=False):
-        self.l_debug('set_orien','value={0} force={1}'.format(value,force))
-        if value is None: return
-        value = myfloat(value,1)
-        if not force and hasattr(self,"orien") and self.orien == value:
-            return True
-        self.orien = value
-        self.setDriver('GV3', value)
+    def set_motion(self,value=None):
+        self.l_debug('set_motion','{0}'.format(value))
+        self.setDriver('GV2', int(value))
 
-    def set_xaxis(self,value,force=False):
+    def get_set_orien(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('GV3')
         if value is None: return
-        value = int(value)
-        if not force and hasattr(self,"xaxis") and self.xaxis == value:
-            return True
-        self.xaxis = value
-        self.setDriver('GV4', value)
+        self.set_orien(value)
 
-    def set_yaxis(self,value,force=False):
-        if value is None: return
-        value = int(value)
-        if not force and hasattr(self,"yaxis") and self.yaxis == value:
-            return True
-        self.yaxis = value
-        self.setDriver('GV5', value)
+    def set_orien(self,value):
+        self.l_debug('set_orien','{0}''.format(value))
+        self.setDriver('GV3', myfloat(value,1))
 
-    def set_zaxis(self,value,force=False):
+    def get_set_xaxis(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('GV4')
         if value is None: return
-        value = int(value)
-        if not force and hasattr(self,"zaxis") and self.zaxis == value:
-            return True
-        self.zaxis = value
-        self.setDriver('GV6', value)
+        self.set_xaxis(value)
 
-    def set_evst(self,value,force=False):
+    def set_xaxis(self,value):
+        self.l_debug('set_xaxis','{0}''.format(value))
+        self.setDriver('GV4', int(value))
+
+    def get_set_yaxis(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('GV5')
         if value is None: return
-        value = int(value)
-        if not force and hasattr(self,"evst") and self.evst == value: return True
-        self.evst = value
-        self.setDriver('ALARM', value)
+        self.set_yaxis(value)
+
+    def set_yaxis(self,value):
+        self.l_debug('set_yaxis','{0}''.format(value))
+        self.setDriver('GV5', int(value))
+
+    def get_set_zaxis(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('GV6')
+        if value is None: return
+        self.set_zaxis(value)
+
+    def set_zaxis(self,value):
+        self.l_debug('set_zaxis','{0}''.format(value))
+        self.setDriver('GV6', int(value))
+
+    def get_set_evst(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('ALARM')
+        if value is None: return
+        self.set_evst(value)
+
+    def set_evst(self,value):
+        self.l_debug('set_evst','{0}''.format(value))
+        self.setDriver('ALARM', int(value))
         # eventState 1=Armed, so no more motion
-        if value == 1:
+        if int(value) == 1:
             self.set_motion(0)
 
-    def set_oor(self,value,force=False):
+    def get_set_oor(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('GV7')
         if value is None: return
-        value = int(value)
-        if not force and hasattr(self,"oor") and self.oor == value:
-            return True
-        self.oor = value
-        self.setDriver('GV7', value)
+        self.set_oor(value)
 
-    def set_signaldbm(self,value,force=False):
-        self.l_debug('set_signaldbm','{0},{1}'.format(value,force))
-        if value is None: return
-        value = int(value)
-        if not force and hasattr(self,"signaldbm") and self.signaldbm == value:
-            return True
-        self.signaldbm = value
-        self.setDriver('CC', value)
+    def set_oor(self,value):
+        self.l_debug('set_oor','{0}''.format(value))
+        self.setDriver('GV7', int(value))
 
-    def set_tmst(self,value,force=False):
+    def get_set_signaldbm(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('CC')
         if value is None: return
-        value = int(value)
-        if not force and hasattr(self,"tmst") and self.tmst == value: return True
-        self.tmst = value
-        self.setDriver('GV9', value)
+        self.set_signaldbm(value)
 
-    def set_cpst(self,value,force=False):
-        self.l_debug('set_cpst','{0},{1}'.format(value,force))
-        if value is None: return
-        value = int(value)
-        if not force and hasattr(self,"cpst") and self.cpst == value: return True
-        self.cpst = value
-        self.setDriver('GV10', value)
+    def set_signaldbm(self,value):
+        self.l_debug('set_signaldbm','{0}''.format(value))
+        self.setDriver('CC', int(value))
 
-    def set_list(self,value,force=False):
+    def get_set_tmst(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('GV9')
         if value is None: return
-        value = int(value)
-        if not force and hasattr(self,"list") and self.list == value: return True
-        self.list = value
-        self.setDriver('GV11', value)
+        self.set_tmst(value)
 
-    def set_wtst(self,value,force=False):
-        self.l_debug('set_wtst','{0},{1}'.format(value,force))
+    def set_tmst(self,value):
+        self.l_debug('set_tmst','{0}''.format(value))
+        self.setDriver('GV9', int(value))
+
+    def get_set_cpst(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('GV10')
         if value is None: return
-        value = int(value)
+        self.set_cpst(value)
+
+    def set_cpst(self,value):
+        self.l_debug('set_cpst','{0}''.format(value))
+        self.setDriver('GV10', int(value))
+
+    def get_set_list(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('GV11')
+        if value is None: return
+        self.set_list(value)
+
+    def set_list(self,value):
+        self.l_debug('set_list','{0}''.format(value))
+        self.setDriver('GV11', int(value))
+
+    def get_set_wtst(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('GV12')
+        if value is None: return
+        self.set_wtst(value)
+
+    def set_wtst(self,value):
+        self.l_debug('set_wtst','{0}''.format(value))
         # Force to 1, Dry state on initialization since polyglot ignores the init value
-        if value == 0: value = 1
-        if not force and hasattr(self,"wtst") and self.wtst == value: return True
-        self.wtst = value
-        self.setDriver('GV12', value)
-
-    def set_time(self,value,force=False):
-        self.l_debug('set_time','{0},{1}'.format(value,force))
-        if value is None: return
         value = int(value)
-        if not force and hasattr(self,"time") and self.time == value: return True
-        self.time = value
-        self.setDriver('GV13', value)
+        if value == 0: value = 1
+        self.setDriver('GV12', int(value))
 
     def set_time_now(self):
         self.set_time(int(time.time()))
         self.set_seconds()
+
+    def set_time(self,value):
+        self.l_debug('set_time','{0}'.format(value))
+        self.time = int(value)
+        self.setDriver('GV13', self.time)
 
     def set_seconds(self,force=True):
         if not hasattr(self,"time"): return False
@@ -536,7 +562,6 @@ class wTag(polyinterface.Node):
             value = -1
         else:
             value = int(time.time()) - self.time
-        self.seconds = value
         self.setDriver('GV14', value)
 
     """
