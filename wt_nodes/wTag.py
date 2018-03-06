@@ -438,7 +438,7 @@ class wTag(polyinterface.Node):
         self.set_orien(value)
 
     def set_orien(self,value):
-        self.l_debug('set_orien','{0}''.format(value))
+        self.l_debug('set_orien','{0}'.format(value))
         self.setDriver('GV3', myfloat(value,1))
 
     def get_set_xaxis(self):
@@ -448,7 +448,7 @@ class wTag(polyinterface.Node):
         self.set_xaxis(value)
 
     def set_xaxis(self,value):
-        self.l_debug('set_xaxis','{0}''.format(value))
+        self.l_debug('set_xaxis','{0}'.format(value))
         self.setDriver('GV4', int(value))
 
     def get_set_yaxis(self):
@@ -458,7 +458,7 @@ class wTag(polyinterface.Node):
         self.set_yaxis(value)
 
     def set_yaxis(self,value):
-        self.l_debug('set_yaxis','{0}''.format(value))
+        self.l_debug('set_yaxis','{0}'.format(value))
         self.setDriver('GV5', int(value))
 
     def get_set_zaxis(self):
@@ -468,7 +468,7 @@ class wTag(polyinterface.Node):
         self.set_zaxis(value)
 
     def set_zaxis(self,value):
-        self.l_debug('set_zaxis','{0}''.format(value))
+        self.l_debug('set_zaxis','{0}'.format(value))
         self.setDriver('GV6', int(value))
 
     def get_set_evst(self):
@@ -478,7 +478,7 @@ class wTag(polyinterface.Node):
         self.set_evst(value)
 
     def set_evst(self,value):
-        self.l_debug('set_evst','{0}''.format(value))
+        self.l_debug('set_evst','{0}'.format(value))
         self.setDriver('ALARM', int(value))
         # eventState 1=Armed, so no more motion
         if int(value) == 1:
@@ -491,7 +491,7 @@ class wTag(polyinterface.Node):
         self.set_oor(value)
 
     def set_oor(self,value):
-        self.l_debug('set_oor','{0}''.format(value))
+        self.l_debug('set_oor','{0}'.format(value))
         self.setDriver('GV7', int(value))
 
     def get_set_signaldbm(self):
@@ -501,7 +501,7 @@ class wTag(polyinterface.Node):
         self.set_signaldbm(value)
 
     def set_signaldbm(self,value):
-        self.l_debug('set_signaldbm','{0}''.format(value))
+        self.l_debug('set_signaldbm','{0}'.format(value))
         self.setDriver('CC', int(value))
 
     def get_set_tmst(self):
@@ -511,7 +511,7 @@ class wTag(polyinterface.Node):
         self.set_tmst(value)
 
     def set_tmst(self,value):
-        self.l_debug('set_tmst','{0}''.format(value))
+        self.l_debug('set_tmst','{0}'.format(value))
         self.setDriver('GV9', int(value))
 
     def get_set_cpst(self):
@@ -521,7 +521,7 @@ class wTag(polyinterface.Node):
         self.set_cpst(value)
 
     def set_cpst(self,value):
-        self.l_debug('set_cpst','{0}''.format(value))
+        self.l_debug('set_cpst','{0}'.format(value))
         self.setDriver('GV10', int(value))
 
     def get_set_list(self):
@@ -531,7 +531,7 @@ class wTag(polyinterface.Node):
         self.set_list(value)
 
     def set_list(self,value):
-        self.l_debug('set_list','{0}''.format(value))
+        self.l_debug('set_list','{0}'.format(value))
         self.setDriver('GV11', int(value))
 
     def get_set_wtst(self):
@@ -541,7 +541,7 @@ class wTag(polyinterface.Node):
         self.set_wtst(value)
 
     def set_wtst(self,value):
-        self.l_debug('set_wtst','{0}''.format(value))
+        self.l_debug('set_wtst','{0}'.format(value))
         # Force to 1, Dry state on initialization since polyglot ignores the init value
         value = int(value)
         if value == 0: value = 1
