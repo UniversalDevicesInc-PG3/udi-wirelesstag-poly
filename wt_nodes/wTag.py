@@ -198,7 +198,7 @@ class wTag(polyinterface.Node):
             self.set_lit(self.getDriver('GV7'),True)
             self.set_evst(self.getDriver('ALARM'),True)
             self.set_oor(self.getDriver('GV8'),True)
-            self.set_sigaldbm(self.getDriver('CC'),True)
+            self.set_signaldbm(self.getDriver('CC'),True)
             self.set_tmst(self.getDriver('GV9'),True)
             self.set_cpst(self.getDriver('GV10'),True)
             self.set_list(self.getDriver('GV11'),True)
