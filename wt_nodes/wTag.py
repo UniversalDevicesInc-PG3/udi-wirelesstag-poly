@@ -203,7 +203,7 @@ class wTag(polyinterface.Node):
             self.get_set_cpst()
             self.get_set_list()
             self.get_set_wtst()
-            self.get_set_now()
+            self.set_time_now()
         if self.controller.update_profile:
             # Drivers were updated, need to query
             self.query()
