@@ -144,12 +144,14 @@ class wTag(polyinterface.Node):
             dv.append({'driver': 'GV4',     'value': 0, 'uom': 56})
             # yasis:  Y-Axis
             dv.append({'driver': 'GV5',     'value': 0, 'uom': 56})
-            # zaxis:  Z-Asis
+            # zaxis:  Z-Axis
             dv.append({'driver': 'GV6',     'value': 0, 'uom': 56})
         if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26
             or tag_type == 32 or tag_type == 52 or tag_type == 72):
             # oor:    OutOfRange
             dv.append({'driver': 'GV8',     'value': 0, 'uom':  2})
+            # signaldBm:
+            dv.append({'driver': 'CC',     'value': 0, 'uom':  56})
         if (tag_type == 13 or tag_type == 21 or tag_type == 26
             or tag_type == 32 or tag_type == 52 or tag_type == 62
             or tag_type == 72):
@@ -196,6 +198,7 @@ class wTag(polyinterface.Node):
             self.set_lit(self.getDriver('GV7'),True)
             self.set_evst(self.getDriver('ALARM'),True)
             self.set_oor(self.getDriver('GV8'),True)
+            self.set_sigaldbm(self.getDriver('CC'),True)
             self.set_tmst(self.getDriver('GV9'),True)
             self.set_cpst(self.getDriver('GV10'),True)
             self.set_list(self.getDriver('GV11'),True)
@@ -328,6 +331,8 @@ class wTag(polyinterface.Node):
             self.set_evst(tdata['eventState'])
         if 'oor' in tdata:
             self.set_oor(tdata['oor'])
+        if 'signaldBm' in tdata:
+            self.set_signaldbm(tdata['signaldBm'])
         if 'tempEventState' in tdata:
             self.set_tmst(tdata['tempEventState'])
         if 'capEventState' in tdata:
@@ -471,6 +476,15 @@ class wTag(polyinterface.Node):
             return True
         self.oor = value
         self.setDriver('GV7', value)
+
+    def set_signaldbm(self,value,force=False):
+        self.l_debug('set_signaldbm','{0},{1}'.format(value,force))
+        if value is None: return
+        value = int(value)
+        if not force and hasattr(self,"signaldbm") and self.signaldbm == value:
+            return True
+        self.signaldbm = value
+        self.setDriver('CC', value)
 
     def set_tmst(self,value,force=False):
         if value is None: return

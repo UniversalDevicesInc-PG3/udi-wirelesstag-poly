@@ -83,4 +83,9 @@
       <range uom="25" subset="0,1,2" nls="WTST" />
    </editor>
 
+   <!-- signaldBm -->
+   <editor id="SIGDBM">
+      <range uom="56" min="-5000" max="5000" prec="0" />
+   </editor>
+
 </editors>

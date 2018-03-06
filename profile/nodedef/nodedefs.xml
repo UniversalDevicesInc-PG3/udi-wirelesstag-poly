@@ -74,6 +74,8 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) x -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State x -->
       <st id="GV7" editor="I_LIT" /> <!-- Light x -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature ? -->
@@ -84,7 +86,6 @@
       <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
       <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
       <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
     </sts>
     <cmds>
