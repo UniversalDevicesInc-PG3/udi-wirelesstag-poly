@@ -73,6 +73,7 @@ class wTagManager(polyinterface.Node):
             self.discover(thread=False)
         else:
             self.add_existing_tags()
+            self.discover() # Needed to fix tag_id's
             self.query() # To get latest tag info.
         self.reportDrivers()
         self.ready = True
@@ -214,7 +215,7 @@ class wTagManager(polyinterface.Node):
     def get_tag_by_id(self,tid):
         tid = int(tid)
         for tag in self.get_tags():
-            self.l_debug('get_tag_by_id','tag_id={0} tid={1}'.format(tag.tag_id,tid))
+            self.l_debug('get_tag_by_id','{0} address={1} id={2}'.format(tid,tag.address,tag.tag_id))
             if int(tag.tag_id) == tid:
                 return tag
         return None
