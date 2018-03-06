@@ -106,6 +106,8 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
@@ -116,7 +118,6 @@
       <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
       <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
       <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
     </sts>
     <cmds>
@@ -138,6 +139,8 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
@@ -149,7 +152,6 @@
       <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
       <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
       <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
@@ -171,6 +173,8 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
@@ -182,7 +186,6 @@
       <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
       <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
       <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
@@ -205,6 +208,8 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
@@ -216,7 +221,6 @@
       <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
       <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
       <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
@@ -238,6 +242,8 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
@@ -249,7 +255,6 @@
       <st id="GV4" editor="FLOAT" /> <!-- X-Axis -->
       <st id="GV5" editor="FLOAT" /> <!-- Y-Axis -->
       <st id="GV6" editor="FLOAT" /> <!-- Z-Axis -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
@@ -272,6 +277,8 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
@@ -279,7 +286,6 @@
       <st id="LUMIN" editor="LUMIN" /> <!-- Lux -->
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
@@ -301,6 +307,8 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
@@ -308,7 +316,6 @@
       <st id="LUMIN" editor="LUMIN" /> <!-- Lux -->
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
@@ -331,12 +338,13 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="T_HUM" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
       <st id="GV12" editor="I_WTST" /> <!-- Water State -->
@@ -359,12 +367,13 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
       <st id="CLIHUM" editor="T_HUM" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
       <st id="GV12" editor="I_WTST" /> <!-- Water State -->
@@ -388,13 +397,14 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="T_HUM" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
@@ -416,13 +426,14 @@
       <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
       <st id="CLIHUM" editor="T_HUM" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
@@ -492,13 +503,14 @@
       <st id="GV1" editor="I_TAGID" />
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
       <st id="CLIHUM" editor="T_HUM" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>
@@ -520,13 +532,14 @@
       <st id="GV1" editor="I_TAGID" />
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+      <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
       <st id="CLIHUM" editor="T_HUM" />
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
-      <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
     </sts>

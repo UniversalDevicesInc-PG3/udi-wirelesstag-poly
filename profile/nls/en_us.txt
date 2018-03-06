@@ -62,6 +62,7 @@ ND-wTag92C-NAME = Webcams (Dropcam) (92) (C)
 ST-ST-NAME = Tag Status
 ST-ALARM-NAME = Event State
 ST-CV-NAME = Battery Voltage
+ST-CC-NAME = Signal dBm
 ST-GV1-NAME = Tag Type
 ST-GV2-NAME = Motion
 ST-GV3-NAME = Orientation
