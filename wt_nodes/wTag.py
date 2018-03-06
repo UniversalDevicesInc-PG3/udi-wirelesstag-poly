@@ -384,7 +384,7 @@ class wTag(polyinterface.Node):
         self.set_lit(value)
 
     def set_lit(self,value):
-        self.l_debug('set_lit','{0},{1}'.format(value))
+        self.l_debug('set_lit','{0}'.format(value))
         self.setDriver('GV7', value)
 
     def get_set_lux(self):
