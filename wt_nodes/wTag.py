@@ -187,7 +187,7 @@ class wTag(polyinterface.Node):
             # These stay the same across reboots as the default.
             self.get_set_temp()
             self.get_set_hum()
-            self.get_set_lux(
+            self.get_set_lux()
             self.get_set_batp()
             self.get_set_batv()
             self.get_set_motion()
