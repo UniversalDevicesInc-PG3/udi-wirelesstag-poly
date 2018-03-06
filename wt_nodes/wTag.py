@@ -102,11 +102,11 @@ class wTag(polyinterface.Node):
         dv = [
             {'driver': 'ST',      'value': 0, 'uom': 2},
              # tag_id
-            {'driver': 'GPV',     'value': 0, 'uom': 56},
+            {'driver': 'GPV',     'value': self.tag_id, 'uom': 56},
             # UOM 0=C 1=F
             {'driver': 'UOM',     'value': 0, 'uom': 56},
             # tag_type:
-            {'driver': 'GV1',     'value': 0, 'uom': 56},
+            {'driver': 'GV1',     'value': self.tag_type, 'uom': 56},
             # temp:   Curent temperature (17=F 4=C)
             {'driver': 'CLITEMP', 'value': 0, 'uom': temp_uom},
             # batp:   Battery percent (51=percent)
