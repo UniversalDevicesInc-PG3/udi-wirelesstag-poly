@@ -10,6 +10,7 @@ from copy import deepcopy
 from wt_funcs import id_to_address,myfloat
 
 LOGGER = polyinterface.LOGGER
+DLEV = 0
 
 class wTag(polyinterface.Node):
     """
@@ -30,6 +31,7 @@ class wTag(polyinterface.Node):
     reportDrivers(): Forces a full update of all drivers to Polyglot/ISY.
     query(): Called when ISY sends a query request to Polyglot for this specific node
     """
+
     def __init__(self, controller, primary, address=None, name=None,
                  tag_type=None, uom=None, tdata=None, node_data=None):
         """
@@ -569,13 +571,16 @@ class wTag(polyinterface.Node):
     def set_seconds(self,force=True):
         if not hasattr(self,"time"): return False
         time_now = int(time.time())
-        self.l_debug('set_seconds','last_time  {}'.format(self.time))
-        self.l_debug('set_seconds','time_now - {}'.format(time_now))
+        if DLEV > 0: self.l_debug('set_seconds','time_now    {}'.format(time_now))
+        if DLEV > 0: self.l_debug('set_seconds','last_time - {}'.format(self.time))
         if self.time == 0:
             value = -1
         else:
             value = time_now - self.time
-        self.l_debug('set_seconds','         = {}'.format(value))
+        if DLEV > 0:
+            self.l_debug('set_seconds','          = {}'.format(value))
+        else:
+            self.l_debug('set_seconds','{}'.format(value))
         self.setDriver('GV14', value)
 
     """
