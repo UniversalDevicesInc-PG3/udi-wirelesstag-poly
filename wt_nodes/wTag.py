@@ -340,7 +340,7 @@ class wTag(polyinterface.Node):
             self.set_list(tdata['lightEventState'])
         # This is the last time the tag manager has heard from the tag?
         if 'lastComm' in tdata:
-            self.set_time(tdata['lastComm'])
+            self.set_time(tdata['lastComm'],wincrap=True)
             self.set_seconds()
 
     # This is the tag_type number, we don't really need to show it, but
@@ -555,17 +555,26 @@ class wTag(polyinterface.Node):
         self.set_time(int(time.time()))
         self.set_seconds()
 
-    def set_time(self,value):
+    def set_time(self,value,wincrap=False):
         self.l_debug('set_time','{0}'.format(value))
+        if wincrap:
+            # Convert windows timestamp to unix :(
+            # https://stackoverflow.com/questions/10411954/convert-windows-timestamp-to-date-using-php-on-a-linux-box
+            value = int(value) / 10000000 - 11644477200
+            self.l_debug('set_time','{0}'.format(value))
         self.time = int(value)
         self.setDriver('GV13', self.time)
 
     def set_seconds(self,force=True):
         if not hasattr(self,"time"): return False
+        time_now = time.time()
+        self.l_debug('set_seconds','last_time '.format(time))
+        self.l_debug('set_seconds','time_now -'.format(time_now))
         if self.time == 0:
             value = -1
         else:
-            value = int(time.time()) - self.time
+            value = time_now - self.time
+        self.l_debug('set_seconds','         ='.format(value))
         self.setDriver('GV14', value)
 
     """
