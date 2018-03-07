@@ -560,7 +560,7 @@ class wTag(polyinterface.Node):
         if wincrap:
             # Convert windows timestamp to unix :(
             # https://stackoverflow.com/questions/10411954/convert-windows-timestamp-to-date-using-php-on-a-linux-box
-            value = int(value) / 10000000 - 11644477200
+            value = int(int(value) / 10000000 - 11644477200)
             self.l_debug('set_time','{0}'.format(value))
         self.time = int(value)
         self.setDriver('GV13', self.time)
@@ -568,13 +568,13 @@ class wTag(polyinterface.Node):
     def set_seconds(self,force=True):
         if not hasattr(self,"time"): return False
         time_now = time.time()
-        self.l_debug('set_seconds','last_time '.format(time))
-        self.l_debug('set_seconds','time_now -'.format(time_now))
+        self.l_debug('set_seconds','last_time  {}'.format(time))
+        self.l_debug('set_seconds','time_now - {}'.format(time_now))
         if self.time == 0:
             value = -1
         else:
             value = time_now - self.time
-        self.l_debug('set_seconds','         ='.format(value))
+        self.l_debug('set_seconds','         = {}'.format(value))
         self.setDriver('GV14', value)
 
     """
