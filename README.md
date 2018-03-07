@@ -255,6 +255,11 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 ## Release Notes
 
+  - 0.0.19 03/07/2018
+    - Last Update Time and Seconds since update are properly tracked across nodeserver restarts using info from Tag Manager
+    - Tag Status is properly set based on 'alive' property from Tag Manager
+    - Aded signaldBm to all tags https://github.com/jimboca/udi-wirelesstag-poly/issues/16
+    - Simplified all get/set methods so changes can be tracked better in logs for debugging.
   - 0.0.18 03/04/2018
     - Another fix for get_network_ip that should now work on MacOS
     - https://github.com/jimboca/udi-wirelesstag-poly/issues/14
