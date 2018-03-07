@@ -558,7 +558,7 @@ class wTag(polyinterface.Node):
         self.set_seconds()
 
     def set_time(self,value,wincrap=False):
-        self.l_debug('set_time','{0}'.format(value))
+        self.l_debug('set_time','{0},{1}'.format(value,wincrap))
         value = int(value)
         if wincrap:
             # Convert windows timestamp to unix :(
