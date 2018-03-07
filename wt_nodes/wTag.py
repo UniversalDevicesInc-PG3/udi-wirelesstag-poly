@@ -568,7 +568,7 @@ class wTag(polyinterface.Node):
 
     def set_seconds(self,force=True):
         if not hasattr(self,"time"): return False
-        time_now = time.time()
+        time_now = int(time.time())
         self.l_debug('set_seconds','last_time  {}'.format(self.time))
         self.l_debug('set_seconds','time_now - {}'.format(time_now))
         if self.time == 0:
