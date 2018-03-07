@@ -178,7 +178,6 @@ class wTag(polyinterface.Node):
         This method is run once the Node is successfully added to the ISY
         and we get a return result from Polyglot. Only happens once.
         """
-        self.setDriver('ST', 1)
         # Always set driver from tag type
         self.set_tag_type(self.tag_type)
         self.set_tag_id(self.tag_id)
@@ -187,6 +186,7 @@ class wTag(polyinterface.Node):
             self.set_from_tag_data(self.tdata)
         else:
             # These stay the same across reboots as the default.
+            self.get_set_alive()
             self.get_set_temp()
             self.get_set_hum()
             self.get_set_lux()
@@ -316,6 +316,8 @@ class wTag(polyinterface.Node):
     Set Functions
     """
     def set_from_tag_data(self,tdata):
+        if 'alive' in tdata:
+            self.set_alive(tdata['alive'])
         if 'temperature' in tdata:
             self.set_temp(tdata['temperature'])
         if 'batteryVolt' in tdata:
@@ -361,6 +363,13 @@ class wTag(polyinterface.Node):
         self.l_debug('set_tag_uom','UOM to {0}'.format(value))
         self.tag_uom = value
         self.setDriver('UOM', value)
+
+    def get_set_alive(self):
+        self.set_alive(self.getDriver('ST'))
+        
+    def set_alive(self,value):
+        self.l_debug('set_alive','{0}'.format(value))
+        self.setDriver('ST', int(value))
 
     def get_set_temp(self):
         self.set_temp(self.getDriver('CLITEMP'),False)
