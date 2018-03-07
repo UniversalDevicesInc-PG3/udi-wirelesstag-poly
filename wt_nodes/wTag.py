@@ -338,6 +338,10 @@ class wTag(polyinterface.Node):
             self.set_cpst(tdata['capEventState'])
         if 'lightEventState' in tdata:
             self.set_list(tdata['lightEventState'])
+        # This is the last time the tag manager has heard from the tag?
+        if 'lastComm' in tdata:
+            self.set_time(tdata['lastComm'])
+            self.set_seconds()
 
     # This is the tag_type number, we don't really need to show it, but
     # we need the info when recreating the tags from the config.
