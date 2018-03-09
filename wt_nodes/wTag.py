@@ -448,15 +448,15 @@ class wTag(polyinterface.Node):
         # Not all have motion, but that's ok, just sent it.
         self.setDriver('GV2', value)
         if value == 0: # False
-            self.set_evst(1) # Armed
+            self.set_evst(1,andMotion=False) # Armed
         elif value == 1: # True
-            self.set_evst(5) # Detected Movement
+            self.set_evst(5,andMotion=False) # Detected Movement
         if value == 2: # Door Open
-            self.set_evst(3) # Opened
+            self.set_evst(3,andMotion=False) # Opened
         elif value == 3: # Open too long
-            self.set_evst(3) # Opened
+            self.set_evst(3,andMotion=False) # Opened
         elif value == 4: # Closed
-            self.set_evst(4) # Closed
+            self.set_evst(4,andMotion=False) # Closed
 
 
     def get_set_orien(self):
@@ -505,11 +505,11 @@ class wTag(polyinterface.Node):
         if value is None: return
         self.set_evst(value)
 
-    def set_evst(self,value):
+    def set_evst(self,value,andMotion=True):
         self.l_debug('set_evst','{0}'.format(value))
         self.setDriver('ALARM', int(value))
         # eventState 1=Armed, so no more motion
-        if int(value) == 1:
+        if andMotion and int(value) == 1:
             self.set_motion(0)
 
     def get_set_oor(self):
