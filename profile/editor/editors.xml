@@ -35,7 +35,7 @@
       <range uom="17" min="-50" max="150" prec="2" />
    </editor>
 
-   <editor id="T_HUM">
+   <editor id="I_HUM">
      <range uom="22" min="0" max="100" prec="1" />
    </editor>
 
