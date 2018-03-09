@@ -400,7 +400,7 @@ class wTag(polyinterface.Node):
 
     def set_lit(self,value):
         self.l_debug('set_lit','{0}'.format(value))
-        self.setDriver('GV7', value)
+        self.setDriver('GV7', int(value))
 
     def get_set_lux(self):
         # Get current value, if None then we don't have this driver.
@@ -501,13 +501,13 @@ class wTag(polyinterface.Node):
 
     def get_set_oor(self):
         # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV7')
+        value = self.getDriver('GV8')
         if value is None: return
         self.set_oor(value)
 
     def set_oor(self,value):
         self.l_debug('set_oor','{0}'.format(value))
-        self.setDriver('GV7', int(value))
+        self.setDriver('GV8', int(value))
 
     def get_set_signaldbm(self):
         # Get current value, if None then we don't have this driver.
