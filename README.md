@@ -255,6 +255,9 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 ## Release Notes
 
+  - 0.0.20 03/08/2018
+    - Fix setting for Humidity, Out Of Range and Light for all Tags
+    - Change temperature to precision=2
   - 0.0.19 03/07/2018
     - Last Update Time and Seconds since update are properly tracked across nodeserver restarts using info from Tag Manager
     - Tag Status is properly set based on 'alive' property from Tag Manager
