@@ -366,7 +366,7 @@ class wTag(polyinterface.Node):
 
     def get_set_alive(self):
         self.set_alive(self.getDriver('ST'))
-        
+
     def set_alive(self,value):
         self.l_debug('set_alive','{0}'.format(value))
         self.setDriver('ST', int(value))
@@ -375,11 +375,11 @@ class wTag(polyinterface.Node):
         self.set_temp(self.getDriver('CLITEMP'),False)
 
     def set_temp(self,value,convert=True):
-        self.l_debug('set_temp','{0}'.format(value))
-        value = myfloat(value,2)
+        self.l_debug('set_temp','{0},{1}'.format(value,convert))
         if convert and self.primary_n.degFC == 1:
             # Convert C to F
-            value = myfloat(float(value) * 1.8 + 32.0,2)
+            value = float(value) * 1.8 + 32.0
+        value = myfloat(value,1)
         self.setDriver('CLITEMP', value)
 
     def get_set_hum(self):
@@ -390,7 +390,7 @@ class wTag(polyinterface.Node):
 
     def set_hum(self,value):
         self.l_debug('set_hum','{0}'.format(value))
-        self.setDriver('CLIHUM', value)
+        self.setDriver('CLIHUM', myfloat(value,1))
 
     def get_set_lit(self):
         # Get current value, if None then we don't have this driver.

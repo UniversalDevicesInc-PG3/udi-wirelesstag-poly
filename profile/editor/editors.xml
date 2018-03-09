@@ -26,13 +26,13 @@
 
     <!-- Temperature -->
    <editor id="I_TEMP">
-      <range uom="14" min="-50" max="200" prec="2" />
+      <range uom="14" min="-50" max="200" prec="1" />
    </editor>
    <editor id="I_TEMP_C">
-      <range uom="4" min="-50" max="75"  prec="2" />
+      <range uom="4" min="-50" max="75"  prec="1" />
    </editor>
    <editor id="I_TEMP_F">
-      <range uom="17" min="-50" max="150" prec="2" />
+      <range uom="17" min="-50" max="150" prec="1" />
    </editor>
 
    <editor id="I_HUM">
