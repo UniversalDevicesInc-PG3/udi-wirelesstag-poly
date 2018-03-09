@@ -259,6 +259,8 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/rXAGk9)
 
+  - 0.0.22 03/08/2018
+    - Bad bug in 0.0.21 causing infinite loop
   - 0.0.21 03/08/2018
     - Change eventState along with Motion, may get rid of Motion driver if this works properly.
   - 0.0.20 03/08/2018
