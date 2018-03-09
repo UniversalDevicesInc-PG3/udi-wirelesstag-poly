@@ -444,7 +444,20 @@ class wTag(polyinterface.Node):
 
     def set_motion(self,value=None):
         self.l_debug('set_motion','{0}'.format(value))
-        self.setDriver('GV2', int(value))
+        value = int(value)
+        # Not all have motion, but that's ok, just sent it.
+        self.setDriver('GV2', value)
+        if value == 0: # False
+            self.set_evst(1) # Armed
+        elif value == 1: # True
+            self.set_evst(5) # Detected Movement
+        if value == 2: # Door Open
+            self.set_evst(3) # Opened
+        elif value == 3: # Open too long
+            self.set_evst(3) # Opened
+        elif value == 4: # Closed
+            self.set_evst(4) # Closed
+
 
     def get_set_orien(self):
         # Get current value, if None then we don't have this driver.

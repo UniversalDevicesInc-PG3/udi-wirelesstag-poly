@@ -91,7 +91,7 @@ MOT4-3 = Open Too Long
 MOT4-4 = Closed
 
 # Properties
-# http://wirelesstag.net/kumoapp/44/eventstate
+# http://www.mytaglist.com/ethClient.asmx?op=GetTagList
 EVST-0 = Disarmed
 EVST-1 = Armed
 EVST-2 = Moved

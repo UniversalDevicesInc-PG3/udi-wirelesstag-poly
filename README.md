@@ -12,6 +12,8 @@ MIT license.
 
 This is discussed on the forum post [Polglot V2 CAO Wireless Tags Nodeserver](https://forum.universal-devices.com/topic/23724-polglot-v2-cao-wireless-tags-nodeserver/)  You can ask questions on that post, or file an issue here on github if you like https://github.com/jimboca/udi-wirelesstag-poly/issues
 
+If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/rXAGk9)
+
 ## How it works
 
 This nodeserver starts a background process which implements a minimal REST
@@ -255,6 +257,10 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 ## Release Notes
 
+If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/rXAGk9)
+
+  - 0.0.21 03/08/2018
+    - Change eventState along with Motion, may get rid of Motion driver if this works properly.
   - 0.0.20 03/08/2018
     - Fix setting for Humidity, Out Of Range and Light for all Tags
     - Change temperature to precision=2
