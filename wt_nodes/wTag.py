@@ -50,10 +50,6 @@ class wTag(polyinterface.Node):
         self.address = address
         self.id = 'wTag' # Until we figure out the uom
         self.name = name
-        # Remove spaces from names since that messes with our return urls.
-        # no longer needed, we no longer pass the name in urls
-        #if name is not None:
-        #    name = re.sub(r"\s+", '', name)
         if node_data is not None:
             # An existing node,
             self.is_new = False
