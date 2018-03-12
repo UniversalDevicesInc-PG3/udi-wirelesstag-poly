@@ -208,7 +208,7 @@ class wTagManager(polyinterface.Node):
         nodes = list()
         for address in self.controller.nodes:
             node = self.controller.nodes[address]
-            self.l_debug('get_tags','node={}'.format(self.node))
+            self.l_debug('get_tags','node={}'.format(node))
             if hasattr(node,'tag_id') and node.primary_n.mac == self.mac:
                 nodes.append(node)
         #self.l_debug('get_tags','nodes={0}'.format(nodes))
