@@ -176,6 +176,7 @@ class wTagManager(polyinterface.Node):
             if address != self.address:
                 node = self.controller._nodes[address]
                 # One of my tags?
+                self.l_debug("add_existing_tags","node primary={}".format(node['primary']))
                 if node['primary'] == self.address:
                     self.l_info("add_existing_tags","node={0} = {1}, update={2}".format(address,node,self.controller.update_profile))
                     self.add_tag(address=node['address'], name=node['name'], node_data=node, update=self.controller.update_profile)
