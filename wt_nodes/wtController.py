@@ -9,6 +9,10 @@ from wtServer import wtServer
 from wt_funcs import get_server_data,get_valid_node_name,get_profile_info
 
 LOGGER = polyinterface.LOGGER
+# old
+nodedef = 'node_def_id'
+# new
+#nodedef = 'nodedef'
 
 class wtController(polyinterface.Controller):
     client_id     = "3b08b242-f0f8-41c0-ba29-6b0478cd0b77"
@@ -180,9 +184,12 @@ class wtController(polyinterface.Controller):
         """
         for address in self.controller._nodes:
             node = self.controller._nodes[address]
-            if node['node_def_id'] == 'wTagManager':
-                self.l_info('add_existing_tag_managers','node={0} update={1}'.format(node,self.update_profile))
-                self.addNode(wTagManager(self, address, node['name'], address.upper(), node_data=node),update=self.update_profile)
+            if nodedef in node:
+                if node[nodedef] == 'wTagManager':
+                    self.l_info('add_existing_tag_managers','node={0} update={1}'.format(node,self.update_profile))
+                    self.addNode(wTagManager(self, address, node['name'], address.upper(), node_data=node),update=self.update_profile)
+            else:
+                self.l_error('add_existing_tag_managers','node has no {0}? node={1}'.format(nodedef,node))
 
     def discover(self, *args, **kwargs):
         """

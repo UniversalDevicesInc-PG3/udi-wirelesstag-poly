@@ -233,16 +233,16 @@ class wTag(polyinterface.Node):
             self.reportDrivers()
 
     def l_info(self, name, string):
-        LOGGER.info("%s:%s:%s:%s: %s" %  (self.id,self.address,self.name,name,string))
+        LOGGER.info("%s:%s:%s:%s:%s: %s" %  (self.primary_n.name,self.name,self.address,self.id,name,string))
 
     def l_error(self, name, string):
-        LOGGER.error("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
+        LOGGER.error("%s:%s:%s:%s:%s: %s" % (self.primary_n.name,self.name,self.address,self.id,name,string))
 
     def l_warning(self, name, string):
-        LOGGER.warning("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
+        LOGGER.warning("%s:%s:%s:%s:%s: %s" % (self.primary_n.name,self.name,self.address,self.id,name,string))
 
     def l_debug(self, name, string):
-        LOGGER.debug("%s:%s:%s:%s: %s" % (self.id,self.address,self.name,name,string))
+        LOGGER.debug("%s:%s:%s:%s:%s: %s" % (self.primary_n.name,self.name,self.address,self.id,name,string))
 
     def get_handler(self,command,params):
         """
