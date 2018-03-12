@@ -402,7 +402,7 @@ class wTag(polyinterface.Node):
         # Get current value, if None then we don't have this driver.
         value = self.getDriver('LUMIN')
         if value is None: return
-        self.set_lit(value)
+        self.set_lux(value)
 
     def set_lux(self,value):
         self.l_debug('set_lux','{0}'.format(value))

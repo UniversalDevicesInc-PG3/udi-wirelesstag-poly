@@ -12,6 +12,9 @@ from wt_nodes import wTag
 
 LOGGER = polyinterface.LOGGER
 
+# For even more debug... should make a setting?
+DEBUG_LEVEL=0
+
 class wTagManager(polyinterface.Node):
     """
     This is the class that all the Nodes will be represented by. You will add this to
@@ -171,12 +174,12 @@ class wTagManager(polyinterface.Node):
         This has to loop thru the _nodes list to figure out if it's one of the
         tags for this tag manager.
         """
-        self.l_debug("add_existing_tags","Looking for my tags in _nodes={}".format(self.controller._nodes))
+        if DEBUG_LEVEL > 0: self.l_debug("add_existing_tags","Looking for my tags in _nodes={}".format(self.controller._nodes))
         for address in self.controller._nodes:
             if address != self.address:
                 node = self.controller._nodes[address]
                 # One of my tags?
-                self.l_debug("add_existing_tags","node primary={}".format(node['primary']))
+                self.l_debug("add_existing_tags","check node primary={}".format(node['primary']))
                 if node['primary'].endswith(self.address):
                     self.l_info("add_existing_tags","node={0} = {1}, update={2}".format(address,node,self.controller.update_profile))
                     self.add_tag(address=node['address'], name=node['name'], node_data=node, update=self.controller.update_profile)
