@@ -171,6 +171,7 @@ class wTagManager(polyinterface.Node):
         This has to loop thru the _nodes list to figure out if it's one of the
         tags for this tag manager.
         """
+        self.l_debug("add_existing_tags","Looking for my tags in _nodes={}".format(self.controller._nodes))
         for address in self.controller._nodes:
             if address != self.address:
                 node = self.controller._nodes[address]
@@ -208,7 +209,7 @@ class wTagManager(polyinterface.Node):
         nodes = list()
         for address in self.controller.nodes:
             node = self.controller.nodes[address]
-            self.l_debug('get_tags','node={}'.format(node))
+            #self.l_debug('get_tags','node={}'.format(node))
             if hasattr(node,'tag_id') and node.primary_n.mac == self.mac:
                 nodes.append(node)
         #self.l_debug('get_tags','nodes={0}'.format(nodes))
