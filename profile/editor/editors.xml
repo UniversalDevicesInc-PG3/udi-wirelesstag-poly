@@ -12,6 +12,10 @@
     </editor>
 
     <editor id="I_TAGID">
+      <range uom="56" min="0" max="1024" prec="0" />
+    </editor>
+    
+    <editor id="I_TAGTYPE">
       <range uom="56" min="0" max="92" prec="0" />
     </editor>
 

@@ -71,7 +71,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? x -->
-      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) x -->
+      <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) x -->
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -103,7 +104,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
-      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -136,7 +138,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
-      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -170,7 +173,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
-      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -205,7 +209,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
-      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -239,7 +244,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
-      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -274,7 +280,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
-      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -304,7 +311,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
-      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -335,7 +343,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
-      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -364,7 +373,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
-      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -394,7 +404,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
-      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -423,7 +434,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" /> <!-- Status, online? -->
-      <st id="GV1" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -453,7 +465,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
+      <st id="GPV" editor="I_TAGID" />
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
@@ -476,7 +489,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
+      <st id="GPV" editor="I_TAGID" />
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
@@ -500,7 +514,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
+      <st id="GPV" editor="I_TAGID" />
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -529,7 +544,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
+      <st id="GPV" editor="I_TAGID" />
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
       <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
@@ -559,7 +575,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
+      <st id="GPV" editor="I_TAGID" />
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
     </sts>
     <cmds>
       <sends />
@@ -573,7 +590,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
+      <st id="GPV" editor="I_TAGID" />
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
     </sts>
     <cmds>
       <sends />
@@ -588,7 +606,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
+      <st id="GPV" editor="I_TAGID" />
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
     </sts>
     <cmds>
       <sends />
@@ -602,7 +621,8 @@
     <editors />
     <sts>
       <st id="ST" editor="BOOL" />
-      <st id="GV1" editor="I_TAGID" />
+      <st id="GPV" editor="I_TAGID" />
+      <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
     </sts>
     <cmds>
       <sends />
