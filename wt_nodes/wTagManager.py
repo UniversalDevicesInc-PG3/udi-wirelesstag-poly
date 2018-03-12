@@ -73,7 +73,7 @@ class wTagManager(polyinterface.Node):
             self.discover(thread=False)
         else:
             self.add_existing_tags()
-            self.discover() # Needed to fix tag_id's
+            #self.discover() # Needed to fix tag_id's
             self.query() # To get latest tag info.
         self.reportDrivers()
         self.ready = True
@@ -98,6 +98,7 @@ class wTagManager(polyinterface.Node):
         else:
             self.set_st(False)
         self.reportDrivers()
+
 
     def shortPoll(self):
         """
