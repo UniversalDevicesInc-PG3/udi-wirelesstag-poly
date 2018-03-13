@@ -328,7 +328,7 @@ class wtServer():
         return self.api_post_d('ethClient.asmx/LoadTempSensorConfig',params)
 
     # http://wirelesstag.net/ethClient.asmx?op=GetTagListCached
-    def GetTagListCached(self,params):
+    def DontUseThisGetTagListCached(self,params):
         return self.api_post_d('ethClient.asmx/GetTagListCached',params)
 
     # http://wirelesstag.net/ethClient.asmx?op=RequestImmediatePostback

@@ -88,7 +88,7 @@ class wTagManager(polyinterface.Node):
         the parent class, so you don't need to override this method unless
         there is a need.
         """
-        mgd = self.controller.wtServer.GetTagListCached({})
+        mgd = self.controller.wtServer.GetTagList({})
         if mgd['st']:
             self.set_st(False)
             for tag in mgd['result']:
