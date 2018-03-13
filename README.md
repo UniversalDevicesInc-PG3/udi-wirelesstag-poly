@@ -259,6 +259,10 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/rXAGk9)
 
+  - 0.0.23 03/12/2018
+    - Remove moisture from 26 and 52
+    - Fix lux for all
+    - Add tag id to device display for debugging
   - 0.0.22 03/08/2018
     - Bad bug in 0.0.21 causing infinite loop
   - 0.0.21 03/08/2018
