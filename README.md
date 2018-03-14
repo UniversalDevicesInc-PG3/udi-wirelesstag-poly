@@ -113,6 +113,7 @@ with:
 | Motion Sensor Tag Pro                            | 21   | 2       |
 | Motion Sensor Tag Pro ALS (Ambient Light Sensor) | 26   | 2       |
 | Water/Soil moisture sensor                       | 32   | 1       |
+| Outdoor Probe/Thermocouple                       | 42   | 3       |
 | Door/window (reed) KumoSensor                    | 52   | 2       |
 | Kumostat/Nest Thremostat                         | 62   | 4       |
 | Infra-Red (PIR) KumoSensor                       | 72   | 2       |
@@ -124,35 +125,35 @@ with:
 The supported drivers that are used from the [GetTagList](http://wirelesstag.net/ethClient.asmx?op=GetTagList)
 data is shown in the following table along with information passed back from the [LoadEventURLConfig](http://wirelesstag.net/ethClient.asmx?op=LoadEventURLConfig)
 
-| Driver   | NLS   | Name             | 12 | 13 | 21 | 26 | 32 | 52 | 62 | 72 | 82 | 92 | Notes |
-| -------- | ----- | ---------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | ----- |
-| UOM      | CORF  | degree           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GPV      | INT   | tagType          | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GV1      | INT   | TagId (slaveId)  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| ST       | BOOL  | alive            | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| CV       | FLOAT | batteryVolt      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GV7      | BONOFF| lit              | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| ALARM    | EVST  | eventState       | X  | X  | X  | X  |    | X  |    | X  |    |    |       |
-| GV9      | TMST  | tempEventState   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GV8      | BOOL  | oor              | X  | X  | X  | X  | X  | X  |    | X  |    |    | Out Of Range |
-| LUMIN    | FLOAT | lux              |    |    |    | X  |    |    |    |    |    |    |       |
-| CLITEMP  | FLOAT | temperature      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| CLIHUM   | FLOAT | cap              |    | X  | X  | X  | X  | X  | X  | X  |    |    |       |
-| GV10     | CPST  | CapEventState    |    | X  | X  | X  | X  | X  |    | X  |    |    |       |
-| GV11     | LIST  | lightEventState  |    |    |    | X  |    |    |    |    |    |    |       |
-| GV12     | WTST  | water detected/dried |    |    |    |    |  X |    |    |    |    |    |   N1   |
-| BATLVL   | FLOAT | batteryRemaining | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GV2      | BOOL  | motion           | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
-| GV3      | FLOAT | orien            | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
-| GV4      | FLOAT | xaxis            | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
-| GV5      | FLOAT | yaxis            | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
-| GV6      | FLOAT | zaxis            | X  | X  | X  |    |    |    |    |    |    |    |   N1  |
-| NS1      | FLOAT | lowTH            | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| NS1      | FLOAT | highTH           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| NS1      | FLOAT | rssi             | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| NS1      | FLOAT | txpwr            | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
-| GV13     | INT   | time             | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |   N2  |
-| GV14     | INT   | seconds since update | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |   N2  |
+| Driver   | NLS   | Name             | 12 | 13 | 21 | 42 | 26 | 32 | 52 | 62 | 72 | 82 | 92 | Notes |
+| -------- | ----- | ---------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | ----- |
+| UOM      | CORF  | degree           | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GPV      | INT   | tagType          | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GV1      | INT   | TagId (slaveId)  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| ST       | BOOL  | alive            | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| CV       | FLOAT | batteryVolt      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GV7      | BONOFF| lit              | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| ALARM    | EVST  | eventState       | X  | X  | X  | X  | X  |    | X  |    | X  |    |    |       |
+| GV9      | TMST  | tempEventState   | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GV8      | BOOL  | oor              | X  | X  | X  |    | X  | X  | X  |    | X  |    |    | Out Of Range |
+| LUMIN    | FLOAT | lux              |    |    |    |    | X  |    |    |    |    |    |    |       |
+| CLITEMP  | FLOAT | temperature      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| CLIHUM   | FLOAT | cap              |    | X  | X  |    | X  | X  | X  | X  | X  |    |    |       |
+| GV10     | CPST  | CapEventState    |    | X  | X  |    | X  | X  | X  |    | X  |    |    |       |
+| GV11     | LIST  | lightEventState  |    |    |    |    | X  |    |    |    |    |    |    |       |
+| GV12     | WTST  | water detected/dried |    |    |     |   |    |  X |    |    |    |    |    |   N1   |
+| BATLVL   | FLOAT | batteryRemaining | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |       |
+| GV2      | BOOL  | motion           | X  | X  | X  |    |    |    |    |    |    |    |    |   N1  |
+| GV3      | FLOAT | orien            | X  | X  | X  |    |    |    |    |    |    |    |    |   N1  |
+| GV4      | FLOAT | xaxis            | X  | X  | X  |    |    |    |    |    |    |    |    |   N1  |
+| GV5      | FLOAT | yaxis            | X  | X  | X  |    |    |    |    |    |    |    |    |   N1  |
+| GV6      | FLOAT | zaxis            | X  | X  | X  |    |    |    |    |    |    |    |    |   N1  |
+| NS1      | FLOAT | lowTH            | X  | X  | X  |    | X  | X  | X  | X  | X  | X  | X  |       |
+| NS1      | FLOAT | highTH           | X  | X  | X  |    | X  | X  | X  | X  | X  | X  | X  |       |
+| NS1      | FLOAT | rssi             | X  | X  | X  |    | X  | X  | X  | X  | X  | X  | X  |       |
+| NS1      | FLOAT | txpwr            | X  | X  | X  |    | X  | X  | X  | X  | X  | X  | X  |       |
+| GV13     | INT   | time             | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |   N2  |
+| GV14     | INT   | seconds since update | X  | X  |  X  |X  | X  | X  | X  | X  | X  | X  | X  |   N2  |
 
 
   - NA1 = Not Applicable, since it's available in eventState?
