@@ -260,6 +260,8 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/rXAGk9)
 
+  - 0.0.24 03/14/2018
+    - Tag 42 - Outdoor Probe/Thermocouple added.  Thanks to https://github.com/mayermd
   - 0.0.23 03/12/2018
     - Remove moisture from 26 and 52
     - Fix lux for all
