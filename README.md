@@ -260,6 +260,10 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/rXAGk9)
 
+  - 0.0.25 03/15/2018
+    - Add lock sending Tag Manager specific commands.  Seems to resolve all issues with multiple tag managers.
+    - Fix typo https://github.com/jimboca/udi-wirelesstag-poly/issues/21
+    - Add carried_away and in_free_fall https://github.com/jimboca/udi-wirelesstag-poly/issues/19
   - 0.0.24 03/14/2018
     - Tag 42 - Outdoor Probe/Thermocouple added.  Thanks to https://github.com/mayermd
   - 0.0.23 03/12/2018
