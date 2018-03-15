@@ -311,7 +311,7 @@ class wtServer():
     def api_select_and_post_d(self,tmgr_mac,path,params):
         # A very dumb lock... But seems to work.
         while self._slock is not False:
-            self.l_debug('api_select_and_post_d',"Locked by {0} {1}".format(self._slock,self._slockp))
+            self.l_debug('api_select_and_post_d',"For {0} {1} already locked by {2} {3}".format(tmgr_mac,path,self._slock,self._slockp))
             time.sleep(1)
         self._slockp = path
         self._slock = tmgr_mac
