@@ -277,12 +277,10 @@ class wTagManager(polyinterface.Node):
             self.set_url_config_st = res['st']
 
     def get_tag_list(self):
-        ret = self.controller.wtServer.GetTagList(self.mac,)
-        if ret['st'] is False:
-            self.set_st(False)
-            self.l_error('get_tag_list',"Unable to select get tags")
-        else:
-            self.set_st(True)
+        ret = self.controller.wtServer.GetTagList(self.mac)
+        self.set_st(ret)
+        if ret: return ret
+        self.l_error('get_tag_list',"Failed: st={}".format(ret))
         return ret
 
     def l_info(self, name, string):
