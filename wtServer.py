@@ -7,7 +7,7 @@
 from http.server import HTTPServer,BaseHTTPRequestHandler
 from urllib import parse
 from urllib.parse import parse_qsl
-import socket, threading, sys, requests, json
+import socket, threading, sys, requests, json, time
 import netifaces as ni
 
 class wtHandler(BaseHTTPRequestHandler):
@@ -148,6 +148,7 @@ class wtServer():
         self.url = self.rest.url
         if self.oauth2_code != False:
             self.get_access_token()
+        self._slock = False
         return True
 
     def get_handler(self,command,params):
@@ -308,9 +309,17 @@ class wtServer():
         return mgd['st']
 
     def api_select_and_post_d(self,tmgr_mac,path,params):
+        # A very dumb lock...
+        while self._slock is not False:
+            self.l_debug('api_select_and_post_d',"Locked by {}".format(self._slock))
+            time.sleep(1)
+        self._slock = tmgr_mac
         if self.SelectTagManager(tmgr_mac):
-            return self.api_post_d(path,params)
-        return { 'st': False }
+            ret = self.api_post_d(path,params)
+        else
+            ret = { 'st': False }
+        self._slock = False
+        return ret
 
     # http://wirelesstag.net/ethClient.asmx?op=GetServerTime
     def GetServerTime(self,tmgr_mac):
