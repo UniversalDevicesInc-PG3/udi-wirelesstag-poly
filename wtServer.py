@@ -309,7 +309,7 @@ class wtServer():
         return mgd['st']
 
     def api_select_and_post_d(self,tmgr_mac,path,params):
-        # A very dumb lock...
+        # A very dumb lock... But seems to work.
         while self._slock is not False:
             self.l_debug('api_select_and_post_d',"Locked by {}".format(self._slock))
             time.sleep(1)
