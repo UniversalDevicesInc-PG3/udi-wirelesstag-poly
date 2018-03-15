@@ -296,20 +296,6 @@ class wtController(polyinterface.Controller):
         self.set_comm(mgd['st'])
         return mgd
 
-    def get_server_time(self):
-        if not self.authorized('get_server_time') : return { 'st': False }
-        mgd = self.wtServer.GetServerTime()
-        self.set_comm(mgd['st'])
-        if 'result' in mgd:
-            self.server_time = mgd['result']
-        return mgd
-
-    def load_temp_sensor_config(self,tag_id):
-        if not self.authorized('load_temp_sensor_config') : return { 'st': False }
-        mgd = self.wtServer.LoadTempSensorConfig({'id': tag_id})
-        self.set_comm(mgd['st'])
-        return mgd
-
     def get_node(self,address):
         """
         Returns a node that already exists in the controller.

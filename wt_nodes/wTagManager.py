@@ -88,7 +88,7 @@ class wTagManager(polyinterface.Node):
         the parent class, so you don't need to override this method unless
         there is a need.
         """
-        mgd = self.controller.wtServer.GetTagList()
+        mgd = self.controller.wtServer.GetTagList(self.mac)
         if mgd['st']:
             self.set_st(False)
             for tag in mgd['result']:
@@ -251,7 +251,7 @@ class wTagManager(polyinterface.Node):
             self.l_error("_set_url_config","No tags in Polyglot DB, you need to discover?")
             return False
         def_param = '0={0}&1={1}&2={2}'
-        mgd = self.controller.wtServer.LoadEventURLConfig({'id':tags[0].tag_id})
+        mgd = self.controller.wtServer.LoadEventURLConfig(self.mac,{'id':tags[0].tag_id})
         self.l_debug('set_url_config','{0}'.format(mgd))
         if mgd['st'] is False:
             self.set_url_config_st = False
@@ -273,21 +273,16 @@ class wTagManager(polyinterface.Node):
                     value['nat'] = True
                     newconfig[key] = value
             # Changed to applyAll True for now?
-            res = self.controller.wtServer.SaveEventURLConfig({'id':tags[0].tag_id, 'config': newconfig, 'applyAll': True})
+            res = self.controller.wtServer.SaveEventURLConfig(self.mac,{'id':tags[0].tag_id, 'config': newconfig, 'applyAll': True})
             self.set_url_config_st = res['st']
 
     def get_tag_list(self):
-        ret = self.controller.wtServer.SelectTagManager(self.mac)
+        ret = self.controller.wtServer.GetTagList(self.mac,)
         if ret['st'] is False:
             self.set_st(False)
-            self.l_error('get_tag_list',"Unable to select tag manager: {}".format(self.mac))
+            self.l_error('get_tag_list',"Unable to select get tags")
         else:
-            ret = self.controller.wtServer.GetTagList()
-            if ret['st'] is False:
-                self.set_st(False)
-                self.l_error('get_tag_list',"Unable to select get tags")
-            else:
-                self.set_st(True)
+            self.set_st(True)
         return ret
 
     def l_info(self, name, string):

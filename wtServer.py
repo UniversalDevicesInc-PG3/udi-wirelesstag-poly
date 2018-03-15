@@ -274,7 +274,7 @@ class wtServer():
     def api_post_d(self,path,payload,dump=True):
         """
         Call the api path with payload expecting data in d entry
-        Return sttatus and result
+        Return status and result
         """
         if dump:
             payload = json.dumps(payload)
@@ -301,63 +301,56 @@ class wtServer():
     # http://wirelesstag.net/ethAccount.asmx?op=SelectTagManager
     def SelectTagManager(self,mgr_mac):
         # This doesn't like how request converts dict to json, so do it here.
-        if hasattr(self,'last_selected') and self.last_selected == mgr_mac: return { 'st': True }
+        if hasattr(self,'last_selected') and self.last_selected == mgr_mac: return True
         mgd = self.api_post_d('ethAccount.asmx/SelectTagManager',{'mac':mgr_mac})
         if mgd['st']:
-            last_selected = mgr_mac
-        return mgd
+            self.last_selected = mgr_mac
+        return mgd['st']
+
+    def api_select_and_post_d(self,tmgr_mac,path,params):
+        if self.SelectTagManager(tmgr_mac):
+            return self.api_post_d(path,params)
+        return { 'st': False }
 
     # http://wirelesstag.net/ethClient.asmx?op=GetServerTime
-    def GetServerTime(self):
-        return self.api_post_d('ethClient.asmx/GetServerTime',{})
+    def GetServerTime(self,tmgr_mac):
+        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/GetServerTime',{})
 
     # http://wirelesstag.net/ethClient.asmx?op=GetTagList
-    def GetTagList(self):
-        return self.api_post_d('ethClient.asmx/GetTagList',{})
+    def GetTagList(self,tmgr_mac):
+        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/GetTagList',{})
 
     # http://wirelesstag.net/ethClient.asmx?op=LoadEventURLConfig
-    def LoadEventURLConfig(self,params):
-        return self.api_post_d('ethClient.asmx/LoadEventURLConfig',params)
+    def LoadEventURLConfig(self,tmgr_mac,params):
+        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/LoadEventURLConfig',params)
 
     # http://wirelesstag.net/ethClient.asmx?op=SaveEventURLConfig
-    def SaveEventURLConfig(self,params):
-        return self.api_post_d('ethClient.asmx/SaveEventURLConfig',params)
+    def SaveEventURLConfig(self,tmgr_mac,params):
+        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/SaveEventURLConfig',params)
 
     # http://wirelesstag.net/ethClient.asmx?op=LoadTempSensorConfig
-    def LoadTempSensorConfig(self,params):
-        return self.api_post_d('ethClient.asmx/LoadTempSensorConfig',params)
+    def LoadTempSensorConfig(self,tmgr_mac,params):
+        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/LoadTempSensorConfig',params)
 
     # http://wirelesstag.net/ethClient.asmx?op=GetTagListCached
-    def DontUseThisGetTagListCached(self,params):
-        return self.api_post_d('ethClient.asmx/GetTagListCached',params)
+    def DontUseThisGetTagListCached(self,tmgr_mac,params):
+        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/GetTagListCached',params)
 
     # http://wirelesstag.net/ethClient.asmx?op=RequestImmediatePostback
-    def RequestImmediatePostback(self,params):
-        return self.api_post_d('ethClient.asmx/RequestImmediatePostback',params)
+    def RequestImmediatePostback(self,tmgr_mac,params):
+        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/RequestImmediatePostback',params)
 
-    def RebootTagManager(self,mgr_mac):
-        ret = self.SelectTagManager(mgr_mac)
-        if ret['st']:
-            ret = self.api_post_d('ethClient.asmx/RebootTagManager',{})
-        return ret
+    def RebootTagManager(self,tmgr_mac):
+        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/RebootTagManager',{})
 
-    def PingAllTags(self,mgr_mac):
-        ret = self.SelectTagManager(mgr_mac)
-        if ret['st']:
-            ret = self.api_post_d('ethClient.asmx/PingAllTags',{'autoRetry':True})
-        return ret
+    def PingAllTags(self,tmgr_mac):
+        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/PingAllTags',{'autoRetry':True})
 
-    def LightOn(self,mgr_mac,id,flash):
-        ret = self.SelectTagManager(mgr_mac)
-        if ret['st']:
-            ret = self.api_post_d('ethClient.asmx/LightOn',{'id': id, 'flash':flash})
-        return ret
+    def LightOn(self,tmgr_mac,id,flash):
+        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/LightOn',{'id': id, 'flash':flash})
 
-    def LightOff(self,mgr_mac,id):
-        ret = self.SelectTagManager(mgr_mac)
-        if ret['st']:
-            ret = self.api_post_d('ethClient.asmx/LightOff',{'id': id})
-        return ret
+    def LightOff(self,tmgr_mac,id):
+        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/LightOff',{'id': id})
 
 def my_ghandler(command,params):
     return True
