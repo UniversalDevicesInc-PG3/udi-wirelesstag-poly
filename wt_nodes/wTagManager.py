@@ -142,7 +142,7 @@ class wTagManager(polyinterface.Node):
         self.l_debug('longPoll','...')
         if self.st is False:
             ret = self.controller.wtServer.SelectTagManager(self.mac)
-            self.set_st(ret['st'])
+            self.set_st(ret)
 
     def discover(self, thread=False):
         """
