@@ -305,6 +305,7 @@ class wTagManager(polyinterface.Node):
         self.set_st(params['online'])
 
     def set_st(self,value,force=False):
+        self.l_debug('set_st',"{},{}".format(value,force))
         if not force and hasattr(self,"st") and self.st == value:
             return True
         self.st = value
