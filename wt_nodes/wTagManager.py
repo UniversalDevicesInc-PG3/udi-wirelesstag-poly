@@ -90,7 +90,7 @@ class wTagManager(polyinterface.Node):
         """
         mgd = self.controller.wtServer.GetTagList(self.mac)
         if mgd['st']:
-            self.set_st(False)
+            self.set_st(True)
             for tag in mgd['result']:
                 tag_o = self.get_tag_by_id(tag['slaveId'])
                 if tag_o is None:
