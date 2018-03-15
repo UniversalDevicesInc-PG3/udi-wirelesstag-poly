@@ -316,7 +316,7 @@ class wtServer():
         self._slock = tmgr_mac
         if self.SelectTagManager(tmgr_mac):
             ret = self.api_post_d(path,params)
-        else
+        else:
             ret = { 'st': False }
         self._slock = False
         return ret
