@@ -60,6 +60,7 @@
         </cmd>
         <cmd id="QUERY" />
         <cmd id="PING_ALL_TAGS" />
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="REBOOT" />
         <cmd id="DISCOVER" />
       </accepts>
@@ -95,6 +96,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -128,6 +130,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -164,6 +167,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -199,6 +203,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -235,6 +240,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -270,6 +276,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -301,6 +308,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -331,6 +339,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -362,6 +371,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -392,6 +402,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -417,6 +428,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -442,6 +454,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -473,6 +486,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -502,6 +516,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -527,6 +542,7 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -551,6 +567,7 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -582,6 +599,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -612,6 +630,7 @@
         <cmd id="SET_LIGHT">
           <p id="" editor="I_LIT" init="GV7" />
         </cmd>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -628,6 +647,7 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -643,6 +663,7 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -659,6 +680,7 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>
@@ -674,6 +696,7 @@
     <cmds>
       <sends />
       <accepts>
+        <cmd id="SET_URL_CONFIG" />
         <cmd id="QUERY" />
       </accepts>
     </cmds>

@@ -8,6 +8,7 @@ import time
 import re
 from copy import deepcopy
 from wt_funcs import id_to_address,myfloat
+from wt_params import wt_params
 
 LOGGER = polyinterface.LOGGER
 DLEV = 0
@@ -50,6 +51,7 @@ class wTag(polyinterface.Node):
         self.address = address
         self.id = 'wTag' # Until we figure out the uom
         self.name = name
+        self.node_set_url = False
         if node_data is not None:
             # An existing node,
             self.is_new = False
@@ -223,7 +225,7 @@ class wTag(polyinterface.Node):
         #self.set_tag_id(self.tag_id,True)
         #self.set_tag_uom(self.tag_uom,True)
         # This askes for the sensor to report
-        mgd = self.controller.wtServer.RequestImmediatePostback({'id':self.tag_id})
+        mgd = self.primary_n.RequestImmediatePostback({'id':self.tag_id})
         if mgd['st']:
             self.set_from_tag_data(mgd['result'])
             self.reportDrivers()
@@ -239,6 +241,32 @@ class wTag(polyinterface.Node):
 
     def l_debug(self, name, string):
         LOGGER.debug("%s:%s:%s:%s:%s: %s" % (self.primary_n.name,self.name,self.address,self.id,name,string))
+
+    def set_url_config(self,force=False):
+        # If we haven't tried to set this nodes url's or it failed, the reset it.
+        url = self.controller.wtServer.listen_url
+        if not self.node_set_url or force:
+            mgd = self.primary_n.LoadEventURLConfig({'id':self.tag_id})
+            self.l_debug('set_url_config','{0}'.format(mgd))
+            if mgd['st'] is False:
+                self.node_set_url = False
+            else:
+                #{'in_free_fall': {'disabled': True, 'nat': False, 'verb': None, 'url': 'http://', 'content': None}
+                newconfig = dict()
+                for key, value in mgd['result'].items():
+                    if key != '__type':
+                        if key in wt_params:
+                            param = wt_params[key]
+                        else:
+                            self.l_error('set_url_config',"Unknown tag param '{0}'".format(key))
+                            param = def_param
+                        self.l_debug('set_url_config',"key={0} value={1}".format(key,value))
+                        value['disabled'] = False
+                        value['url'] = '{0}/{1}?tmgr_mac={2}&{3}'.format(url,key,self.primary_n.mac,param)
+                        value['nat'] = True
+                        newconfig[key] = value
+                res = self.primary_n.SaveEventURLConfig({'id':self.tag_id, 'config': newconfig, 'applyAll': False})
+                self.node_set_url = res['st']
 
     def get_handler(self,command,params):
         """
@@ -610,18 +638,22 @@ class wTag(polyinterface.Node):
         slit = self.lit
         self.set_lit(value)
         if value == 0:
-            ret = self.controller.wtServer.LightOff(self.primary_n.mac,self.tag_id)
+            ret = self.primary_n.LightOff(self.primary_n.mac,self.tag_id)
         elif value == 1:
-            ret = self.controller.wtServer.LightOn(self.primary_n.mac,self.tag_id,False)
+            ret = self.primary_n.LightOn(self.primary_n.mac,self.tag_id,False)
         elif value == 2:
-            ret = self.controller.wtServer.LightOn(self.primary_n.mac,self.tag_id,True)
+            ret = self.primary_n.LightOn(self.primary_n.mac,self.tag_id,True)
         if ret['st']:
             self.set_from_tag_data(ret['result'])
         else:
             # Command failed, restore status
             self.set_lit(slit)
 
+    def cmd_set_url_config(self,command):
+        self.set_url_config(force=True)
+
     commands = {
         'QUERY': query,
         'SET_LIGHT': cmd_set_light,
+        'SET_URL_CONFIG': cmd_set_url_config,
     }

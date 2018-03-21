@@ -129,6 +129,7 @@ class wtREST():
 class wtServer():
 
     def __init__(self,logger,client_id,client_secret,ghandler=None,oauth2_code=False):
+        self.l_name = "wtServer"
         self.logger = logger
         self.client_id = client_id
         self.client_secret = client_secret
@@ -146,8 +147,10 @@ class wtServer():
         self.listen_url  = self.rest.url
         self.listen_port = self.rest.listen_port
         self.url = self.rest.url
+        # Start the session for talking to wirelesstag server
+        self.session = wtSession(self,self.logger,self)
         if self.oauth2_code != False:
-            self.get_access_token()
+            self.pull_access_token()
         self._slock = False
         return True
 
@@ -162,7 +165,7 @@ class wtServer():
             message = "\nGot code {}, asking for access token\n".format(params['code'])
             self.oauth2_code = params['code']
             self.l_info('get_handler','Got code: {}'.format(self.oauth2_code))
-            tr = self.get_access_token()
+            tr = self.pull_access_token()
             if tr == False:
                 code = 500
                 message += "ERROR: Unable to get access token from code, see log"
@@ -192,10 +195,10 @@ class wtServer():
             self.l_error('get_handler','code={0} message={1}'.format(code,message))
         return  { 'code': code, 'message': message }
 
-    def get_access_token(self,code=None):
+    def pull_access_token(self,code=None):
         if code is not None:
             self.oauth2_code = code
-        aret = self.http_post('oauth2/access_token.aspx',
+        aret = self.session.post('oauth2/access_token.aspx',
                               {
                                   'client_id': self.client_id,
                                   'client_secret': self.client_secret,
@@ -204,58 +207,18 @@ class wtServer():
         # This gives us:
         # {'token_type': 'Bearer', 'access_token': '...', 'expires_in': 9999999}
         if aret == False:
-            self.l_error('get_access_token','Failed')
+            self.l_error('pull_access_token','Failed')
             self.access_token = aret
             return aret
         self.access_token = aret['access_token']
         self.token_type   = aret['token_type']
         self.l_debug('start',"token_type={} access_token={}".format(self.token_type,self.access_token))
 
-    def http_post(self,path,payload,use_token=True):
-        #url = "http://www.mytaglist.com/{}".format(path)
-        url = "http://wirelesstag.net/{}".format(path)
-        self.l_debug('http_post',"Sending: url={0} payload={1}".format(url,payload))
-        if use_token:
-            if self.access_token is False:
-                self.l_error('http_post',"No authorization for url={0} payload={1}".format(url,payload))
-                return False
-            headers = {
-                "Authorization": "{0} {1}".format(self.token_type,self.access_token),
-                "Content-Type": "application/json"
-            }
-        else:
-            headers = {}
-        try:
-            response = requests.post(
-                url,
-                headers=headers,
-                data=payload,
-                timeout=10
-            )
-        # This is supposed to catch all request excpetions.
-        except requests.exceptions.RequestException as e:
-            self.l_error('http_post',"Connection error for %s: %s" % (url, e))
-            return False
-        self.l_debug('http_post',' Got: code=%s' % (response.status_code))
-        if response.status_code == 200:
-            #self.l_debug('http_post',"Got: text=%s" % response.text)
-            try:
-                d = json.loads(response.text)
-            except (Exception) as err:
-                self.l_error('http_post','Failed to convert to json {0}: {1}'.format(response.text,err), exc_info=True)
-                return False
-            return d
-        elif response.status_code == 400:
-            self.l_error('http_post',"Bad request: %s" % (url) )
-        elif response.status_code == 404:
-            self.l_error('http_post',"Not Found: %s" % (url) )
-        elif response.status_code == 401:
-            # Authentication error
-            self.l_error('http_post',
-                "Failed to authenticate, please check your username and password")
-        else:
-            self.l_error('http_post',"Unknown response %s: %s %s" % (response.status_code, url, response.text) )
-        return False
+    def get_access_token(self):
+        return self.access_token
+
+    def get_token_type(self):
+        return self.token_type
 
     def l_info(self, name, string):
         self.logger.info("%s: %s" %  (name,string))
@@ -269,98 +232,128 @@ class wtServer():
     def l_debug(self, name, string):
         self.logger.debug("%s: %s" % (name,string))
 
-    """
-    Wiress Tags API Functions
-    """
+    # These match the names used in the API
+
+    # http://wirelesstag.net/ethAccount.asmx?op=IsSignedIn
+    def IsSignedIn(self):
+        return self.session.api_post_d('ethAccount.asmx/IsSignedIn',{})
+
+    # These match the names used in the API:
+    # http://wirelesstag.net/ethAccount.asmx?op=GetTagManagers
+    def GetTagManagers(self):
+        return self.session.api_post_d('ethAccount.asmx/GetTagManagers',{})
+
+    # http://wirelesstag.net/ethClient.asmx?op=GetServerTime
+    def GetServerTime(self):
+        return self.session.api_post_d('ethClient.asmx/GetServerTime',{})
+
+class wtSession():
+
+    def __init__(self,parent,logger,wtServer,tmgr_mac=None):
+        self.parent = parent
+        self.logger = logger
+        self.wtServer = wtServer
+        self.tmgr_mac = tmgr_mac
+        self.tmgr_mac_st = False
+        self.session = requests.Session()
+        self.select_tag_manager()
+
+
+    def select_tag_manager(self,force=False):
+        if self.tmgr_mac is None:
+            return True
+        if not self.tmgr_mac_st or force:
+            mgd = self.api_post_dn('ethAccount.asmx/SelectTagManager',{'mac':self.tmgr_mac})
+            self.tmgr_mac_st = mgd['st']
+            self.session.headers.update({'X-Set-Mac': self.tmgr_mac})
+        return self.tmgr_mac_st
+
+    def post(self,path,payload,use_token=True):
+        #url = "http://www.mytaglist.com/{}".format(path)
+        url = "http://wirelesstag.net/{}".format(path)
+        self.l_debug('post',"Sending: url={0} payload={1}".format(url,payload))
+        if use_token:
+            access_token = self.wtServer.get_access_token()
+            if access_token is False:
+                self.l_error('post',"No authorization for url={0} payload={1}".format(url,payload))
+                return False
+            token_type   = self.wtServer.get_token_type()
+            self.session.headers.update(
+                {
+                    "Authorization": "{0} {1}".format(token_type,access_token),
+                    "Content-Type": "application/json"
+                }
+            )
+        else:
+            self.session.headers.update({})
+        try:
+            response = self.session.post(
+                url,
+                data=payload,
+                timeout=15
+            )
+        # This is supposed to catch all request excpetions.
+        except requests.exceptions.RequestException as e:
+            self.l_error('post',"Connection error for %s: %s" % (url, e))
+            return False
+        self.l_debug('post',' Got: code=%s' % (response.status_code))
+        if response.status_code == 200:
+            #self.l_debug('http_post',"Got: text=%s" % response.text)
+            try:
+                d = json.loads(response.text)
+            except (Exception) as err:
+                self.l_error('http_post','Failed to convert to json {0}: {1}'.format(response.text,err), exc_info=True)
+                return False
+            return d
+        elif response.status_code == 400:
+            self.l_error('post',"Bad request: %s" % (url) )
+        elif response.status_code == 404:
+            self.l_error('post',"Not Found: %s" % (url) )
+        elif response.status_code == 401:
+            # Authentication error
+            self.l_error('post',
+                "Failed to authenticate, please check your username and password")
+        else:
+            self.l_error('post',"Unknown response %s: %s %s" % (response.status_code, url, response.text) )
+        return False
+
     def api_post_d(self,path,payload,dump=True):
         """
         Call the api path with payload expecting data in d entry
         Return status and result
         """
+        # If we failed to set tag manager, try again
+        if not self.select_tag_manager(): return { 'st': False }
+        return self.api_post_dn(path,payload,dump)
+
+    def api_post_dn(self,path,payload,dump=True):
+        """
+        Just do the post, don't select tag manager
+        """
         if dump:
             payload = json.dumps(payload)
-        aret = self.http_post(path,payload)
-        self.l_debug('api_post_d','path={0} got={1}'.format(path,aret))
+        aret = self.post(path,payload)
+        self.l_debug('post','path={0} got={1}'.format(path,aret))
         if aret == False or not 'd' in aret:
             mret = { 'st': False }
         else:
             mret = { 'st': True, 'result': aret['d'] }
-        self.l_debug('api_post_d','ret={0}'.format(mret))
+        self.l_debug('post','ret={0}'.format(mret))
         return mret
 
-    # These match the names used in the API
+    def l_info(self, name, string):
+        self.logger.info("%s:%s: %s" %  (self.parent.l_name,name,string))
 
-    # http://wirelesstag.net/ethAccount.asmx?op=IsSignedIn
-    def IsSignedIn(self):
-        return self.api_post_d('ethAccount.asmx/IsSignedIn',{})
+    def l_error(self, name, string, exc_info=False):
+        self.logger.error("%s:%s: %s" % (self.parent.l_name,name,string), exc_info=exc_info)
 
-    # These match the names used in the API:
-    # http://wirelesstag.net/ethAccount.asmx?op=GetTagManagers
-    def GetTagManagers(self):
-        return self.api_post_d('ethAccount.asmx/GetTagManagers',{})
+    def l_warning(self, name, string):
+        self.logger.warning("%s:%s: %s" % (self.parent.l_name,name,string))
 
-    # http://wirelesstag.net/ethAccount.asmx?op=SelectTagManager
-    def SelectTagManager(self,mgr_mac):
-        # This doesn't like how request converts dict to json, so do it here.
-        if hasattr(self,'last_selected') and self.last_selected == mgr_mac: return True
-        mgd = self.api_post_d('ethAccount.asmx/SelectTagManager',{'mac':mgr_mac})
-        if mgd['st']:
-            self.last_selected = mgr_mac
-        return mgd['st']
+    def l_debug(self, name, string):
+        self.logger.debug("%s:%s: %s" % (self.parent.l_name,name,string))
 
-    def api_select_and_post_d(self,tmgr_mac,path,params):
-        # A very dumb lock... But seems to work.
-        while self._slock is not False:
-            self.l_debug('api_select_and_post_d',"For {0} {1} already locked by {2} {3}".format(tmgr_mac,path,self._slock,self._slockp))
-            time.sleep(1)
-        self._slockp = path
-        self._slock = tmgr_mac
-        if self.SelectTagManager(tmgr_mac):
-            ret = self.api_post_d(path,params)
-        else:
-            ret = { 'st': False }
-        self._slock = False
-        return ret
 
-    # http://wirelesstag.net/ethClient.asmx?op=GetServerTime
-    def GetServerTime(self,tmgr_mac):
-        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/GetServerTime',{})
-
-    # http://wirelesstag.net/ethClient.asmx?op=GetTagList
-    def GetTagList(self,tmgr_mac):
-        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/GetTagList',{})
-
-    # http://wirelesstag.net/ethClient.asmx?op=LoadEventURLConfig
-    def LoadEventURLConfig(self,tmgr_mac,params):
-        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/LoadEventURLConfig',params)
-
-    # http://wirelesstag.net/ethClient.asmx?op=SaveEventURLConfig
-    def SaveEventURLConfig(self,tmgr_mac,params):
-        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/SaveEventURLConfig',params)
-
-    # http://wirelesstag.net/ethClient.asmx?op=LoadTempSensorConfig
-    def LoadTempSensorConfig(self,tmgr_mac,params):
-        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/LoadTempSensorConfig',params)
-
-    # http://wirelesstag.net/ethClient.asmx?op=GetTagListCached
-    def DontUseThisGetTagListCached(self,tmgr_mac,params):
-        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/GetTagListCached',params)
-
-    # http://wirelesstag.net/ethClient.asmx?op=RequestImmediatePostback
-    def RequestImmediatePostback(self,tmgr_mac,params):
-        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/RequestImmediatePostback',params)
-
-    def RebootTagManager(self,tmgr_mac):
-        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/RebootTagManager',{})
-
-    def PingAllTags(self,tmgr_mac):
-        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/PingAllTags',{'autoRetry':True})
-
-    def LightOn(self,tmgr_mac,id,flash):
-        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/LightOn',{'id': id, 'flash':flash})
-
-    def LightOff(self,tmgr_mac,id):
-        return self.api_select_and_post_d(tmgr_mac,'ethClient.asmx/LightOff',{'id': id})
 
 def my_ghandler(command,params):
     return True
@@ -383,7 +376,7 @@ if __name__ == '__main__':
         logger.info('Exiting from keyboard interupt')
         sys.exit()
     # Manually get the access token
-    obj.get_access_token(code)
+    obj.pull_access_token(code)
     #while obj.oauth2_code == False:
     #    logger.info("Waiting for code...");
     #    time.sleep(10)
