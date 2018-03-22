@@ -82,6 +82,10 @@ ST-GV12-NAME = Wet State
 ST-GV13-NAME = Last Update Time
 ST-GV14-NAME = Seconds Since Update
 
+ST-tag62-GV7-NAME = Fan
+FAN-0 = Auto
+FAN-1 = On
+
 CMD-SET_LIGHT-NAME = Set Light
 
 LIT-0 = Off
@@ -106,6 +110,18 @@ EVST-6 = TimedOut
 EVST-7 = Stabilizing
 EVST-8 = Carried Away
 EVST-9 = In Free Fall
+
+# Tag 62 Thermostat
+EVSTTH-0 = EVSTTH-0
+EVSTTH-1 = EVSTTH-1
+EVSTTH-2 = EVSTTH-2
+EVSTTH-3 = EVSTTH-4
+EVSTTH-4 = EVSTTH-5
+EVSTTH-5 = AC/Heat On
+EVSTTH-6 = AC/Heat Off
+EVSTTH-7 = EVSTTH-7
+EVSTTH-8 = EVSTTH-8
+EVSTTH-9 = EVSTTH-9
 
 TMST-0 = Disarmed
 TMST-1 = Normal

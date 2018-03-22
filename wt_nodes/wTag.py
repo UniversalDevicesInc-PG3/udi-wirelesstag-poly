@@ -114,6 +114,7 @@ class wTag(polyinterface.Node):
             # batv:   Battery Voltag 72=Volt
             {'driver': 'CV',      'value': 0, 'uom': 72},
             # lit:    Light
+            # fan:    Honeywell Fan State
             {'driver': 'GV7',     'value': 0, 'uom': 25},
             # tempState:
             {'driver': 'GV9',     'value': 0, 'uom': 25},
@@ -195,7 +196,10 @@ class wTag(polyinterface.Node):
             self.get_set_xaxis()
             self.get_set_yaxis()
             self.get_set_zaxis()
-            self.get_set_lit()
+            if self.tag_type == 62:
+                self.get_set_fan()
+            else:
+                self.get_set_lit()
             self.get_set_evst()
             self.get_set_oor()
             self.get_set_signaldbm()
@@ -260,6 +264,9 @@ class wTag(polyinterface.Node):
                         else:
                             self.l_error('set_url_config',"Unknown tag param '{0}'".format(key))
                             param = def_param
+                        # (for PIR {1}: timestamp, {2}: tag ID)
+                        if key == 'motion_detected' and self.tag_type == 72:
+                            param = 'name={0}&tagid={2}&ts={1}'
                         self.l_debug('set_url_config',"key={0} value={1}".format(key,value))
                         value['disabled'] = False
                         value['url'] = '{0}/{1}?tmgr_mac={2}&{3}'.format(url,key,self.primary_n.mac,param)
@@ -352,8 +359,12 @@ class wTag(polyinterface.Node):
             self.set_lux(tdata['lux'])
         if 'cap' in tdata:
             self.set_hum(tdata['cap'])
-        if 'lit' in tdata:
-            self.set_lit(tdata['lit'])
+        if self.tag_type == 62:
+            if 'thermostat' in tdata and tdata['thermostat'] is not None and 'fanOn' in tdata['thermostat']:
+                self.set_fan(tdata['thermostat']['fanOn'])
+        else:
+            if 'lit' in tdata:
+                self.set_lit(tdata['lit'])
         if 'eventState' in tdata:
             self.set_evst(tdata['eventState'])
         if 'oor' in tdata:
@@ -424,6 +435,16 @@ class wTag(polyinterface.Node):
 
     def set_lit(self,value):
         self.l_debug('set_lit','{0}'.format(value))
+        self.setDriver('GV7', int(value))
+
+    def get_set_fan(self):
+        # Get current value, if None then we don't have this driver.
+        value = self.getDriver('GV7')
+        if value is None: return
+        self.set_lit(value)
+
+    def set_fan(self,value):
+        self.l_debug('set_fan','{0}'.format(value))
         self.setDriver('GV7', int(value))
 
     def get_set_lux(self):

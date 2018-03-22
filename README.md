@@ -260,6 +260,13 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/rXAGk9)
 
+  - 2.0.0  03/22/2018
+    - Why jump to 2.0.0?  Because it's Polyglot V2, should have started with that :)
+    - And the big addition of what should be proper support for multiple Tag Managers https://github.com/jimboca/udi-wirelesstag-poly/issues/26
+    - Profile updates for Honeywell thermostats https://github.com/jimboca/udi-wirelesstag-poly/issues/14
+    - Add Set URL Config buttons https://github.com/jimboca/udi-wirelesstag-poly/issues/25
+    - Program Tag URL individually https://github.com/jimboca/udi-wirelesstag-poly/issues/23 and fix for PIR sensor
+    - 
   - 0.0.25 03/15/2018
     - Add lock sending Tag Manager specific commands.  Seems to resolve all issues with multiple tag managers.
     - Fix typo https://github.com/jimboca/udi-wirelesstag-poly/issues/21
