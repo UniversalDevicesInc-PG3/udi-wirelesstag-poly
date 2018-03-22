@@ -265,8 +265,9 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
     - And the big addition of what should be proper support for multiple Tag Managers https://github.com/jimboca/udi-wirelesstag-poly/issues/26
     - Profile updates for Honeywell thermostats https://github.com/jimboca/udi-wirelesstag-poly/issues/14
     - Add Set URL Config buttons https://github.com/jimboca/udi-wirelesstag-poly/issues/25
-    - Program Tag URL individually https://github.com/jimboca/udi-wirelesstag-poly/issues/23 and fix for PIR sensor
-    - 
+    - Program Tag URL individually https://github.com/jimboca/udi-wirelesstag-poly/issues/23 and fix for PIR sensor type 72
+    - Typo in Wireless Tag type 62 in Wireless Tag node server https://github.com/jimboca/udi-wirelesstag-poly/issues/21
+    - Add carried_away and in_free_fall params https://github.com/jimboca/udi-wirelesstag-poly/issues/19
   - 0.0.25 03/15/2018
     - Add lock sending Tag Manager specific commands.  Seems to resolve all issues with multiple tag managers.
     - Fix typo https://github.com/jimboca/udi-wirelesstag-poly/issues/21
