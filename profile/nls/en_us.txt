@@ -1,5 +1,6 @@
 
 # All
+CMD-TEST-NAME = Test
 CMD-DISCOVER-NAME = Discover
 CMD-QUERY-NAME = Query
 CMD-PING_ALL_TAGS-NAME = Ping All Tags

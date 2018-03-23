@@ -14,7 +14,7 @@ from wt_nodes import wTag
 LOGGER = polyinterface.LOGGER
 
 # For even more debug... should make a setting?
-DEBUG_LEVEL=0
+DEBUG_LEVEL=1
 
 class wTagManager(polyinterface.Node):
     """
@@ -69,8 +69,8 @@ class wTagManager(polyinterface.Node):
         """
         self.l_info('start','...')
         self.set_st(True)
+        self.get_use_tags()
         self.start_session()
-        self.get_set_use_tags()
         self.l_info("start",'{0} {1}'.format(self._drivers,self.use_tags))
         self.degFC = 1 # I like F.
         # When we are added by the controller discover, then run our discover.
@@ -181,7 +181,8 @@ class wTagManager(polyinterface.Node):
         This has to loop thru the _nodes list to figure out if it's one of the
         tags for this tag manager.
         """
-        if DEBUG_LEVEL > 0: self.l_debug("add_existing_tags","Looking for my tags in _nodes={}".format(self.controller._nodes))
+        self.l_debug("add_existing_tags","Looking for my tags")
+        if DEBUG_LEVEL > 0: self.l_debug("add_existing_tags"," in _nodes={}".format(self.controller._nodes))
         for address in self.controller._nodes:
             if address != self.address:
                 node = self.controller._nodes[address]
@@ -343,8 +344,11 @@ class wTagManager(polyinterface.Node):
         else:
             self.setDriver('ST', 0)
 
-    def get_set_use_tags(self):
-        self.set_use_tags(self.getDriver('GV1'))
+    def get_use_tags(self):
+        self.use_tags = self.getDriver('GV1')
+        if self.use_tags is None: return None
+        self.use_tags = int(self.use_tags)
+        return self.use_tags
 
     def set_use_tags(self,value,force=False):
         if value is None: value = 0
@@ -387,6 +391,9 @@ class wTagManager(polyinterface.Node):
         """
         self.setDriver('ST', 0)
 
+    def cmd_test(self, command):
+        self.l_debug('cmd_test','just a test')
+        self.l_debug('cmd_test',str(self.controller.nodes['foo']))
 
     id = 'wTagManager'
     drivers = [
@@ -400,4 +407,5 @@ class wTagManager(polyinterface.Node):
         'PING_ALL_TAGS': cmd_ping_all_tags,
         'DISCOVER': discover,
         'REBOOT': cmd_reboot,
+        'TEST': cmd_test,
     }
