@@ -46,6 +46,9 @@ class wTagManager(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
+        # Fpr our logger lines
+        self.l_name = "{}:{}:{}".format(self.id,address,name)
+        self.l_debug('__init__','start')
         # Save the real mac before we legalize it.
         self.ready       = False
         self.do_discover = do_discover
@@ -56,8 +59,7 @@ class wTagManager(polyinterface.Node):
         self.discover_thread = None
         self.set_url_thread = None
         self.set_url_config_st = None
-        self.node_set_url = dict()
-        self.l_name = "{}:{}:{}".format(self.id,self.address,self.name)
+        self.l_debug('__init__','done')
 
     def start(self):
         """
@@ -68,12 +70,8 @@ class wTagManager(polyinterface.Node):
         self.l_info('start','...')
         self.set_st(True)
         self.start_session()
-        if self.node_data is False:
-            # New node, set the defaults.
-            self.set_use_tags(0)
-        else:
-            self.set_use_tags(self.getDriver('GV1'))
-            self.l_info("start",'{0} {1}'.format(self._drivers,self.use_tags))
+        self.get_set_use_tags()
+        self.l_info("start",'{0} {1}'.format(self._drivers,self.use_tags))
         self.degFC = 1 # I like F.
         # When we are added by the controller discover, then run our discover.
         if self.do_discover:
@@ -190,15 +188,13 @@ class wTagManager(polyinterface.Node):
                 # One of my tags?
                 self.l_debug("add_existing_tags","check node primary={}".format(node['primary']))
                 if node['primary'] == self.address:
-                    self.l_info("add_existing_tags","node={0} = {1}, update={2}".format(address,node,self.controller.update_profile))
-                    self.add_tag(address=node['address'], name=node['name'], node_data=node, update=self.controller.update_profile)
+                    self.l_info("add_existing_tags","node={0} = {1}".format(address,node))
+                    self.add_tag(address=node['address'], name=node['name'], is_new=False)
         self.set_url_config()
 
-    def add_tag(self, address=None, name=None, tag_type=None, uom=None, tdata=None, node_data=None, update=False):
+    def add_tag(self, address=None, name=None, tag_type=None, uom=None, tdata=None, is_new=True):
         return self.controller.addNode(wTag(self.controller, self.address, address,
-        name=name, tag_type=tag_type, uom=uom, tdata=tdata, node_data=node_data),
-        update=update)
-
+        name=name, tag_type=tag_type, uom=uom, tdata=tdata, is_new=is_new))
 
     """
     Misc functions
@@ -310,10 +306,10 @@ class wTagManager(polyinterface.Node):
         if len(tags) == 0:
             self.l_error("_set_url_config","No tags in Polyglot DB, you need to discover?")
             return False
-        def_param = '0={0}&1={1}&2={2}'
-        self.set_url_config_st = True
+        self.set_url_config_st = False
         for tag in tags:
             tag.set_url_config(force=force)
+        self.set_url_config_st = True
 
 
     def l_info(self, name, string):
@@ -346,6 +342,9 @@ class wTagManager(polyinterface.Node):
             self.setDriver('ST', 1)
         else:
             self.setDriver('ST', 0)
+
+    def get_set_use_tags(self):
+        self.set_use_tags(self.getDriver('GV1'))
 
     def set_use_tags(self,value,force=False):
         if value is None: value = 0
@@ -392,7 +391,7 @@ class wTagManager(polyinterface.Node):
     id = 'wTagManager'
     drivers = [
         {'driver': 'ST',  'value': 0, 'uom': 2},
-        {'driver': 'GV1', 'value': 1, 'uom': 2}  # Use Tags
+        {'driver': 'GV1', 'value': 0, 'uom': 2}, # Use Tags
     ]
     commands = {
         'SET_USE_TAGS': cmd_set_use_tags,

@@ -34,7 +34,7 @@ class wTag(polyinterface.Node):
     """
 
     def __init__(self, controller, primary, address=None, name=None,
-                 tag_type=None, uom=None, tdata=None, node_data=None):
+                 tag_type=None, uom=None, tdata=None, is_new=True):
         """
         Optional.
         Super runs all the parent class necessities. You do NOT have
@@ -45,53 +45,61 @@ class wTag(polyinterface.Node):
         :param address: This nodes address
         :param name: This nodes name
         """
-        LOGGER.debug('wTag:__init__: address={0} name={1} type={2} uom={3}'.format(address,name,tag_type,uom))
+        LOGGER.debug('wTag:__init__: start: address={0} name={1} type={2} uom={3}'.format(address,name,tag_type,uom))
         tag_id = None
          # So logger calls won't crash
         self.address = address
         self.id = 'wTag' # Until we figure out the uom
         self.name = name
+        self.is_new = is_new
         self.node_set_url = False
-        if node_data is not None:
-            # An existing node,
-            self.is_new = False
-            # We need to pull tag_type from GV1 for existing tags.
-            self.tag_uom = -1 # Should never happen, just need for old data added before it existed.
-            for driver in node_data['drivers']:
-                if driver['driver'] == 'GV1':
-                    tag_type = driver['value']
-                elif driver['driver'] == 'GPV':
-                    tag_id   = driver['value']
-                elif driver['driver'] == 'UOM':
-                    self.tag_uom  = driver['value']
-            if tag_id is None:
-                self.l_error('__init__','No tag_id (GPV) in node_data={0}'.format(node_data))
-                return False
-            if tag_type is None:
-                self.l_error('__init__','No tag_type (GV1) in node_data={0}'.format(node_data))
-                return False
-        elif address is None or name is None or tag_type is None:
+        # Have to set this to call getDriver
+        self.controller = controller
+        self.primary_n = controller.nodes[primary]
+        if is_new:
             # It's a new tag.
             self.address = address
             if tdata is None:
-                self.l_error('__init__',"address ({0}), name ({1}), and type ({2}) must be specified when tdata is None".format(address,name,tag_type))
+                self.l_error('__init__',"New node address ({0}), name ({1}), and type ({2}) must be specified when tdata is None".format(address,name,tag_type))
                 return False
             if uom is None:
                 self.l_error('__init__',"uom ({0}) must be specified for new tags.".format(uom))
-            self.is_new   = True
+            self.l_debug('__init__','New node {}'.format(tdata))
             tag_type      = tdata['tagType']
             self.tag_uom  = uom
             tag_id        = tdata['slaveId']
             self.uuid     = tdata['uuid']
             address       = id_to_address(self.uuid)
             name          = tdata['name']
+        else:
+            #
+            # An existing node,
+            self.l_debug('__init__','Existing node...')
+            # We need to pull info from existing tags to know what they are.
+            #
+            # tag_uom = UOM
+            # Should never happen, just need for old data added before it existed.
+            self.tag_uom = self.getDriver('UOM')
+            if self.tag_uom is None:
+                self.l_error('__init__','No tag_uom (UOM)')
+                self.tag_uom = -1
+            # tag_id = GPV
+            tag_id = self.getDriver('GPV')
+            if tag_id is None:
+                self.l_error('__init__','No tag_id (GPV) in node_data={0}'.format(node_data))
+                return False
+            # tag_type = GV1
+            tag_type = self.getDriver('GV1')
+            if tag_type is None:
+                self.l_error('__init__','No tag_type (GV1) in node_data={0}'.format(node_data))
+                return False
         tag_id = int(tag_id)
         tag_type = int(tag_type)
         self.name = name
         self.tdata = tdata
         self.tag_id = tag_id
         self.tag_type = tag_type
-        self.primary_n = controller.nodes[primary]
+        self.l_info('__init__','type={} uom={} id={} address={} name={}'.format(self.tag_type,self.tag_uom,self.tag_id,address,name))
         #
         # C or F?
         # Fix our temp_uom in drivers
@@ -168,7 +176,7 @@ class wTag(polyinterface.Node):
         uomS = "C" if self.tag_uom == 0 else "F"
         self.id = 'wTag' + str(self.tag_type) + uomS
         self.address = address
-        self.l_info('__init__','address={0} name={1} type={2} id={3} uom={4}'.format(address,name,self.tag_type,self.tag_id,self.tag_uom))
+        self.l_info('__init__','super id={} controller{} primary={} address={} name={} type={} id={} uom={}'.format(wTag,controller,primary,address,name,self.tag_type,self.tag_id,self.tag_uom))
         super(wTag, self).__init__(controller, primary, address, name)
 
     def start(self):
@@ -183,31 +191,7 @@ class wTag(polyinterface.Node):
         self.set_tag_uom(self.tag_uom)
         if self.tdata is not None:
             self.set_from_tag_data(self.tdata)
-        else:
-            # These stay the same across reboots as the default.
-            self.get_set_alive()
-            self.get_set_temp()
-            self.get_set_hum()
-            self.get_set_lux()
-            self.get_set_batp()
-            self.get_set_batv()
-            self.get_set_motion()
-            self.get_set_orien()
-            self.get_set_xaxis()
-            self.get_set_yaxis()
-            self.get_set_zaxis()
-            if self.tag_type == 62:
-                self.get_set_fan()
-            else:
-                self.get_set_lit()
-            self.get_set_evst()
-            self.get_set_oor()
-            self.get_set_signaldbm()
-            self.get_set_tmst()
-            self.get_set_cpst()
-            self.get_set_list()
-            self.get_set_wtst()
-            self.set_time_now()
+        self.set_time_now()
         if self.controller.update_profile:
             # Drivers were updated, need to query
             self.query()
@@ -224,10 +208,6 @@ class wTag(polyinterface.Node):
         the parent class, so you don't need to override this method unless
         there is a need.
         """
-        # Polyglot bug?  We have to set every driver before calling reportDrivers?
-        #self.set_tag_type(self.tag_type,True)
-        #self.set_tag_id(self.tag_id,True)
-        #self.set_tag_uom(self.tag_uom,True)
         # This askes for the sensor to report
         mgd = self.primary_n.RequestImmediatePostback({'id':self.tag_id})
         if mgd['st']:
@@ -399,15 +379,9 @@ class wTag(polyinterface.Node):
         self.tag_uom = value
         self.setDriver('UOM', value)
 
-    def get_set_alive(self):
-        self.set_alive(self.getDriver('ST'))
-
     def set_alive(self,value):
         self.l_debug('set_alive','{0}'.format(value))
         self.setDriver('ST', int(value))
-
-    def get_set_temp(self):
-        self.set_temp(self.getDriver('CLITEMP'),False)
 
     def set_temp(self,value,convert=True):
         self.l_debug('set_temp','{0},{1}'.format(value,convert))
@@ -417,61 +391,27 @@ class wTag(polyinterface.Node):
         value = myfloat(value,1)
         self.setDriver('CLITEMP', value)
 
-    def get_set_hum(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('CLIHUM')
-        if value is None: return
-        self.set_hum(value)
-
     def set_hum(self,value):
         self.l_debug('set_hum','{0}'.format(value))
         self.setDriver('CLIHUM', myfloat(value,1))
 
-    def get_set_lit(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV7')
-        if value is None: return
-        self.set_lit(value)
 
     def set_lit(self,value):
         self.l_debug('set_lit','{0}'.format(value))
         self.setDriver('GV7', int(value))
 
-    def get_set_fan(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV7')
-        if value is None: return
-        self.set_lit(value)
 
     def set_fan(self,value):
         self.l_debug('set_fan','{0}'.format(value))
         self.setDriver('GV7', int(value))
 
-    def get_set_lux(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('LUMIN')
-        if value is None: return
-        self.set_lux(value)
-
     def set_lux(self,value):
         self.l_debug('set_lux','{0}'.format(value))
         self.setDriver('LUMIN', myfloat(value,2))
 
-    def get_set_batp(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('BATLVL')
-        if value is None: return
-        self.set_batp(value)
-
     def set_batp(self,value,force=False):
         self.l_debug('set_batp','{0}'.format(value))
         self.setDriver('BATLVL', myfloat(value,2))
-
-    def get_set_batv(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('CV')
-        if value is None: return
-        self.set_batv(value)
 
     def set_batv(self,value):
         self.setDriver('CV', myfloat(value,3))
@@ -480,12 +420,6 @@ class wTag(polyinterface.Node):
         # TODO: Implement battery low!
         return
         self.setDriver('CV', value)
-
-    def get_set_motion(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV2')
-        if value is None: return
-        self.set_motion(value)
 
     def set_motion(self,value=None):
         self.l_debug('set_motion','{0}'.format(value))
@@ -503,52 +437,21 @@ class wTag(polyinterface.Node):
         elif value == 4: # Closed
             self.set_evst(4,andMotion=False) # Closed
 
-
-    def get_set_orien(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV3')
-        if value is None: return
-        self.set_orien(value)
-
     def set_orien(self,value):
         self.l_debug('set_orien','{0}'.format(value))
         self.setDriver('GV3', myfloat(value,1))
-
-    def get_set_xaxis(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV4')
-        if value is None: return
-        self.set_xaxis(value)
 
     def set_xaxis(self,value):
         self.l_debug('set_xaxis','{0}'.format(value))
         self.setDriver('GV4', int(value))
 
-    def get_set_yaxis(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV5')
-        if value is None: return
-        self.set_yaxis(value)
-
     def set_yaxis(self,value):
         self.l_debug('set_yaxis','{0}'.format(value))
         self.setDriver('GV5', int(value))
 
-    def get_set_zaxis(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV6')
-        if value is None: return
-        self.set_zaxis(value)
-
     def set_zaxis(self,value):
         self.l_debug('set_zaxis','{0}'.format(value))
         self.setDriver('GV6', int(value))
-
-    def get_set_evst(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('ALARM')
-        if value is None: return
-        self.set_evst(value)
 
     def set_evst(self,value,andMotion=True):
         self.l_debug('set_evst','{0}'.format(value))
@@ -557,61 +460,25 @@ class wTag(polyinterface.Node):
         if andMotion and int(value) == 1:
             self.set_motion(0)
 
-    def get_set_oor(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV8')
-        if value is None: return
-        self.set_oor(value)
-
     def set_oor(self,value):
         self.l_debug('set_oor','{0}'.format(value))
         self.setDriver('GV8', int(value))
-
-    def get_set_signaldbm(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('CC')
-        if value is None: return
-        self.set_signaldbm(value)
 
     def set_signaldbm(self,value):
         self.l_debug('set_signaldbm','{0}'.format(value))
         self.setDriver('CC', int(value))
 
-    def get_set_tmst(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV9')
-        if value is None: return
-        self.set_tmst(value)
-
     def set_tmst(self,value):
         self.l_debug('set_tmst','{0}'.format(value))
         self.setDriver('GV9', int(value))
-
-    def get_set_cpst(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV10')
-        if value is None: return
-        self.set_cpst(value)
 
     def set_cpst(self,value):
         self.l_debug('set_cpst','{0}'.format(value))
         self.setDriver('GV10', int(value))
 
-    def get_set_list(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV11')
-        if value is None: return
-        self.set_list(value)
-
     def set_list(self,value):
         self.l_debug('set_list','{0}'.format(value))
         self.setDriver('GV11', int(value))
-
-    def get_set_wtst(self):
-        # Get current value, if None then we don't have this driver.
-        value = self.getDriver('GV12')
-        if value is None: return
-        self.set_wtst(value)
 
     def set_wtst(self,value):
         self.l_debug('set_wtst','{0}'.format(value))
