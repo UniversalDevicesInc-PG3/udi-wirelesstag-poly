@@ -81,25 +81,19 @@ class wtController(polyinterface.Controller):
             sys.exit()
         self.setDriver('GV1', self.serverdata['version_major'])
         self.setDriver('GV2', self.serverdata['version_minor'])
-        self.debug_mode     = self.getDriver('GV5')
+        self.set_debug_mode(self.getDriver('GV5'))
         # Short Poll
         val = self.getDriver('GV6')
         self.l_debug("start","shortPoll={0} GV6={1}".format(self.polyConfig['shortPoll'],val))
         if val is None or int(val) == 0:
             val = self.polyConfig['shortPoll']
-            self.setDriver('GV6',val)
-        else:
-            self.polyConfig['shortPoll'] = int(val)
-        self.short_poll = val
+        self.set_short_poll(val)
         # Long Poll
         val = self.getDriver('GV7')
         self.l_debug("start","longPoll={0} GV7={1}".format(self.polyConfig['longPoll'],val))
         if val is None or int(val) == 0:
             val = self.polyConfig['longPoll']
-            self.setDriver('GV7',val)
-        else:
-            self.polyConfig['longPoll'] = int(val)
-        self.long_poll = val
+        self.set_long_poll(val)
         if self.wtServer.st:
             self.set_port(self.wtServer.listen_port,True)
         else:
@@ -324,7 +318,7 @@ class wtController(polyinterface.Controller):
             if hasattr(self,'wtServer'):
                 self.addNotice('Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wtServer.url))
             else:
-                self.addNotice("No Athorization, and no REST Server running, this should not be possible!")
+                self.addNotice("No Authorization, and no REST Server running, this should not be possible!")
 
     def set_url_config(self):
         # TODO: Should loop over tag managers, and call set_url_config on the tag manager

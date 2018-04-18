@@ -69,7 +69,7 @@ class wTagManager(polyinterface.Node):
         """
         self.l_info('start','...')
         self.set_st(True)
-        self.get_use_tags()
+        self.set_use_tags(self.get_use_tags())
         self.start_session()
         self.l_info("start",'{0} {1}'.format(self._drivers,self.use_tags))
         self.degFC = 1 # I like F.
