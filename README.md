@@ -262,6 +262,8 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
+NOTE: There is a BUG in Polyglot 2.2.0 so the 'Click Authorize ...' Notice may never disappear from the Polyglot web page.  Hopefully this will be fixed soon.  If the WirelessTagsController 'OAUTH2' is 'True' then it's okay and you don't need to click the authorize.
+
   - 2.0.1  04/17/2018
     - Fix initialization of Short Poll, Long Poll, Debug Mode, on controller, and Monitor Tags of TagManager nodes.
   - 2.0.0  03/22/2018
