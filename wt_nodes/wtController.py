@@ -102,6 +102,8 @@ class wtController(polyinterface.Controller):
         self.check_profile()
         self.add_existing_tag_managers()
         self.query()
+        self.hb = 0
+        self.heartbeat()
         self.ready = True
         self.l_info('start','done')
 
@@ -149,13 +151,23 @@ class wtController(polyinterface.Controller):
         """
         self.l_debug('longPoll','ready={}'.format(self.ready))
         if not self.ready: return False
-        # For now just pinging the serverto make sure it's alive
+        # For now just pinging the server to make sure it's alive
         self.is_signed_in()
         if not self.comm: return self.comm
         # Call long poll on the tags managers
         for address in self.nodes:
             if self.nodes[address].id == 'wTagManager':
                 self.nodes[address].longPoll()
+        self.heartbeat()
+
+    def heartbeat(self):
+        self.l_debug('heartbeat','hb={}'.format(self.hb))
+        if self.hb == 0:
+            self.reportCmd("DON",2)
+            self.hb = 1
+        else:
+            self.reportCmd("DOF",2)
+            self.hb = 0
 
     def query(self):
         """
@@ -166,10 +178,10 @@ class wtController(polyinterface.Controller):
         """
         if not self.authorized('query') : return False
         self.is_signed_in()
-        self.reportDrivers;
+        self.reportDrivers();
         # Don't do this on initial startup!
-        #for node in self.nodes:
-            #self.nodes[node].reportDrivers()
+        for node in self.nodes:
+            self.nodes[node].reportDrivers()
 
     def add_existing_tag_managers(self):
         """
@@ -454,7 +466,7 @@ class wtController(polyinterface.Controller):
         'INSTALL_PROFILE': cmd_install_profile
     }
     drivers = [
-        {'driver': 'ST',  'value': 0, 'uom': 2},
+        {'driver': 'ST',  'value': 1, 'uom': 2},
         {'driver': 'GV1', 'value': 0, 'uom': 56}, # vmaj: Version Major
         {'driver': 'GV2', 'value': 0, 'uom': 56}, # vmin: Version Minor
         {'driver': 'GV3', 'value': 0, 'uom': 2},  # auth: Authorized (we have valid oauth2 token)
