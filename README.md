@@ -354,4 +354,3 @@ If you have issues, please create an issue https://github.com/jimboca/udi-wirele
     - First release
   - 0.0.3 02/22/2018
     - Still not released, see TODO list
-                                                                                               
