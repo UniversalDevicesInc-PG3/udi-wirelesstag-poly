@@ -262,6 +262,12 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
+  - 2.0.2  05/03/2018
+    - Fix when query is run to report all nodes
+    - New version of polyinterface will fix issue with Notice's not going away
+    - Added Heartbeat https://github.com/jimboca/udi-wirelesstag-poly/issues/6
+  - 2.0.1  04/17/2018
+    - Fix initialization of Short Poll, Long Poll, Debug Mode, on controller, and Monitor Tags of TagManager nodes.
   - 2.0.0  03/22/2018
     - Why jump to 2.0.0?  Because it's Polyglot V2, should have started with that :)
     - And the big addition of what should now be proper support for multiple Tag Managers https://github.com/jimboca/udi-wirelesstag-poly/issues/26

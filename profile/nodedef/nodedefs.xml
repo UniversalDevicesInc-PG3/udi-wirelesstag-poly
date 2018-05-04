@@ -24,7 +24,10 @@
       <st id="GV8" editor="I_INTEGER" />
     </sts>
     <cmds>
-      <sends />
+      <sends>
+        <cmd id="DON" />
+        <cmd id="DOF" />
+      </sends>
       <accepts>
         <!--  Log Debug Mode -->
         <cmd id="SET_DM">
