@@ -269,7 +269,7 @@ class wtSession():
         return self.tmgr_mac_st
 
     def post(self,path,payload,use_token=True):
-        url = "https://wirelesstag.net/{}".format(path)
+        url = "https://www.mytaglist.com/{}".format(path)
         self.l_debug('post',"Sending: url={0} payload={1}".format(url,payload))
         if use_token:
             access_token = self.wtServer.get_access_token()
