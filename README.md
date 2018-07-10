@@ -264,6 +264,7 @@ If you have issues, please create an issue https://github.com/jimboca/udi-wirele
 
   - 2.0.3  07/10/2018
     - Changed from http to https, thanks @xKing for the change
+    - Increased post timeout from 15 to 60 for when the tag server is slow
   - 2.0.2  05/03/2018
     - Fix when query is run to report all nodes
     - New version of polyinterface will fix issue with Notice's not going away
