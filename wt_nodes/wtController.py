@@ -17,7 +17,7 @@ nodedef = 'node_def_id'
 class wtController(polyinterface.Controller):
     client_id     = "3b08b242-f0f8-41c0-ba29-6b0478cd0b77"
     client_secret = "0b947853-1676-4a63-a384-72769c88f3b1"
-    auth_url      = "https://www.wirelesstag.net/oauth2/authorize.aspx?client_id={0}".format(client_id)
+    auth_url      = "https://www.mytaglist.com/oauth2/authorize.aspx?client_id={0}".format(client_id)
     """
     The Controller Class is the primary node from an ISY perspective. It is a Superclass
     of polyinterface.Node so all methods from polyinterface.Node are available to this

@@ -269,8 +269,7 @@ class wtSession():
         return self.tmgr_mac_st
 
     def post(self,path,payload,use_token=True):
-        #url = "http://www.mytaglist.com/{}".format(path)
-        url = "http://wirelesstag.net/{}".format(path)
+        url = "https://wirelesstag.net/{}".format(path)
         self.l_debug('post',"Sending: url={0} payload={1}".format(url,payload))
         if use_token:
             access_token = self.wtServer.get_access_token()
@@ -290,7 +289,7 @@ class wtSession():
             response = self.session.post(
                 url,
                 data=payload,
-                timeout=15
+                timeout=60
             )
         # This is supposed to catch all request excpetions.
         except requests.exceptions.RequestException as e:
