@@ -262,6 +262,8 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
+  - 2.0.5 07/22/2018
+    - Fix crash bug in shortPoll that only happens if tag manager is not properly selected the first try.
   - 2.0.4  07/11/2018
     - Add better icons from @xKing. Profile should automatically reload, but if you don't see the new icons then select the WirelessTagsConroller and "Install Profile" then restart admin console.
   - 2.0.3  07/10/2018
