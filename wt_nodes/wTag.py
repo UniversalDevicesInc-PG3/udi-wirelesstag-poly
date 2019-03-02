@@ -302,12 +302,18 @@ class wTag(polyinterface.Node):
             self.set_list(2)
         else:
             self.l_error('get_handler',"Unknown command '{0}'".format(command))
-        if 'tempc' in params and self.tag_uom == 0:
-            self.set_temp(params['tempc'],convert=False)
-        if 'tempf' in params and self.tag_uom == 1:
-            self.set_temp(params['tempf'],convert=False)
         if 'temp' in params:
             self.set_temp(params['temp'])
+        elif self.tag_uom == 0:
+            if 'tempc' in params:
+                self.set_temp(params['tempc'],convert=False)
+            elif 'tempf' in params:
+                self.set_temp(params['tempf'],convert=True)
+        elif self.tag_uom == 1:
+            if 'tempf' in params:
+                self.set_temp(params['tempf'],convert=False)
+            elif 'tempc' in params:
+                self.set_temp(params['tempc'],convert=True)
         if 'hum' in params:
             self.set_hum(params['hum'])
         if 'lux' in params:
@@ -385,9 +391,13 @@ class wTag(polyinterface.Node):
 
     def set_temp(self,value,convert=True):
         self.l_debug('set_temp','{0},{1}'.format(value,convert))
-        if convert and self.primary_n.degFC == 1:
-            # Convert C to F
-            value = float(value) * 1.8 + 32.0
+        if convert:
+            if self.tag_uom == 1:
+                # [°C] = ([°F] - 32) × 5/9
+                value = float(value) * 9/5 + 32.0
+            else:
+                # [°F] = [°C] × 9/5 + 32
+                value = (float(value) - 32.0) * 5/9
         value = myfloat(value,1)
         self.setDriver('CLITEMP', value)
 
