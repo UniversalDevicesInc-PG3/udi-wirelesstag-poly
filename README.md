@@ -274,6 +274,8 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
+  - 2.0.7: 03/03/2019
+    - Fixed Tag 26 C nodedef
   - 2.0.6  03/02/2019
     - [Tags in Celcius still show temp in Fahrenheit](https://github.com/jimboca/udi-wirelesstag-poly/issues/32)
     - [See Switching C or F Mode](#switching-c-or-f-mode)
