@@ -224,7 +224,7 @@ data is shown in the following table along with information passed back from the
 8. Once Monitor tags is enabled, you should see the tags be added to the ISY.
     * Review the nodeserver log if they don't all show up, it may take a minute or so.
 
-  ## Requirements
+## Requirements
 1. [Polyglot V2](https://github.com/UniversalDevicesInc/polyglot-v2) >= 2.1.0
 1. When using a RaspberryPi it should be run on Raspian Stretch
   To check your version: ```cat /etc/os-release```
@@ -234,6 +234,18 @@ data is shown in the following table along with information passed back from the
     * https://www.raspberrypi.org/blog/raspbian-stretch/
     * https://linuxconfig.org/raspbian-gnu-linux-upgrade-from-jessie-to-raspbian-stretch-9
 1. This has only been tested with ISY 5.0.11 so it is not confirmed to work with any prior version.
+
+## Switching C or F Mode
+
+You can reconfigure a Tag to report in C or F mode at https://my.wirelesstag.net by clicking the
+temperature on the Tag, then change to C/F and save, which will change all tags on that tag manager.
+However this will not change them in the ISY, you need to select the Tag Manager in
+the ISY Admin Console and click discover.  This can take a few minutes, but eventually you should
+see the node identifier change from (F) or (C) at the end, and the Temperature display will show
+C or F appropriately.
+
+Due to node types changing, you may have to go to each program referencing a node, select the
+tag reference in the program, click update, and save.
 
 ## TODO
 
@@ -262,6 +274,9 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
+  - 2.0.6  03/02/2019
+    - [Tags in Celcius still show temp in Fahrenheit](https://github.com/jimboca/udi-wirelesstag-poly/issues/32)
+    - [See Switching C or F Mode](#switching-c-or-f-mode)
   - 2.0.5 07/22/2018
     - Fix crash bug in shortPoll that only happens if tag manager is not properly selected the first try.
   - 2.0.4  07/11/2018

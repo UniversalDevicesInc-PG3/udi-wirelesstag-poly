@@ -5,6 +5,10 @@ def myfloat(value, prec=4):
     """ round and return float """
     return round(float(value), prec)
 
+# F = (C × 9/5) + 32
+def CtoF(value):
+    return (float(value) * 9/5) + 32
+
 def id_to_address(address,slen=14):
     slen = slen * -1
     m = hashlib.md5()
