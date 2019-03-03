@@ -7,7 +7,7 @@ import sys
 import time
 import re
 from copy import deepcopy
-from wt_funcs import id_to_address,myfloat
+from wt_funcs import id_to_address,myfloat,CtoF
 from wt_params import wt_params
 
 LOGGER = polyinterface.LOGGER
@@ -303,17 +303,17 @@ class wTag(polyinterface.Node):
         else:
             self.l_error('get_handler',"Unknown command '{0}'".format(command))
         if 'temp' in params:
-            self.set_temp(params['temp'])
+            # This is always C ?
+            if self.tag_uom == 0:
+                self.set_temp(params['temp'])
+            else:
+                self.set_temp(CtoF(params['temp']))
         elif self.tag_uom == 0:
             if 'tempc' in params:
-                self.set_temp(params['tempc'],convert=False)
-            elif 'tempf' in params:
-                self.set_temp(params['tempf'],convert=True)
+                self.set_temp(params['tempc'])
         elif self.tag_uom == 1:
             if 'tempf' in params:
-                self.set_temp(params['tempf'],convert=False)
-            elif 'tempc' in params:
-                self.set_temp(params['tempc'],convert=True)
+                self.set_temp(params['tempf'])
         if 'hum' in params:
             self.set_hum(params['hum'])
         if 'lux' in params:
@@ -336,7 +336,11 @@ class wTag(polyinterface.Node):
         if 'alive' in tdata:
             self.set_alive(tdata['alive'])
         if 'temperature' in tdata:
-            self.set_temp(tdata['temperature'])
+            # This is always C ?
+            if self.tag_uom == 0:
+                self.set_temp(tdata['temperature'])
+            else:
+                self.set_temp(CtoF(tdata['temperature']))
         if 'batteryVolt' in tdata:
             self.set_batv(tdata['batteryVolt'])
         if 'batteryRemaining' in tdata:
@@ -389,22 +393,13 @@ class wTag(polyinterface.Node):
         self.l_debug('set_alive','{0}'.format(value))
         self.setDriver('ST', int(value))
 
-    def set_temp(self,value,convert=True):
-        self.l_debug('set_temp','{0},{1}'.format(value,convert))
-        if convert:
-            if self.tag_uom == 1:
-                # [°C] = ([°F] - 32) × 5/9
-                value = float(value) * 9/5 + 32.0
-            else:
-                # [°F] = [°C] × 9/5 + 32
-                value = (float(value) - 32.0) * 5/9
-        value = myfloat(value,1)
-        self.setDriver('CLITEMP', value)
+    def set_temp(self,value):
+        self.l_debug('set_temp','{0}'.format(value))
+        self.setDriver('CLITEMP', myfloat(value,1))
 
     def set_hum(self,value):
         self.l_debug('set_hum','{0}'.format(value))
         self.setDriver('CLIHUM', myfloat(value,1))
-
 
     def set_lit(self,value):
         self.l_debug('set_lit','{0}'.format(value))
