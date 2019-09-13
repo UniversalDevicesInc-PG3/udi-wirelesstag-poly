@@ -117,8 +117,6 @@ class wTag(polyinterface.Node):
             {'driver': 'GV1',     'value': self.tag_type, 'uom': 56},
             # temp:   Curent temperature (17=F 4=C)
             {'driver': 'CLITEMP', 'value': 0, 'uom': temp_uom},
-            # batp:   Battery percent (51=percent)
-            {'driver': 'BATLVL',  'value': 0, 'uom': 51},
             # batv:   Battery Voltag 72=Volt
             {'driver': 'CV',      'value': 0, 'uom': 72},
             # lit:    Light
@@ -131,7 +129,9 @@ class wTag(polyinterface.Node):
             # seconds since update
             {'driver': 'GV14',     'value': 0, 'uom': 25},
         ]
-
+        if (not (tag_type == 102)):
+            # batp:   Battery percent (51=percent)
+            {'driver': 'BATLVL',  'value': 0, 'uom': 51},
         if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26
             or tag_type == 32 or tag_type == 52 or tag_type == 62 or
             tag_type == 72):
@@ -141,7 +141,7 @@ class wTag(polyinterface.Node):
             # lux:    Lux (36=lux)
             dv.append({'driver': 'LUMIN',   'value': 0, 'uom': 36})
         if (tag_type == 13 or tag_type == 21 or tag_type == 26 or tag_type == 32
-            or tag_type == 52 or tag_type == 62 or tag_type == 72):
+            or tag_type == 52 or tag_type == 62 or tag_type == 72 or tag_type == 102):
             # hum:    Humidity (21 = absolute humidity)
             dv.append({'driver': 'CLIHUM',  'value': 0, 'uom': 22})
         if (tag_type == 12 or tag_type == 13 or tag_type == 21):
@@ -156,7 +156,7 @@ class wTag(polyinterface.Node):
             # zaxis:  Z-Axis
             dv.append({'driver': 'GV6',     'value': 0, 'uom': 56})
         if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26
-            or tag_type == 32 or tag_type == 52 or tag_type == 72):
+            or tag_type == 32 or tag_type == 52 or tag_type == 72 or tag_type == 102):
             # oor:    OutOfRange
             dv.append({'driver': 'GV8',     'value': 0, 'uom':  2})
             # signaldBm:

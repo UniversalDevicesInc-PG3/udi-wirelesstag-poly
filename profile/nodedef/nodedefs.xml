@@ -698,4 +698,66 @@
     </cmds>
   </nodeDef>
 
+
+    <!-- Tag 21 F -->
+    <nodeDef id="wTag102F" nls="tag102">
+      <editors />
+      <sts>
+        <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+        <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+        <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
+        <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+        <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+        <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+        <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
+        <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+        <st id="GV7" editor="I_LIT" /> <!-- Light -->
+        <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
+        <st id="CLIHUM" editor="I_HUM" />
+        <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+        <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+        <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
+      </sts>
+      <cmds>
+        <sends />
+        <accepts>
+          <cmd id="SET_LIGHT">
+            <p id="" editor="I_LIT" init="GV7" />
+          </cmd>
+          <cmd id="SET_URL_CONFIG" />
+          <cmd id="QUERY" />
+        </accepts>
+      </cmds>
+    </nodeDef>
+    <!-- Tag 21 C -->
+    <nodeDef id="wTag21C" nls="tag21">
+      <editors />
+      <sts>
+        <st id="ST" editor="BOOL" /> <!-- Status, online? -->
+        <st id="GPV" editor="I_TAGID" /> <!-- TagId (SlaveId) -->
+        <st id="GV1" editor="I_TAGTYPE" /> <!-- TagType -->
+        <st id="GV13" editor="I_INTEGER" /> <!-- Time -->
+        <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
+        <st id="GV8" editor="BOOL" /> <!-- Out Of Range -->
+        <st id="CC" editor="SIGDBM" /> <!-- signaldBm -->
+        <st id="ALARM" editor="I_EVST" /> <!-- Event State -->
+        <st id="GV7" editor="I_LIT" /> <!-- Light -->
+        <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
+        <st id="CLIHUM" editor="I_HUM" />
+        <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+        <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
+        <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
+      </sts>
+      <cmds>
+        <sends />
+        <accepts>
+          <cmd id="SET_LIGHT">
+            <p id="" editor="I_LIT" init="GV7" />
+          </cmd>
+          <cmd id="SET_URL_CONFIG" />
+          <cmd id="QUERY" />
+        </accepts>
+      </cmds>
+    </nodeDef>
+
 </nodeDefs>
