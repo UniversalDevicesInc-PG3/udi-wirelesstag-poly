@@ -62,6 +62,8 @@ ND-wTag82F-NAME = WeMo Switches/Maker/LED (82) (F)
 ND-wTag82F-ICON = Input
 ND-wTag92F-NAME = Webcams (Dropcam) (92) (F)
 ND-wTag92F-ICON = Input
+ND-wTag102F-NAME = External Power Sensor (102) (F)
+ND-wTag102F-ICON = Input
 
 ND-wTag12C-NAME = Motion Sensor Tag (8-bit temperature) (12) (C)
 ND-wTag12C-ICON = Input
@@ -85,6 +87,8 @@ ND-wTag82C-NAME = WeMo Switches/Maker/LED (82) (C)
 ND-wTag82C-ICON = Input
 ND-wTag92C-NAME = Webcams (Dropcam) (92) (C)
 ND-wTag92C-ICON = Input
+ND-wTag102C-NAME = External Power Sensor (102) (F)
+ND-wTag102C-ICON = Input
 
 # These are the defaults for all tags
 ST-ST-NAME = Tag Status
