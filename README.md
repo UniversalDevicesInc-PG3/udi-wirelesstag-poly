@@ -275,6 +275,8 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
+  - 2.0.7: 10/28/2019
+    - Skip unknown params for now
   - 2.0.6: 09/12/2019
     - First attempt at adding new External Battery Tag which I can't test.
   - 2.0.5  03/02/2019
