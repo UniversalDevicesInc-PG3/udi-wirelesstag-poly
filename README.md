@@ -275,11 +275,19 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
-  - 2.0.6: 09/12/2019
+  - 2.0.10: 10/18/2019
+    - Fixed BATLVL not reporting
+  - 2.0.9: 09/14/2019
+    - Adding missing name for External Power Sensor
+  - 2.0.8: 09/12/2019
     - First attempt at adding new External Battery Tag which I can't test.
-  - 2.0.5  03/02/2019
+  - 2.0.7: 03/03/2019
+    - Fixed Tag 26 C nodedef
+  - 2.0.6  03/02/2019
     - [Tags in Celcius still show temp in Fahrenheit](https://github.com/jimboca/udi-wirelesstag-poly/issues/32)
     - [See Switching C or F Mode](#switching-c-or-f-mode)
+  - 2.0.5 07/22/2018
+    - Fix crash bug in shortPoll that only happens if tag manager is not properly selected the first try.
   - 2.0.4  07/11/2018
     - Add better icons from @xKing. Profile should automatically reload, but if you don't see the new icons then select the WirelessTagsConroller and "Install Profile" then restart admin console.
   - 2.0.3  07/10/2018

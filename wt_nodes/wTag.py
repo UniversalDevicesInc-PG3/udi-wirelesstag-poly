@@ -131,7 +131,7 @@ class wTag(polyinterface.Node):
         ]
         if (not (tag_type == 102)):
             # batp:   Battery percent (51=percent)
-            {'driver': 'BATLVL',  'value': 0, 'uom': 51},
+            dv.append({'driver': 'BATLVL',  'value': 0, 'uom': 51})
         if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26
             or tag_type == 32 or tag_type == 52 or tag_type == 62 or
             tag_type == 72):
