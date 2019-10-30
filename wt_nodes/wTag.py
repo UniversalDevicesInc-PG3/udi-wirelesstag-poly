@@ -242,16 +242,18 @@ class wTag(polyinterface.Node):
                         if key in wt_params:
                             param = wt_params[key]
                         else:
-                            self.l_error('set_url_config',"Unknown tag param '{0}'".format(key))
-                            param = def_param
-                        # (for PIR {1}: timestamp, {2}: tag ID)
-                        if key == 'motion_detected' and self.tag_type == 72:
-                            param = 'name={0}&tagid={2}&ts={1}'
-                        self.l_debug('set_url_config',"key={0} value={1}".format(key,value))
-                        value['disabled'] = False
-                        value['url'] = '{0}/{1}?tmgr_mac={2}&{3}'.format(url,key,self.primary_n.mac,param)
-                        value['nat'] = True
-                        newconfig[key] = value
+                            self.l_error('set_url_config',"Unknown tag param '{0}' it will be ignored".format(key))
+                            param = False
+                        # Just skip for now
+                        if param is not False:
+                            # (for PIR {1}: timestamp, {2}: tag ID)
+                            if key == 'motion_detected' and self.tag_type == 72:
+                                param = 'name={0}&tagid={2}&ts={1}'
+                            self.l_debug('set_url_config',"key={0} value={1}".format(key,value))
+                            value['disabled'] = False
+                            value['url'] = '{0}/{1}?tmgr_mac={2}&{3}'.format(url,key,self.primary_n.mac,param)
+                            value['nat'] = True
+                            newconfig[key] = value
                 res = self.primary_n.SaveEventURLConfig({'id':self.tag_id, 'config': newconfig, 'applyAll': False})
                 self.node_set_url = res['st']
 
