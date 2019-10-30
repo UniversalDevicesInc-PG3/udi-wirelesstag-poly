@@ -275,6 +275,8 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
+  - 2.0.11: 10/28/2019
+    - Skip unknown params for now
   - 2.0.10: 10/18/2019
     - Fixed BATLVL not reporting
   - 2.0.9: 09/14/2019
