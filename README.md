@@ -275,6 +275,10 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
+  - 2.0.13: 12/23/2019
+    - Removed eventState from tags 102 and 107 since they don't support motion events
+    - Fixed moisture state to report for tags 107
+    - Added lightstate to 26 and 107
   - 2.0.12: 12/21/2019
     - Add new tag 107, untested since I don't have one yet
   - 2.0.11: 10/28/2019
