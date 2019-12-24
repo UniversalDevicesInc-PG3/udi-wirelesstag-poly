@@ -54,17 +54,20 @@ wt_params = {
     # {0}: Tag name, {1}: Temperature in °F, {2}: Temperature in °C, {3}: Tag ID, {4}: timestamp
     'temp_normal': 'name={0}&tagid={3}&tempf={1}&tempc={2}&ts={4}',
 
+    #
+    # NOTE: Below 3 are not as documented, if APi is fixed then swap back 1 & 2
+    #
     # When it's too bright
     # {0}: Tag name, {1}: Tag ID, {2}: Brightness in lux, {3}: timestamp
-    'too_bright': 'name={0}&tagid={1}&lux={2}&ts={3}',
+    'too_bright': 'name={0}&tagid={2}&lux={1}&ts={3}',
 
     # When it's too dark
     # {0}: Tag name, {1}: Tag ID, {2}: Brightness in lux, {3}: timestamp
-    'too_dark': 'name={0}&tagid={1}&lux={2}&ts={3}',
+    'too_dark': 'name={0}&tagid={2}&lux={1}&ts={3}',
 
     # When brightness returned to normal
     # {0}: Tag name, {1}: Tag ID, {2}: Brightness in lux, {3}: timestamp
-    'light_normal': 'name={0}&tagid={1}&lux={2}&ts={3}',
+    'light_normal': 'name={0}&tagid={2}&lux={1}&ts={3}',
 
     # When tag battery is low
     # {0}: Tag name, {1}: latest battery voltage, {2}: configured low battery warning threshold, {3}: Tag ID,{4}: timestamp
