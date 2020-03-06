@@ -277,10 +277,9 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
-  - 2.1.0: 03/05/2020
+  - 2.0.14: 03/05/2020
     - Fixed motion detection for tag type 26 ALS, which looks like a PIR
-    - Added motion to 107
-    - Other motion fixes in progress...
+\   - Motion timeout still not working
   - 2.0.13: 12/23/2019
     - Removed eventState from tags 102 and 107 since they don't support motion events
     - Fixed moisture state to report for tags 107

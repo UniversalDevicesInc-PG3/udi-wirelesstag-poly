@@ -145,7 +145,7 @@ class wTag(polyinterface.Node):
             or tag_type == 102 or tag_type == 107):
             # hum:    Humidity (21 = absolute humidity)
             dv.append({'driver': 'CLIHUM',  'value': 0, 'uom': 22})
-        if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26 or tag_type == 107):
+        if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26):
             # motion:
             dv.append({'driver': 'GV2',     'value': 0, 'uom': 25})
         if (tag_type == 12 or tag_type == 13 or tag_type == 21):
