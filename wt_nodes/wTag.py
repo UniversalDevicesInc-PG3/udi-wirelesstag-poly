@@ -145,9 +145,10 @@ class wTag(polyinterface.Node):
             or tag_type == 102 or tag_type == 107):
             # hum:    Humidity (21 = absolute humidity)
             dv.append({'driver': 'CLIHUM',  'value': 0, 'uom': 22})
-        if (tag_type == 12 or tag_type == 13 or tag_type == 21):
-            # motion: Might use True, False, Open for door mode?
+        if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26 or tag_type == 107):
+            # motion: 
             dv.append({'driver': 'GV2',     'value': 0, 'uom': 25})
+        if (tag_type == 12 or tag_type == 13 or tag_type == 21):
             # orien:  Orientation
             dv.append({'driver': 'GV3',     'value': 0, 'uom': 56})
             # xaxis:  X-Axis
@@ -248,8 +249,8 @@ class wTag(polyinterface.Node):
                             param = False
                         # Just skip for now
                         if param is not False:
-                            # (for PIR {1}: timestamp, {2}: tag ID)
-                            if key == 'motion_detected' and self.tag_type == 72:
+                            # for PIR and ALS {1}: timestamp, {2}: tag ID)
+                            if key == 'motion_detected' and (self.tag_type == 72 or self.tag_type == 26)
                                 param = 'name={0}&tagid={2}&ts={1}'
                             self.l_debug('set_url_config',"key={0} value={1}".format(key,value))
                             value['disabled'] = False

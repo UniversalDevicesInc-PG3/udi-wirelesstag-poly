@@ -777,6 +777,7 @@
         <st id="CLIHUM" editor="I_HUM" />
         <st id="LUMIN" editor="LUMIN" /> <!-- Lux -->
         <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+        <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
         <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
         <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
         <st id="GV11" editor="I_LIST" /> <!-- Luminance/Lux/Light State -->
@@ -810,6 +811,7 @@
         <st id="CLIHUM" editor="I_HUM" />
         <st id="LUMIN" editor="LUMIN" /> <!-- Lux -->
         <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+        <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
         <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
         <st id="GV10" editor="I_CPST" /> <!-- Moisture State -->
         <st id="GV11" editor="I_LIST" /> <!-- Luminance/Lux/Light State -->
