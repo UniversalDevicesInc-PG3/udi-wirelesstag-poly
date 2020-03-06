@@ -303,6 +303,7 @@
       <st id="LUMIN" editor="LUMIN" /> <!-- Lux -->
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV11" editor="I_LIST" /> <!-- Luminance/Lux/Light State -->
     </sts>
@@ -335,6 +336,7 @@
       <st id="LUMIN" editor="LUMIN" /> <!-- Lux -->
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
+      <st id="GV2" editor="I_MOTION" /> <!-- Motion -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
       <st id="GV11" editor="I_LIST" /> <!-- Luminance/Lux/Light State -->
     </sts>
