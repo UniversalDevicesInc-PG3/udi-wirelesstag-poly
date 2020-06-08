@@ -278,7 +278,7 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
   - 2.0.15: 05/08/2020
-  - [Add probe (tagType=42) chip temperature](https://github.com/jimboca/udi-wirelesstag-poly/issues/35)
+    - [Add probe (tagType=42) chip temperature](https://github.com/jimboca/udi-wirelesstag-poly/issues/35)
   - 2.0.14: 03/05/2020
     - Fixed motion detection for tag type 26 ALS, which looks like a PIR
 \   - Motion timeout still not working
