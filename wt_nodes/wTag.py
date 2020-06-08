@@ -175,6 +175,9 @@ class wTag(polyinterface.Node):
         if (tag_type == 32):
             # TODO: Only 32 has water sensor?
             dv.append({'driver': 'GV12',  'value': 1, 'uom': 25})
+        if (tag_type == 42):
+            # TODO: Only 42 has chip temperature
+            dv.append({'driver': 'GV15',  'value': 1, 'uom': 25})
         self.drivers = dv
         uomS = "C" if self.tag_uom == 0 else "F"
         self.id = 'wTag' + str(self.tag_type) + uomS
@@ -319,6 +322,12 @@ class wTag(polyinterface.Node):
         elif self.tag_uom == 1:
             if 'tempf' in params:
                 self.set_temp(params['tempf'])
+        if 'cap' in params:
+            # This is always C
+            if self.tag_uom == 0:
+                self.set_chip_temp(params['cap'])
+            else:
+                self.set_chip_temp(CtoF(params['cap']))
         if 'hum' in params:
             self.set_hum(params['hum'])
         if 'lux' in params:
@@ -402,6 +411,10 @@ class wTag(polyinterface.Node):
         self.l_debug('set_temp','{0}'.format(value))
         self.setDriver('CLITEMP', myfloat(value,1))
 
+    def set_chip_temp(self,value):
+        self.l_debug('set_chip_temp','{0}'.format(value))
+        self.setDriver('GV15', myfloat(value,1))
+
     def set_hum(self,value):
         self.l_debug('set_hum','{0}'.format(value))
         self.setDriver('CLIHUM', myfloat(value,1))
@@ -409,7 +422,6 @@ class wTag(polyinterface.Node):
     def set_lit(self,value):
         self.l_debug('set_lit','{0}'.format(value))
         self.setDriver('GV7', int(value))
-
 
     def set_fan(self,value):
         self.l_debug('set_fan','{0}'.format(value))
@@ -424,6 +436,7 @@ class wTag(polyinterface.Node):
         self.setDriver('BATLVL', myfloat(value,2))
 
     def set_batv(self,value):
+        self.l_debug('set_batp','{0}'.format(myfloat(value,3)))
         self.setDriver('CV', myfloat(value,3))
 
     def set_batl(self,value,force=False):

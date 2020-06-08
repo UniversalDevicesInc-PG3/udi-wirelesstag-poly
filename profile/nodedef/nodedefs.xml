@@ -426,6 +426,7 @@
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_F" /> <!-- Temperature -->
+      <st id="GV15" editor="I_TEMP_F" /> <!-- Chip Temperature -->
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->
@@ -452,6 +453,7 @@
       <st id="GV14" editor="I_INTEGER" /> <!-- Seconds since update -->
       <st id="GV7" editor="I_LIT" /> <!-- Light -->
       <st id="CLITEMP" editor="I_TEMP_C" /> <!-- Temperature -->
+      <st id="GV15" editor="I_TEMP_C" /> <!-- Chip Temperature -->
       <st id="BATLVL" editor="BATLVL" /> <!-- Battery Percentage -->
       <st id="CV" editor="FLOAT" /> <!-- Battery Voltage -->
       <st id="GV9" editor="I_TMST" /> <!-- Temperature State -->

@@ -156,7 +156,8 @@ Tag 102 is the new external batter tag, which is currently not in their document
 | NS1      | FLOAT | rssi                 | X  | X  | X  |    | X  | X  | X  | X  | X  | X  | X  |  X  |  X  |       |
 | NS1      | FLOAT | txpwr                | X  | X  | X  |    | X  | X  | X  | X  | X  | X  | X  |  X  |  X  |       |
 | GV13     | INT   | time                 | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |  X  |  X  |   N2  |
-| GV14     | INT   | seconds since update | X  | X  |  X  |X  | X  | X  | X  | X  | X  | X  | X  |  X  |  X  |   N2  |
+| GV14     | INT   | seconds since update | X  | X  |  X | X  | X  | X  | X  | X  | X  | X  | X  |  X  |  X  |   N2  |
+| GV15     | FLOAT | chip temperature     |    |    |    | X  |    |    |    |    |    |    |    |     |     |       |
 
 
   - NA1 = Not Applicable, since it's available in eventState?
@@ -276,7 +277,8 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
-
+  - 2.0.15: 05/08/2020
+  - [Add probe (tagType=42) chip temperature](https://github.com/jimboca/udi-wirelesstag-poly/issues/35)
   - 2.0.14: 03/05/2020
     - Fixed motion detection for tag type 26 ALS, which looks like a PIR
 \   - Motion timeout still not working
