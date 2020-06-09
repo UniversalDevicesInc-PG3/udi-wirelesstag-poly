@@ -277,6 +277,8 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
+  - 2.0.16: 05/09/2020
+    - Blindly trying to get this working [Add probe (tagType=42) chip temperature](https://github.com/jimboca/udi-wirelesstag-poly/issues/35)
   - 2.0.15: 05/08/2020
     - [Add probe (tagType=42) chip temperature](https://github.com/jimboca/udi-wirelesstag-poly/issues/35)
   - 2.0.14: 03/05/2020
