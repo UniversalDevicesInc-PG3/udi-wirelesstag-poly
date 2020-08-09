@@ -433,6 +433,10 @@ class wTag(polyinterface.Node):
         self.l_debug('set_lit','{0}'.format(value))
         self.setDriver('GV7', int(value))
 
+    def get_lit(self,value):
+        self.l_debug('get_lit','{0}'.format(value))
+        self.getDriver('GV7')
+
     def set_fan(self,value):
         self.l_debug('set_fan','{0}'.format(value))
         self.setDriver('GV7', int(value))
@@ -556,7 +560,7 @@ class wTag(polyinterface.Node):
     def cmd_set_light(self,command):
         value = int(command.get("value"))
         # Save current value, and change it.
-        slit = self.lit
+        slit = self.get_lit()
         self.set_lit(value)
         if value == 0:
             ret = self.primary_n.LightOff(self.primary_n.mac,self.tag_id)
