@@ -278,6 +278,8 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
+  - 2.0.19: 08/09/2020
+    - Fixed crash from previous fix.
   - 2.0.18: 08/09/2020
     - Fixed crashed caused by "Set Light" command.
   - 2.0.17: 06/11/2020

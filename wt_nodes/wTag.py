@@ -433,7 +433,7 @@ class wTag(polyinterface.Node):
         self.l_debug('set_lit','{0}'.format(value))
         self.setDriver('GV7', int(value))
 
-    def get_lit(self,value):
+    def get_lit(self):
         self.l_debug('get_lit','{0}'.format(value))
         self.getDriver('GV7')
 
