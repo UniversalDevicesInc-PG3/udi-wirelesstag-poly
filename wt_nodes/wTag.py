@@ -349,6 +349,7 @@ class wTag(polyinterface.Node):
     Set Functions
     """
     def set_from_tag_data(self,tdata):
+        self.l_debug('set_from_tag_data','{}'.format(tdata))
         if 'alive' in tdata:
             self.set_alive(tdata['alive'])
         if 'temperature' in tdata:
@@ -381,6 +382,9 @@ class wTag(polyinterface.Node):
                 self.set_lit(tdata['lit'])
         if 'eventState' in tdata:
             self.set_evst(tdata['eventState'])
+        # Used to be oor, not it's OutOfRange ?
+        if 'OutOfRange' in tdata:
+            self.set_oor(tdata['OutOfRange'])
         if 'oor' in tdata:
             self.set_oor(tdata['oor'])
         if 'signaldBm' in tdata:
