@@ -49,7 +49,7 @@
    </editor>
 
    <editor id="LUMIN">
-     <range uom="36" min="0" max="100" prec="2" />
+     <range uom="36" min="0" max="100000" prec="2" />
    </editor>
 
    <!-- Voltage -->
