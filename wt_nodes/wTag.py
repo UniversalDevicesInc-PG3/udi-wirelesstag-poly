@@ -457,7 +457,7 @@ class wTag(polyinterface.Node):
         self.setDriver('BATLVL', myfloat(value,2))
 
     def set_batv(self,value):
-        self.l_debug('set_batp','{0}'.format(myfloat(value,3)))
+        self.l_debug('set_batv','{0}'.format(myfloat(value,3)))
         self.setDriver('CV', myfloat(value,3))
 
     def set_batl(self,value,force=False):
