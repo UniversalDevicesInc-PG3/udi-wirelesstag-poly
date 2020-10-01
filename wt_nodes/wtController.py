@@ -269,6 +269,7 @@ class wtController(polyinterface.Controller):
                 if hasattr(tnode,'tag_id'):
                     self.l_debug('get_handler',' tmgr_mac={0} tagid={1}'.format(tnode.primary_n.mac,tnode.tag_id))
             return False
+        self.l_debug('get_handler','calling node={0} command={1} params={2}'.format(node.address,command,params))
         return node.get_handler(command,params)
 
     """
