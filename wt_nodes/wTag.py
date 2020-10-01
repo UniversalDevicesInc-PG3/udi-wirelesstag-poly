@@ -267,7 +267,7 @@ class wTag(polyinterface.Node):
         """
         This is called by the controller get_handler after parsing the node_data
         """
-        self.l_debug('get_handler','command={} params='.format(command,params))
+        self.l_debug('get_handler','command={} params={}'.format(command,params))
         if command == '/update':
             #tagname=Garage Freezer&tagid=0&temp=-21.4213935329179&hum=0&lux=0&ts=2018-02-15T11:18:02+00:00 HTTP/1.1" 400 -
             pass
