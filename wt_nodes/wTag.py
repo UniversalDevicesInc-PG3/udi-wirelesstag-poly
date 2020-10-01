@@ -342,6 +342,8 @@ class wTag(polyinterface.Node):
             self.set_yaxis(params['yaxis'])
         if 'zaxis' in params:
             self.set_zaxis(params['zaxis'])
+        if 'batv' in params:
+            self.set_batv(params['batv'])
         self.set_time_now()
         return True
 
