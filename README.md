@@ -277,6 +277,8 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
+  - 2.0.24 10/06/2020
+    - Fix Battery Voltage editor to show volts, and now it can be set to a variable. After updating nodeserver, restart then close admin console if you have it open first.  The variable should be set to Precision=3 and if you have any programs currently referencing Battery Voltage in the if/then/else you will need to Update that line and save it.  
   - 2.0.23 09/30/2020
     - Increase allowable lux to 100000
   - 2.0.22 09/30/2020
