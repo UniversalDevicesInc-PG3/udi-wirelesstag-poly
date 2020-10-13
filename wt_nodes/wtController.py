@@ -71,6 +71,7 @@ class wtController(polyinterface.Controller):
         version does nothing.
         """
         self.l_info('start','WirelessSensorTags Polyglot...')
+        self.removeNoticesAll()
         self.load_params()
         self.wtServer = wtServer(LOGGER,self.client_id,self.client_secret,self.get_handler,self.oauth2_code)
         try:
@@ -251,6 +252,7 @@ class wtController(polyinterface.Controller):
         self.l_debug('get_handler','processing command={0} params={1}'.format(command,params))
         if command == '/code':
             return self.set_oauth2(params['oauth2_code'])
+            self.removeNoticesAll()
         node = None
         if not 'tagid' in params:
             self.l_error('get_handler','tagid not in params? command={0} params={1}'.format(command,params))
@@ -326,7 +328,6 @@ class wtController(polyinterface.Controller):
     def save_params(self):
         # Make sure latest code is in the params
         self.addCustomParam({'oauth2_code': self.oauth2_code})
-        self.removeNoticesAll()
         if self.oauth2_code == False:
             if hasattr(self,'wtServer'):
                 self.addNotice('Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wtServer.url))

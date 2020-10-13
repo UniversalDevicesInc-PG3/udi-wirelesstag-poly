@@ -74,6 +74,7 @@ class wTagManager(polyinterface.Node):
         self.l_info("start",'{0} {1}'.format(self._drivers,self.use_tags))
         self.degFC = 1 # I like F.
         # When we are added by the controller discover, then run our discover.
+        self.ready = True
         if self.do_discover:
             self.discover(thread=False)
         else:
@@ -83,7 +84,6 @@ class wTagManager(polyinterface.Node):
                 #self.discover() # Needed to fix tag_id's
                 self.query() # To get latest tag info.
         self.reportDrivers()
-        self.ready = True
         self.l_info('start','done')
 
     def query(self):
@@ -155,11 +155,26 @@ class wTagManager(polyinterface.Node):
         """
         Start the discover in a thread so we don't cause timeouts :(
         """
+        if getattr(self,'discover_running',None) is None:
+            self.discover_running = False
+        if self.discover_running:
+            self.l_debug('discover','Already running...')
+            return False
+        self.discover_running = True
+        cnt = 30
+        while ((not self.ready) and cnt > 0):
+            self.l_debug('discover','waiting for node to be ready ({})..'.format(cnt))
+            cnt -= 1
+            time.sleep(1)
+        if not self.ready:
+            self.l_error('discover','timed out waiting for node to be ready, did it crash?')
+            return
         if thread:
             self.discover_thread = Thread(target=self._discover)
             self.discover_thread.start()
         else:
             self._discover()
+            self.discover_running = False
 
     def _discover(self):
         self.l_debug('discover','use_tags={}'.format(self.use_tags))
@@ -174,6 +189,7 @@ class wTagManager(polyinterface.Node):
             self.add_tag(tdata=tag, uom=self.get_tag_temp_unit(tag))
         self.reportDrivers() # Report now so they show up while set_url runs.
         self.set_url_config(thread=False)
+        self.discover_running = False
 
     def add_existing_tags(self):
         """

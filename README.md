@@ -277,6 +277,8 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
+  - 2.0.24 10/13/2020
+    - Try to avoid race condition on initial add and discover for nodes.  Can't confirm because I can't make it happen.
   - 2.0.23 09/30/2020
     - Increase allowable lux to 100000
   - 2.0.22 09/30/2020
