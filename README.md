@@ -277,12 +277,14 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
-  - 2.0.24 10/13/2020
+  - 2.0.25 10/13/2020
     - Try to avoid race condition on initial add and discover for nodes.  Can't confirm because I can't make it happen.
+  - 2.0.24 10/06/2020
+    - Fix Battery Voltage editor to show volts, and now it can be set to a variable. After updating nodeserver, restart then close admin console if you have it open first.  The variable should be set to Precision=3 and if you have any programs currently referencing Battery Voltage in the if/then/else you will need to Update that line and save it.  
   - 2.0.23 09/30/2020
     - Increase allowable lux to 100000
   - 2.0.22 09/30/2020
-    - [Fix setting Batter Voltage from Tag Manager update command(https://github.com/jimboca/udi-wirelesstag-poly/issues/37)
+    - [Fix setting Battery Voltage from Tag Manager update command](https://github.com/jimboca/udi-wirelesstag-poly/issues/37)
   - 2.0.21 08/10/2020
     - Fix for not setting Out Of Range on startup.
   - 2.0.20 08/09/2020
