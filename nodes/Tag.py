@@ -2,50 +2,21 @@
 This is a NodeServer for CAO Gadgets Wireless Sensor Tags for Polyglot v2 written in Python3
 by JimBoCA jimboca3@gmail.com
 """
-import polyinterface
+
+from udi_interface import Node,LOGGER
 import sys
 import time
 import re
-from copy import deepcopy
 from wt_funcs import id_to_address,myfloat,CtoF
 from wt_params import wt_params
 
-LOGGER = polyinterface.LOGGER
 DLEV = 0
 
-class wTag(polyinterface.Node):
-    """
-    This is the class that all the Nodes will be represented by. You will add this to
-    Polyglot/ISY with the controller.addNode method.
-
-    Class Variables:
-    self.primary: String address of the Controller node.
-    self.parent: Easy access to the Controller Class from the node itself.
-    self.address: String address of this Node 14 character limit. (ISY limitation)
-    self.added: Boolean Confirmed added to ISY
-
-    Class Methods:
-    start(): This method is called once polyglot confirms the node is added to ISY.
-    setDriver('ST', 1, report = True, force = False):
-        This sets the driver 'ST' to 1. If report is False we do not report it to
-        Polyglot/ISY. If force is True, we send a report even if the value hasn't changed.
-    reportDrivers(): Forces a full update of all drivers to Polyglot/ISY.
-    query(): Called when ISY sends a query request to Polyglot for this specific node
-    """
+class Tag(Node):
 
     def __init__(self, controller, primary, address=None, name=None,
                  tag_type=None, uom=None, tdata=None, is_new=True):
-        """
-        Optional.
-        Super runs all the parent class necessities. You do NOT have
-        to override the __init__ method, but if you do, you MUST call super.
-
-        :param controller: Reference to the Controller class
-        :param primary: Controller address
-        :param address: This nodes address
-        :param name: This nodes name
-        """
-        LOGGER.debug('wTag:__init__: start: address={0} name={1} type={2} uom={3}'.format(address,name,tag_type,uom))
+        LOGGER.debug('address={0} name={1} type={2} uom={3}'.format(address,name,tag_type,uom))
         tag_id = None
          # So logger calls won't crash
         self.address = address
@@ -60,11 +31,11 @@ class wTag(polyinterface.Node):
             # It's a new tag.
             self.address = address
             if tdata is None:
-                self.l_error('__init__',"New node address ({0}), name ({1}), and type ({2}) must be specified when tdata is None".format(address,name,tag_type))
+                LOGGER.error("New node address ({0}), name ({1}), and type ({2}) must be specified when tdata is None".format(address,name,tag_type))
                 return False
             if uom is None:
-                self.l_error('__init__',"uom ({0}) must be specified for new tags.".format(uom))
-            self.l_debug('__init__','New node {}'.format(tdata))
+                LOGGER.error("uom ({0}) must be specified for new tags.".format(uom))
+            LOGGER.debug('New node {}'.format(tdata))
             tag_type      = tdata['tagType']
             self.tag_uom  = uom
             tag_id        = tdata['slaveId']
@@ -74,24 +45,24 @@ class wTag(polyinterface.Node):
         else:
             #
             # An existing node,
-            self.l_debug('__init__','Existing node...')
+            LOGGER.debug('Existing node...')
             # We need to pull info from existing tags to know what they are.
             #
             # tag_uom = UOM
             # Should never happen, just need for old data added before it existed.
             self.tag_uom = self.getDriver('UOM')
             if self.tag_uom is None:
-                self.l_error('__init__','No tag_uom (UOM)')
+                LOGGER.error('No tag_uom (UOM)')
                 self.tag_uom = -1
             # tag_id = GPV
             tag_id = self.getDriver('GPV')
             if tag_id is None:
-                self.l_error('__init__','No tag_id (GPV) in node_data={0}'.format(node_data))
+                LOGGER.error('No tag_id (GPV) in node_data={0}'.format(node_data))
                 return False
             # tag_type = GV1
             tag_type = self.getDriver('GV1')
             if tag_type is None:
-                self.l_error('__init__','No tag_type (GV1) in node_data={0}'.format(node_data))
+                LOGGER.error('No tag_type (GV1) in node_data={0}'.format(node_data))
                 return False
         tag_id = int(tag_id)
         tag_type = int(tag_type)
@@ -99,7 +70,7 @@ class wTag(polyinterface.Node):
         self.tdata = tdata
         self.tag_id = tag_id
         self.tag_type = tag_type
-        self.l_info('__init__','type={} uom={} id={} address={} name={}'.format(self.tag_type,self.tag_uom,self.tag_id,address,name))
+        LOGGER.info('type={} uom={} id={} address={} name={}'.format(self.tag_type,self.tag_uom,self.tag_id,address,name))
         #
         # C or F?
         # Fix our temp_uom in drivers
@@ -182,10 +153,11 @@ class wTag(polyinterface.Node):
         uomS = "C" if self.tag_uom == 0 else "F"
         self.id = 'wTag' + str(self.tag_type) + uomS
         self.address = address
-        self.l_info('__init__','super id={} controller{} primary={} address={} name={} type={} id={} uom={}'.format(wTag,controller,primary,address,name,self.tag_type,self.tag_id,self.tag_uom))
-        super(wTag, self).__init__(controller, primary, address, name)
+        LOGGER.info('super id={} controller{} primary={} address={} name={} type={} id={} uom={}'.format(wTag,controller,primary,address,name,self.tag_type,self.tag_id,self.tag_uom))
+        controller.poly.subscribe(controller.poly.START,             self.handler_start, address) 
+        super(Tag, self).__init__(controller.poly, primary, address, name)
 
-    def start(self):
+    def handler_start(self):
         """
         Optional.
         This method is run once the Node is successfully added to the ISY
@@ -237,7 +209,7 @@ class wTag(polyinterface.Node):
         url = self.controller.wtServer.listen_url
         if not self.node_set_url or force:
             mgd = self.primary_n.LoadEventURLConfig({'id':self.tag_id})
-            self.l_debug('set_url_config','{0}'.format(mgd))
+            LOGGER.debug('{0}'.format(mgd))
             if mgd['st'] is False:
                 self.node_set_url = False
             else:
@@ -248,14 +220,14 @@ class wTag(polyinterface.Node):
                         if key in wt_params:
                             param = wt_params[key]
                         else:
-                            self.l_error('set_url_config',"Unknown tag param '{0}' it will be ignored".format(key))
+                            LOGGER.error("Unknown tag param '{0}' it will be ignored".format(key))
                             param = False
                         # Just skip for now
                         if param is not False:
                             # for PIR and ALS {1}: timestamp, {2}: tag ID)
                             if key == 'motion_detected' and (self.tag_type == 72 or self.tag_type == 26):
                                 param = 'name={0}&tagid={2}&ts={1}'
-                            self.l_debug('set_url_config',"key={0} value={1}".format(key,value))
+                            LOGGER.debug("key={0} value={1}".format(key,value))
                             value['disabled'] = False
                             value['url'] = '{0}/{1}?tmgr_mac={2}&{3}'.format(url,key,self.primary_n.mac,param)
                             value['nat'] = True
@@ -267,7 +239,7 @@ class wTag(polyinterface.Node):
         """
         This is called by the controller get_handler after parsing the node_data
         """
-        self.l_debug('get_handler','command={} params={}'.format(command,params))
+        LOGGER.debug('command={} params={}'.format(command,params))
         if command == '/update':
             #tagname=Garage Freezer&tagid=0&temp=-21.4213935329179&hum=0&lux=0&ts=2018-02-15T11:18:02+00:00 HTTP/1.1" 400 -
             pass
@@ -310,7 +282,7 @@ class wTag(polyinterface.Node):
         elif command == '/light_normal':
             self.set_list(2)
         else:
-            self.l_error('get_handler',"Unknown command '{0}'".format(command))
+            LOGGER.error("Unknown command '{0}'".format(command))
         if 'temp' in params:
             # This is always C ?
             if self.tag_uom == 0:
@@ -352,7 +324,7 @@ class wTag(polyinterface.Node):
     Set Functions
     """
     def set_from_tag_data(self,tdata):
-        self.l_debug('set_from_tag_data','{}'.format(tdata))
+        LOGGER.debug('{}'.format(tdata))
         if 'alive' in tdata:
             self.set_alive(tdata['alive'])
         if 'temperature' in tdata:
@@ -406,58 +378,58 @@ class wTag(polyinterface.Node):
     # This is the tag_type number, we don't really need to show it, but
     # we need the info when recreating the tags from the config.
     def set_tag_type(self,value):
-        self.l_debug('set_tag_type','GV1 to {0}'.format(value))
+        LOGGER.debug('GV1 to {0}'.format(value))
         self.tag_type = value
         self.setDriver('GV1', value)
 
     def set_tag_id(self,value):
-        self.l_debug('set_tag_id','GPV to {0}'.format(value))
+        LOGGER.debug('GPV to {0}'.format(value))
         self.tag_id = value
         self.setDriver('GPV', value)
 
     def set_tag_uom(self,value):
-        self.l_debug('set_tag_uom','UOM to {0}'.format(value))
+        LOGGER.debug('UOM to {0}'.format(value))
         self.tag_uom = value
         self.setDriver('UOM', value)
 
     def set_alive(self,value):
-        self.l_debug('set_alive','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('ST', int(value))
 
     def set_temp(self,value):
-        self.l_debug('set_temp','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('CLITEMP', myfloat(value,1))
 
     def set_chip_temp(self,value):
-        self.l_debug('set_chip_temp','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('GV15', myfloat(value,1))
 
     def set_hum(self,value):
-        self.l_debug('set_hum','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('CLIHUM', myfloat(value,1))
 
     def set_lit(self,value):
-        self.l_debug('set_lit','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('GV7', int(value))
 
     def get_lit(self):
-        self.l_debug('get_lit','')
+        LOGGER.debug('')
         return self.getDriver('GV7')
 
     def set_fan(self,value):
-        self.l_debug('set_fan','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('GV7', int(value))
 
     def set_lux(self,value):
-        self.l_debug('set_lux','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('LUMIN', myfloat(value,2))
 
     def set_batp(self,value,force=False):
-        self.l_debug('set_batp','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('BATLVL', myfloat(value,2))
 
     def set_batv(self,value):
-        self.l_debug('set_batv','{0}'.format(myfloat(value,3)))
+        LOGGER.debug('{0}'.format(myfloat(value,3)))
         self.setDriver('CV', myfloat(value,3))
 
     def set_batl(self,value,force=False):
@@ -466,7 +438,7 @@ class wTag(polyinterface.Node):
         self.setDriver('CV', value)
 
     def set_motion(self,value=None):
-        self.l_debug('set_motion','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         value = int(value)
         # Not all have motion, but that's ok, just sent it.
         self.setDriver('GV2', value)
@@ -482,50 +454,50 @@ class wTag(polyinterface.Node):
             self.set_evst(4,andMotion=False) # Closed
 
     def set_orien(self,value):
-        self.l_debug('set_orien','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('GV3', myfloat(value,1))
 
     def set_xaxis(self,value):
-        self.l_debug('set_xaxis','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('GV4', int(value))
 
     def set_yaxis(self,value):
-        self.l_debug('set_yaxis','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('GV5', int(value))
 
     def set_zaxis(self,value):
-        self.l_debug('set_zaxis','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('GV6', int(value))
 
     def set_evst(self,value,andMotion=True):
-        self.l_debug('set_evst','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('ALARM', int(value))
         # eventState 1=Armed, so no more motion
         if andMotion and int(value) == 1:
             self.set_motion(0)
 
     def set_oor(self,value):
-        self.l_debug('set_oor','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('GV8', int(value))
 
     def set_signaldbm(self,value):
-        self.l_debug('set_signaldbm','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('CC', int(value))
 
     def set_tmst(self,value):
-        self.l_debug('set_tmst','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('GV9', int(value))
 
     def set_cpst(self,value):
-        self.l_debug('set_cpst','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('GV10', int(value))
 
     def set_list(self,value):
-        self.l_debug('set_list','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         self.setDriver('GV11', int(value))
 
     def set_wtst(self,value):
-        self.l_debug('set_wtst','{0}'.format(value))
+        LOGGER.debug('{0}'.format(value))
         # Force to 1, Dry state on initialization since polyglot ignores the init value
         value = int(value)
         if value == 0: value = 1
@@ -536,29 +508,29 @@ class wTag(polyinterface.Node):
         self.set_seconds()
 
     def set_time(self,value,wincrap=False):
-        self.l_debug('set_time','{0},{1}'.format(value,wincrap))
+        LOGGER.debug('{0},{1}'.format(value,wincrap))
         value = int(value)
         if wincrap:
             # Convert windows timestamp to unix :(
             # https://stackoverflow.com/questions/10411954/convert-windows-timestamp-to-date-using-php-on-a-linux-box
             value = int(value / 10000000 - 11644477200)
-            self.l_debug('set_time','{0}'.format(value))
+            LOGGER.debug('{0}'.format(value))
         self.time = value
         self.setDriver('GV13', self.time)
 
     def set_seconds(self,force=True):
         if not hasattr(self,"time"): return False
         time_now = int(time.time())
-        if DLEV > 0: self.l_debug('set_seconds','time_now    {}'.format(time_now))
-        if DLEV > 0: self.l_debug('set_seconds','last_time - {}'.format(self.time))
+        if DLEV > 0: LOGGER.debug('time_now    {}'.format(time_now))
+        if DLEV > 0: LOGGER.debug('last_time - {}'.format(self.time))
         if self.time == 0:
             value = -1
         else:
             value = time_now - self.time
         if DLEV > 0:
-            self.l_debug('set_seconds','          = {}'.format(value))
+            LOGGER.debug('          = {}'.format(value))
         else:
-            self.l_debug('set_seconds','{}'.format(value))
+            LOGGER.debug('{}'.format(value))
         self.setDriver('GV14', value)
 
     """

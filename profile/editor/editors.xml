@@ -4,6 +4,10 @@
         <range uom="2" subset="0,1" />
     </editor>
 
+   <editor id="cst">
+     <range uom="25" subset="0,1,2" nls="CST"/>
+   </editor>
+
     <editor id="FLOAT">
        <range uom="56" min="0.1" max="999.999" prec="3"/>
     </editor>

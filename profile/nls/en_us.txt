@@ -12,14 +12,16 @@ CMD-SET_URL_CONFIG-NAME = Set URL Config
 ND-wtController-NAME = Wireless Tags Controller
 ND-wtController-ICON = GenericCtl
 ST-cntl-ST-NAME = NodeServer Online
-ST-cntl-GV1-NAME = Version Major
-ST-cntl-GV2-NAME = Version Minor
 ST-cntl-GV3-NAME = Commumicating
 ST-cntl-GV4-NAME = OAUTH2
-ST-cntl-GV5-NAME = Debug Mode
 ST-cntl-GV6-NAME = Short Poll
 ST-cntl-GV7-NAME = Long Poll
 ST-cntl-GV8-NAME = Listen Port
+
+# Controller Status
+CST-0 = Disconnected
+CST-1 = Connected
+CST-2 = Failed
 
 CMD-cntl-SET_SHORTPOLL-NAME = Short Poll
 CMD-cntl-SET_LONGPOLL-NAME = Long Poll
