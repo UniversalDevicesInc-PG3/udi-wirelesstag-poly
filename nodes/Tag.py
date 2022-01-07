@@ -26,7 +26,7 @@ class Tag(Node):
         self.node_set_url = False
         # Have to set this to call getDriver
         self.controller = controller
-        self.primary_n = controller.nodes[primary]
+        self.primary_n = controller.poly.getNode(primary)
         if is_new:
             # It's a new tag.
             self.address = address
@@ -47,21 +47,26 @@ class Tag(Node):
             # An existing node,
             LOGGER.debug('Existing node...')
             # We need to pull info from existing tags to know what they are.
-            #
-            # tag_uom = UOM
-            # Should never happen, just need for old data added before it existed.
-            self.tag_uom = self.getDriver('UOM')
-            if self.tag_uom is None:
+            node_data = self.controller.poly.db_getNodeDrivers(address)
+            LOGGER.debug(f"node_data={node_data}")
+            dv = dict()
+            for driver in node_data:
+                dv[driver['driver']] = driver['value']
+            if 'UOM' in dv:
+                self.tag_uom = dv['UOM']
+            else:
                 LOGGER.error('No tag_uom (UOM)')
                 self.tag_uom = -1
             # tag_id = GPV
-            tag_id = self.getDriver('GPV')
-            if tag_id is None:
+            if 'GPV' in dv:
+                tag_id = dv['GPV']
+            else:
                 LOGGER.error('No tag_id (GPV) in node_data={0}'.format(node_data))
                 return False
             # tag_type = GV1
-            tag_type = self.getDriver('GV1')
-            if tag_type is None:
+            if 'GV1' in dv:
+                tag_type = dv['GV1']
+            else:
                 LOGGER.error('No tag_type (GV1) in node_data={0}'.format(node_data))
                 return False
         tag_id = int(tag_id)
@@ -108,7 +113,7 @@ class Tag(Node):
             tag_type == 72):
             # evst: Event State
             dv.append({'driver': 'ALARM',   'value': 0, 'uom': 25})
-        if (tag_type == 26 or tag_type == 107):
+        if (tag_type == 13 or tag_type == 26 or tag_type == 107):
             # lux:    Lux (36=lux)
             dv.append({'driver': 'LUMIN',   'value': 0, 'uom': 36})
         if (tag_type == 13 or tag_type == 21 or tag_type == 26 or tag_type == 32
@@ -140,7 +145,7 @@ class Tag(Node):
             or tag_type == 72 or tag_type == 107):
             # moisture(cap)State:
             dv.append({'driver': 'GV10',    'value': 0, 'uom': 25})
-        if (tag_type == 26 or tag_type == 107):
+        if (tag_type == 13 or tag_type == 26 or tag_type == 107):
             # lightState:
             dv.append({'driver': 'GV11',    'value': 0, 'uom': 25})
         if (tag_type == 32):
@@ -153,9 +158,10 @@ class Tag(Node):
         uomS = "C" if self.tag_uom == 0 else "F"
         self.id = 'wTag' + str(self.tag_type) + uomS
         self.address = address
-        LOGGER.info('super id={} controller{} primary={} address={} name={} type={} id={} uom={}'.format(wTag,controller,primary,address,name,self.tag_type,self.tag_id,self.tag_uom))
         controller.poly.subscribe(controller.poly.START,             self.handler_start, address) 
+        #LOGGER.info('super id={} controller{} primary={} address={} name={} type={} id={} uom={}'.format(Tag,controller,primary,address,name,self.tag_type,self.tag_id,self.tag_uom))
         super(Tag, self).__init__(controller.poly, primary, address, name)
+        LOGGER.debug('done')
 
     def handler_start(self):
         """
@@ -191,18 +197,6 @@ class Tag(Node):
         if mgd['st']:
             self.set_from_tag_data(mgd['result'])
             self.reportDrivers()
-
-    def l_info(self, name, string):
-        LOGGER.info("%s:%s:%s:%s:%s: %s" %  (self.primary_n.name,self.name,self.address,self.id,name,string))
-
-    def l_error(self, name, string):
-        LOGGER.error("%s:%s:%s:%s:%s: %s" % (self.primary_n.name,self.name,self.address,self.id,name,string))
-
-    def l_warning(self, name, string):
-        LOGGER.warning("%s:%s:%s:%s:%s: %s" % (self.primary_n.name,self.name,self.address,self.id,name,string))
-
-    def l_debug(self, name, string):
-        LOGGER.debug("%s:%s:%s:%s:%s: %s" % (self.primary_n.name,self.name,self.address,self.id,name,string))
 
     def set_url_config(self,force=False):
         # If we haven't tried to set this nodes url's or it failed, the reset it.

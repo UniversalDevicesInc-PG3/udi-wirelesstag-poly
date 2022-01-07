@@ -1,6 +1,6 @@
 
 from udi_interface import Node,LOGGER,Custom,LOG_HANDLER
-import sys,time,logging
+import sys,time,logging,json
 from threading import Thread
 from copy import deepcopy
 
@@ -14,9 +14,6 @@ nodedef = 'node_def_id'
 #nodedef = 'nodedef'
 
 class Controller(Node):
-    client_id     = "3b08b242-f0f8-41c0-ba29-6b0478cd0b77"
-    client_secret = "0b947853-1676-4a63-a384-72769c88f3b1"
-    auth_url      = "https://www.mytaglist.com/oauth2/authorize.aspx?client_id={0}".format(client_id)
 
     def __init__(self, poly, primary, address, name):
         LOGGER.info('HarmonyController: Initializing')
@@ -25,6 +22,7 @@ class Controller(Node):
         self.ready = False
         self.oauth2_code = False
         self.discover_thread = None
+        self.wtServer = False
         # TODO: Always true, should read from customData and check profile version like PG2 version did?
         self.update_profile = True
         self.n_queue = []
@@ -39,13 +37,19 @@ class Controller(Node):
         poly.subscribe(poly.DISCOVER,          self.discover)
         poly.subscribe(poly.STOP,              self.handler_stop)
         poly.subscribe(poly.CUSTOMPARAMS,      self.handler_params)
-        poly.subscribe(poly.CUSTOMDATA,        self.handler_data)
+        self.config_st = False
+        #poly.subscribe(poly.CUSTOMDATA,        self.handler_data)
         #poly.subscribe(poly.CUSTOMTYPEDPARAMS, self.handler_typed_params)
         #poly.subscribe(poly.CUSTOMTYPEDDATA,   self.handler_typed_data)
         poly.subscribe(poly.LOGLEVEL,          self.handler_log_level)
         poly.subscribe(poly.CONFIGDONE,        self.handler_config_done)
         poly.subscribe(poly.ADDNODEDONE,       self.node_queue)
+        self.got_nsdata = None
         poly.subscribe(poly.CUSTOMNS,          self.handler_nsdata)
+        # TODO: Remove when nsdata loading is working
+        self.got_nsdata = True
+        self.client_id = "3b08b242-f0f8-41c0-ba29-6b0478cd0b77"
+        self.client_secret ="0b947853-1676-4a63-a384-72769c88f3b1"
         poly.ready()
         poly.addNode(self, conn_status="ST")
 
@@ -72,9 +76,24 @@ class Controller(Node):
         return anode
 
     def handler_start(self):
+        LOGGER.info('enter')
         self.poly.Notices.clear()
         #serverdata = self.poly.get_server_data(check_profile=False)
         LOGGER.info(f"Started WirelessTag NodeServer {self.poly.serverdata['version']}")
+        #
+        # Always need to start the REST server
+        #
+        self.wtServer = wtServer(LOGGER,self.client_id,self.client_secret,self.get_handler,self.oauth2_code)
+        try:
+            self.wtServer.start()
+        except KeyboardInterrupt:
+            # TODO: Should we set a flag so poll can just restart the server, instead of exiting?
+            logger.info('Exiting from keyboard interupt')
+            sys.exit()
+        if self.wtServer.st:
+            self.set_port(self.wtServer.listen_port,True)
+        else:
+            self.set_port(-1)
         #self.setDriver('GV1', self.serverdata['version_major'])
         #self.setDriver('GV2', self.serverdata['version_minor'])
         # TODO: Get working again: Short Poll
@@ -92,16 +111,14 @@ class Controller(Node):
         self.hb = 0
         self.heartbeat()
         # TODO: Currently there is no way to add_existing on PG3 :( Must run discover
-        #self.discover()
+        self.add_existing_tag_managers()
+        self.query()
         self.ready = True
         LOGGER.info('done')
 
-    def handler_nsdata(self, key, data):
-        if 'nsdata' in key:
-            LOGGER.info('Got nsdata update {}'.format(data))
-
     def handler_config_done(self):
-        pass
+        LOGGER.info('enter')
+        LOGGER.info('done')
 
     def handler_poll(self, polltype):
         if polltype == 'longPoll':
@@ -205,7 +222,7 @@ class Controller(Node):
     def get_handler(self,command,params):
         LOGGER.debug('processing command={0} params={1}'.format(command,params))
         if command == '/code':
-            self.set_oauth2(params['oauth2_code'])
+            self.Params['oauth2_code'] = params['oauth2_code']
             self.discover()
             return
         tnode = None
@@ -270,12 +287,28 @@ class Controller(Node):
                 return node
         return None
 
-    def handler_data(self,data):
-        LOGGER.debug('enter: Loading data')
-        self.Data.load(data)
+    #def handler_data(self,data):
+    #    LOGGER.debug('enter: Loading data')
+    #    self.Data.load(data)
+    #    LOGGER.debug(f'Data={self.Data}')
+
+    def handler_nsdata(self, key, data):
+        LOGGER.debug(f"key={key} data={data}")
+        if 'nsdata' in key:
+            LOGGER.info('Got nsdata update {}'.format(data))
+            try:
+                jdata = json.loads(data)
+                self.client_id = jdata['client_id']
+                self.client_secret = jdata['client_secret']
+            except:
+                LOGGER.error(f'failed to parse nsdata={data}',exc_info=True)
+                self.client_id = None
+                self.got_nsdata = False
+                return
+            self.got_nsdata = True
 
     def handler_params(self,params):
-        LOGGER.debug(f'enter: Loading params')
+        LOGGER.debug(f'enter: Loading params {params}')
         self.Params.load(params)
         self.poly.Notices.clear()
         """
@@ -284,34 +317,40 @@ class Controller(Node):
         # Assume it's good unless it's not
         config_st = True
         #
-        # Clear Hubs
+        # Check for oauth2_code
         #
-        param = 'oauth2_code'
-        if param in self.Params and self.Params[param] != "":
-            self.set_oauth2(self.Params[param])
+        if 'oauth2_code' in self.Params.keys():
+            value = self.Params['oauth2_code']
         else:
-            LOGGER.error("oauth2_code not defined or is empty in customParams, please authorize")
-            self.set_oauth2(False)
-            config_st = False
+            LOGGER.error(f"oauth2_code not defined, assuming False")
+            value = False
+
+        if value is False or value == "false" or value == "":
+            value = False
+            self.set_auth(False)
+            self.set_comm(False)
+        else:
+            self.set_auth(True)
+            self.set_comm(True)
+        self.oauth2_code = value
+        LOGGER.debug(f'oauth2_code={self.oauth2_code}')
+        #
+        # Wait for server to start up.
+        #
+        count = 10
+        while self.wtServer is False and count > 0:
+            LOGGER.warning("Waiting for REST Server {self.wtServer} to startup {count}...")
+            time.sleep(1)
+            count -= 1
+        if self.wtServer is False:
+            LOGGER.error(f"Timeout waiting for REST Server {self.wtServer} to startup")
         if self.oauth2_code is False:
-            if hasattr(self,'wtServer'):
+            if self.wtServer is not False:
+                self.auth_url      = "https://www.mytaglist.com/oauth2/authorize.aspx?client_id={0}".format(self.client_id)
                 self.Notices['authorize'] = 'Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wtServer.url)
             else:
                 self.Notices['authorize'] = "No Authorization, and no REST Server running, this should not be possible!"
         self.config_st = config_st
-        self.wtServer = wtServer(LOGGER,self.client_id,self.client_secret,self.get_handler,self.oauth2_code)
-        try:
-            self.wtServer.start()
-        except KeyboardInterrupt:
-            # TODO: Should we set a flag so poll can just restart the server, instead of exiting?
-            logger.info('Exiting from keyboard interupt')
-            sys.exit()
-        if self.wtServer.st:
-            self.set_port(self.wtServer.listen_port,True)
-        else:
-            self.set_port(-1)
-        self.add_existing_tag_managers()
-        self.query()
         LOGGER.debug(f'exit: config_st={config_st}')
 
     def set_url_config(self):
@@ -338,18 +377,6 @@ class Controller(Node):
     """
     Set Functions
     """
-    def set_oauth2(self,value):
-        if self.Params['oauth2_code'] != value:
-            self.Params['oauth2_code'] = value
-        self.oauth2_code = value
-        if value is False:
-            self.set_auth(False)
-            self.set_comm(False)
-        else:
-            self.set_auth(True)
-            self.set_comm(True)
-        return True
-
     def set_short_poll(self,val):
         if val is None or int(val) < 5:
             val = 5

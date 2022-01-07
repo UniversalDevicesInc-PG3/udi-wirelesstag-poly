@@ -105,6 +105,7 @@ class TagManager(Node):
         """
         Start the discover in a thread so we don't cause timeouts :(
         """
+        LOGGER.debug("enter")
         if getattr(self,'discover_running',None) is None:
             self.discover_running = False
         if self.discover_running:
@@ -125,6 +126,7 @@ class TagManager(Node):
         else:
             self._discover()
             self.discover_running = False
+        LOGGER.debug("exit")
 
     def _discover(self):
         LOGGER.debug('use_tags={}'.format(self.use_tags))
@@ -275,19 +277,6 @@ class TagManager(Node):
         for tag in tags:
             tag.set_url_config(force=force)
         self.set_url_config_st = True
-
-
-    def l_info(self, name, string):
-        LOGGER.info("%s:%s: %s" %  (self.l_name,name,string))
-
-    def l_error(self, name, string):
-        LOGGER.error("%s:%s: %s" % (self.l_name,name,string))
-
-    def l_warning(self, name, string):
-        LOGGER.warning("%s:%s: %s" % (self.l_name,name,string))
-
-    def l_debug(self, name, string):
-        LOGGER.debug("%s:%s: %s" % (self.l_name,name,string))
 
     """
     Set Functions

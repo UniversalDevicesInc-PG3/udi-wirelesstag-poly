@@ -10,6 +10,9 @@
     "longPoll": "600",
 	"logLevel": "DEBUG",
     "profile_version": "0.0.0",
+	"customParams": {
+		"oauth2_code": false
+	},
     "credits": [
         {
             "title": "udi-WirelessSensorTags-poly: A NodeServer for CAO Gadgets Wireless Sensor Tags",
@@ -21,3 +24,4 @@
         }
     ]
 }
+
