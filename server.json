@@ -9,7 +9,7 @@
     "shortPoll": "60",
     "longPoll": "600",
 	"logLevel": "DEBUG",
-    "profile_version": "0.0.0",
+    "profile_version": "3.0.0",
 	"customParams": {
 		"oauth2_code": false
 	},
