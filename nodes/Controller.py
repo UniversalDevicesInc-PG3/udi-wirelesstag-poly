@@ -448,7 +448,7 @@ class Controller(Node):
         'INSTALL_PROFILE': cmd_install_profile
     }
     drivers = [
-        {'driver': 'ST',  'value': 1, 'uom': 2},
+        {'driver': 'ST',  'value': 1, 'uom': 56},
         {'driver': 'GV3', 'value': 0, 'uom': 2},  # auth: Authorized (we have valid oauth2 token)
         {'driver': 'GV4', 'value': 0, 'uom': 2},  # comm: Communicating
         {'driver': 'GV6', 'value': 5, 'uom': 56}, # shortpoll
