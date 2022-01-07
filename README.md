@@ -277,6 +277,11 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
+  - 3.0.1  01/05/2022
+    - Update to udi_interface 3.0.31
+    - Fix to use nsdata from PG3 database
+  - 3.0.0  01/05/2022
+    - First PG3 release
   - 2.0.25 10/13/2020
     - Try to avoid race condition on initial add and discover for nodes.  Can't confirm because I can't make it happen.
   - 2.0.24 10/06/2020

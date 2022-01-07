@@ -44,12 +44,10 @@ class Controller(Node):
         poly.subscribe(poly.LOGLEVEL,          self.handler_log_level)
         poly.subscribe(poly.CONFIGDONE,        self.handler_config_done)
         poly.subscribe(poly.ADDNODEDONE,       self.node_queue)
-        self.got_nsdata = None
+        self.client_secret = None
+        self.client_id = None
+        self.got_nsdata = False
         poly.subscribe(poly.CUSTOMNS,          self.handler_nsdata)
-        # TODO: Remove when nsdata loading is working
-        self.got_nsdata = True
-        self.client_id = "3b08b242-f0f8-41c0-ba29-6b0478cd0b77"
-        self.client_secret ="0b947853-1676-4a63-a384-72769c88f3b1"
         poly.ready()
         poly.addNode(self, conn_status="ST")
 
@@ -110,7 +108,6 @@ class Controller(Node):
         #self.set_long_poll(val)
         self.hb = 0
         self.heartbeat()
-        # TODO: Currently there is no way to add_existing on PG3 :( Must run discover
         self.add_existing_tag_managers()
         self.query()
         self.ready = True
@@ -297,12 +294,13 @@ class Controller(Node):
         if 'nsdata' in key:
             LOGGER.info('Got nsdata update {}'.format(data))
             try:
-                jdata = json.loads(data)
-                self.client_id = jdata['client_id']
-                self.client_secret = jdata['client_secret']
+                #jdata = json.loads(data)
+                self.client_id     = data['client_id']
+                self.client_secret = data['client_secret']
             except:
                 LOGGER.error(f'failed to parse nsdata={data}',exc_info=True)
                 self.client_id = None
+                self.client_secret = None
                 self.got_nsdata = False
                 return
             self.got_nsdata = True
@@ -344,12 +342,15 @@ class Controller(Node):
             count -= 1
         if self.wtServer is False:
             LOGGER.error(f"Timeout waiting for REST Server {self.wtServer} to startup")
-        if self.oauth2_code is False:
-            if self.wtServer is not False:
-                self.auth_url      = "https://www.mytaglist.com/oauth2/authorize.aspx?client_id={0}".format(self.client_id)
-                self.Notices['authorize'] = 'Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wtServer.url)
-            else:
-                self.Notices['authorize'] = "No Authorization, and no REST Server running, this should not be possible!"
+        if self.client_id is None:
+                self.Notices['authorize'] = "ERROR: Unable to authorize, no client id returned in Node Server Data.  Check Log for ERROR"
+        else:
+            if self.oauth2_code is False:
+                if self.wtServer is not False:
+                    self.auth_url      = "https://www.mytaglist.com/oauth2/authorize.aspx?client_id={0}".format(self.client_id)
+                    self.Notices['authorize'] = 'Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wtServer.url)
+                else:
+                    self.Notices['authorize'] = "No Authorization, and no REST Server running, this should not be possible!"
         self.config_st = config_st
         LOGGER.debug(f'exit: config_st={config_st}')
 
