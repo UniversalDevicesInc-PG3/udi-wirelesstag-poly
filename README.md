@@ -277,6 +277,8 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
+  - 3.0.3: 01/11/2022
+    - Change how client id and secret are received, can only test on production PG...
   - 3.0.2  01/05/2022
     - Add discover to PG settings so it shows up in PG UI
     - Fix Connection status

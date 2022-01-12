@@ -44,9 +44,9 @@ class Controller(Node):
         poly.subscribe(poly.LOGLEVEL,          self.handler_log_level)
         poly.subscribe(poly.CONFIGDONE,        self.handler_config_done)
         poly.subscribe(poly.ADDNODEDONE,       self.node_queue)
-        self.client_secret = None
         self.client_id = None
-        self.got_nsdata = False
+        self.client_secret = None
+        self.got_nsdata = None
         poly.subscribe(poly.CUSTOMNS,          self.handler_nsdata)
         poly.ready()
         poly.addNode(self, conn_status="ST")
@@ -78,6 +78,15 @@ class Controller(Node):
         self.poly.Notices.clear()
         #serverdata = self.poly.get_server_data(check_profile=False)
         LOGGER.info(f"Started WirelessTag NodeServer {self.poly.serverdata['version']}")
+        cnt = 10
+        while self.got_nsdata is None and cnt > 0:
+            LOGGER.warning(f'Waiting for nsdata to be loaded... cnt={cnt}')
+        if self.got_nsdata is None:
+            msg = "Unable to start server, no NSDATA returned..."
+            LOGGER.error(msg)
+            self.Notices['handler_start'] = msg
+            return False
+        self.Notices.delete('handler_start')
         #
         # Always need to start the REST server
         #
@@ -289,21 +298,24 @@ class Controller(Node):
     #    self.Data.load(data)
     #    LOGGER.debug(f'Data={self.Data}')
 
-    def handler_nsdata(self, key, data):
-        LOGGER.debug(f"key={key} data={data}")
-        if 'nsdata' in key:
-            LOGGER.info('Got nsdata update {}'.format(data))
-            try:
-                #jdata = json.loads(data)
-                self.client_id     = data['client_id']
-                self.client_secret = data['client_secret']
-            except:
-                LOGGER.error(f'failed to parse nsdata={data}',exc_info=True)
-                self.client_id = None
-                self.client_secret = None
-                self.got_nsdata = False
-                return
-            self.got_nsdata = True
+    def handler_nsdata(self, data):
+        LOGGER.debug(f"data={data}")
+        if data is None:
+            msg = "No NSDATA Returned by Polyglot"
+            LOGGER.error(msg)
+            self.Notices['nsdata'] = msg
+            return
+
+        self.Notices.delete('nsdata')
+        try:
+            #jdata = json.loads(data)
+            self.client_id     = data['client_id']
+            self.client_secret = data['client_secret']
+        except:
+            LOGGER.error(f'failed to parse nsdata={data}',exc_info=True)
+            self.got_nsdata = False
+            return
+        self.got_nsdata = True
 
     def handler_params(self,params):
         LOGGER.debug(f'enter: Loading params {params}')
