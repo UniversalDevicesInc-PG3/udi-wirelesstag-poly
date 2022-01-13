@@ -37,16 +37,19 @@ class Controller(Node):
         poly.subscribe(poly.DISCOVER,          self.discover)
         poly.subscribe(poly.STOP,              self.handler_stop)
         poly.subscribe(poly.CUSTOMPARAMS,      self.handler_params)
-        self.config_st = False
-        #poly.subscribe(poly.CUSTOMDATA,        self.handler_data)
+        poly.subscribe(poly.CUSTOMDATA,        self.handler_data)
         #poly.subscribe(poly.CUSTOMTYPEDPARAMS, self.handler_typed_params)
         #poly.subscribe(poly.CUSTOMTYPEDDATA,   self.handler_typed_data)
         poly.subscribe(poly.LOGLEVEL,          self.handler_log_level)
         poly.subscribe(poly.CONFIGDONE,        self.handler_config_done)
         poly.subscribe(poly.ADDNODEDONE,       self.node_queue)
-        self.client_id = None
-        self.client_secret = None
-        self.got_nsdata = None
+        self.client_id              = None
+        self.client_secret          = None
+        self.handler_start_st       = None
+        self.handler_config_done_st = None
+        self.handler_params_st      = None
+        self.handler_data_st        = None
+        self.handler_nsdata_st      = None
         poly.subscribe(poly.CUSTOMNS,          self.handler_nsdata)
         poly.ready()
         poly.addNode(self, conn_status="ST")
@@ -76,33 +79,33 @@ class Controller(Node):
     def handler_start(self):
         LOGGER.info('enter')
         self.poly.Notices.clear()
-        #serverdata = self.poly.get_server_data(check_profile=False)
+        # Start a heartbeat right away        
+        self.hb = 0
+        self.heartbeat()
+
         LOGGER.info(f"Started WirelessTag NodeServer {self.poly.serverdata['version']}")
         cnt = 10
-        while self.got_nsdata is None and cnt > 0:
-            LOGGER.warning(f'Waiting for nsdata to be loaded... cnt={cnt}')
-        if self.got_nsdata is None:
-            msg = "Unable to start server, no NSDATA returned..."
-            LOGGER.error(msg)
-            self.Notices['handler_start'] = msg
-            return False
-        self.Notices.delete('handler_start')
+        while (self.handler_params_st is None or self.handler_config_done_st is None
+            or self.handler_nsdata_st or self.handler_data_st is None) and cnt > 0:
+            LOGGER.warning(f'Waiting for all to be loaded config={self.handler_config_done_st} params={self.handler_params_st} data={self.handler_data_st} nsdata={self.handler_nsdata_st}... cnt={cnt}')
+            cnt -= 1
         #
         # Always need to start the REST server
         #
-        self.wtServer = wtServer(LOGGER,self.client_id,self.client_secret,self.get_handler,self.oauth2_code)
-        try:
-            self.wtServer.start()
-        except KeyboardInterrupt:
-            # TODO: Should we set a flag so poll can just restart the server, instead of exiting?
-            logger.info('Exiting from keyboard interupt')
-            sys.exit()
-        if self.wtServer.st:
-            self.set_port(self.wtServer.listen_port,True)
+        self.rest_start()
+        # 
+        # All good?
+        #
+        if self.wtServer is False:
+            self.Notices['auth'] = "REST Server {self.wtServer} not running. check Log for ERROR"
+        elif self.client_id is None:
+            self.Notices['auth'] = "Unable to authorize, no client id returned in Node Server Data.  Check Log for ERROR"
+        elif self.oauth2_code is False:
+            self.auth_url      = "https://www.mytaglist.com/oauth2/authorize.aspx?client_id={0}".format(self.client_id)
+            self.Notices['auth'] = 'Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wtServer.url)
         else:
-            self.set_port(-1)
-        #self.setDriver('GV1', self.serverdata['version_major'])
-        #self.setDriver('GV2', self.serverdata['version_minor'])
+            self.Notices.delete('auth')
+
         # TODO: Get working again: Short Poll
         #val = self.getDriver('GV6')
         #LOGGER.debug("shortPoll={0} GV6={1}".format(self.polyConfig['shortPoll'],val))
@@ -115,8 +118,7 @@ class Controller(Node):
         #if val is None or int(val) == 0:
         #    val = self.polyConfig['longPoll']
         #self.set_long_poll(val)
-        self.hb = 0
-        self.heartbeat()
+
         self.add_existing_tag_managers()
         self.query()
         self.ready = True
@@ -124,6 +126,7 @@ class Controller(Node):
 
     def handler_config_done(self):
         LOGGER.info('enter')
+        self.handler_config_done_st = True
         LOGGER.info('done')
 
     def handler_poll(self, polltype):
@@ -222,6 +225,35 @@ class Controller(Node):
     def handler_stop(self):
         LOGGER.debug('NodeServer stopped.')
 
+    def rest_start(self):
+        # 
+        # For now, must have our NSDATA
+        # TODO: Can ignore if we have secret
+        if self.handler_nsdata_st is None:
+            msg = "Unable to start server, no NSDATA returned..."
+            LOGGER.error(msg)
+            self.Notices['rest_start'] = msg
+            return False
+        self.Notices.delete('rest_start')
+        #
+        # Start it up...
+        #
+        self.wtServer = wtServer(LOGGER,self.client_id,self.client_secret,self.get_handler,self.oauth2_code)
+        try:
+            self.wtServer.start()
+        except:
+            LOGGER.error('Failed to start REST Server...')
+        if self.wtServer.st:
+            self.set_port(self.wtServer.listen_port,True)
+        else:
+            self.set_port(-1)
+        return
+
+    def rest_restart(self):
+        if self.wtServer is not False and self.wtServer.st:
+            self.wtServer.stop()
+        self.rest_start()
+
     """
     This handle's all the 'get's from the tag URL calling.
     """
@@ -300,10 +332,12 @@ class Controller(Node):
 
     def handler_nsdata(self, data):
         LOGGER.debug(f"data={data}")
+        # Temporary, should be fixed in next version of PG3
         if data is None:
             msg = "No NSDATA Returned by Polyglot"
             LOGGER.error(msg)
             self.Notices['nsdata'] = msg
+            self.handler_nsdata_st = False
             return
 
         self.Notices.delete('nsdata')
@@ -313,9 +347,14 @@ class Controller(Node):
             self.client_secret = data['client_secret']
         except:
             LOGGER.error(f'failed to parse nsdata={data}',exc_info=True)
-            self.got_nsdata = False
+            self.handler_nsdata_st = False
             return
-        self.got_nsdata = True
+        self.handler_nsdata_st = True
+
+    def handler_data(self,data):
+        LOGGER.debug(f'enter: Loading data {data}')
+        self.Data.load(data)
+        self.handler_data_st = True
 
     def handler_params(self,params):
         LOGGER.debug(f'enter: Loading params {params}')
@@ -325,7 +364,7 @@ class Controller(Node):
         Check all user params are available and valid
         """
         # Assume it's good unless it's not
-        config_st = True
+        st = True
         #
         # Check for oauth2_code
         #
@@ -337,6 +376,7 @@ class Controller(Node):
 
         if value is False or value == "false" or value == "":
             value = False
+            st    = False
             self.set_auth(False)
             self.set_comm(False)
         else:
@@ -344,27 +384,14 @@ class Controller(Node):
             self.set_comm(True)
         self.oauth2_code = value
         LOGGER.debug(f'oauth2_code={self.oauth2_code}')
-        #
-        # Wait for server to start up.
-        #
-        count = 10
-        while self.wtServer is False and count > 0:
-            LOGGER.warning("Waiting for REST Server {self.wtServer} to startup {count}...")
-            time.sleep(1)
-            count -= 1
-        if self.wtServer is False:
-            LOGGER.error(f"Timeout waiting for REST Server {self.wtServer} to startup")
-        if self.client_id is None:
-                self.Notices['authorize'] = "ERROR: Unable to authorize, no client id returned in Node Server Data.  Check Log for ERROR"
-        else:
-            if self.oauth2_code is False:
-                if self.wtServer is not False:
-                    self.auth_url      = "https://www.mytaglist.com/oauth2/authorize.aspx?client_id={0}".format(self.client_id)
-                    self.Notices['authorize'] = 'Click <a target="_blank" href="{0}&redirect_uri={1}/code">Authorize</a> to link your CAO Wireless Sensor Tags account'.format(self.auth_url,self.wtServer.url)
-                else:
-                    self.Notices['authorize'] = "No Authorization, and no REST Server running, this should not be possible!"
-        self.config_st = config_st
-        LOGGER.debug(f'exit: config_st={config_st}')
+
+        # If it's a config change, then need to restart the REST server
+        # because the auth2_code must have changed.
+        if not self.first_run:
+            self.rest_restart()
+
+        self.handler_params_st = st
+        LOGGER.debug(f'exit: st={st}')
 
     def set_url_config(self):
         # TODO: Should loop over tag managers, and call set_url_config on the tag manager

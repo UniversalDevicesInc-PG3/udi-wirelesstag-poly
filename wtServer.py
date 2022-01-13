@@ -97,6 +97,9 @@ class wtREST():
         #self.server.shutdown()
         #self.server.server_close()
 
+    def stop(self):
+        return self.server.shutdown()
+
     def get_handler(self,path,query):
         return self.parent.get_handler(path,query)
 
@@ -154,6 +157,9 @@ class wtServer():
         self._slock = False
         return True
 
+    def stop(self):
+        self.rest.stop()
+        
     def get_handler(self,command,params):
         """
         This is passed the incoming http get's to processes
