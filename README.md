@@ -2,15 +2,14 @@
 
 # udi-WirelessTags-polyglot
 
-This is the Wireless Tags Poly for the [Universal Devices ISY994i](https://www.universal-devices.com/residential/ISY) [Polyglot interface](http://www.universal-devices.com/developers/polyglot/docs/) with  [Polyglot V2](https://github.com/Einstein42/udi-polyglotv2)
-to support [CAO Gadgets Wireless Sensor Tags](http://wirelesstag.net/)
+This is the Wireless Tags Poly for the [Universal Devices Polisy](https://www.universal-devices.com) for Polyglot Version 3 (PG3) to support [CAO Gadgets Wireless Sensor Tags](http://wirelesstag.net/)
 
 (c) JimBoCA aka Jim Searle
 MIT license.
 
 ## Support
 
-This is discussed on the forum post [Polglot V2 CAO Wireless Tags Nodeserver](https://forum.universal-devices.com/topic/23724-polglot-v2-cao-wireless-tags-nodeserver/)  You can ask questions on that post, or file an issue here on github if you like https://github.com/jimboca/udi-wirelesstag-poly/issues
+This is discussed on the [Polglot Ve CAO Wireless Tags Nodeserver SubForum](https://forum.universal-devices.com/forum/306-wirelesstag/)  You can ask questions on that forum, or file an issue here on github if you like https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues
 
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/rXAGk9)
 
