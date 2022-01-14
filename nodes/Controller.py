@@ -23,6 +23,7 @@ class Controller(Node):
         self.oauth2_code = False
         self.discover_thread = None
         self.wtServer = False
+        self.first_run = True
         # TODO: Always true, should read from customData and check profile version like PG2 version did?
         self.update_profile = True
         self.n_queue = []
@@ -88,6 +89,7 @@ class Controller(Node):
         while (self.handler_params_st is None or self.handler_config_done_st is None
             or self.handler_nsdata_st or self.handler_data_st is None) and cnt > 0:
             LOGGER.warning(f'Waiting for all to be loaded config={self.handler_config_done_st} params={self.handler_params_st} data={self.handler_data_st} nsdata={self.handler_nsdata_st}... cnt={cnt}')
+            time.sleep(1)
             cnt -= 1
         #
         # Always need to start the REST server
@@ -97,7 +99,7 @@ class Controller(Node):
         # All good?
         #
         if self.wtServer is False:
-            self.Notices['auth'] = "REST Server {self.wtServer} not running. check Log for ERROR"
+            self.Notices['auth'] = f"REST Server {self.wtServer} not running. check Log for ERROR"
         elif self.client_id is None:
             self.Notices['auth'] = "Unable to authorize, no client id returned in Node Server Data.  Check Log for ERROR"
         elif self.oauth2_code is False:
@@ -307,7 +309,7 @@ class Controller(Node):
      Misc funcs
     """
     def authorized(self,name):
-        if self.wtServer.oauth2_code == False:
+        if self.wtServer is False or self.wtServer.oauth2_code is False:
             self.set_auth(False)
             LOGGER.error("Not able to {0} oauth2_code={1}".format(name,self.wtServer.oauth2_code))
             return False
@@ -350,16 +352,17 @@ class Controller(Node):
     #    LOGGER.debug('enter: Loading data')
     #    self.Data.load(data)
     #    LOGGER.debug(f'Data={self.Data}')
-
-    def handler_nsdata(self, data):
-        LOGGER.debug(f"data={data}")
-        # Temporary, should be fixed in next version of PG3
-        if data is None:
-            msg = "No NSDATA Returned by Polyglot"
-            LOGGER.error(msg)
-            self.Notices['nsdata'] = msg
-            self.handler_nsdata_st = False
-            return
+    def handler_nsdata(self, key, data):
+        LOGGER.debug(f"key={key} data={data}")
+        if 'nsdata' in key:
+            LOGGER.info('Got nsdata update {}'.format(data))
+            # Temporary, should be fixed in next version of PG3
+            if data is None:
+                msg = "No NSDATA Returned by Polyglot"
+                LOGGER.error(msg)
+                self.Notices['nsdata'] = msg
+                self.handler_nsdata_st = False
+                return
 
         self.Notices.delete('nsdata')
         try:
@@ -410,6 +413,7 @@ class Controller(Node):
         # because the auth2_code must have changed.
         if not self.first_run:
             self.rest_restart()
+        self.first_run = True
 
         self.handler_params_st = st
         LOGGER.debug(f'exit: st={st}')
