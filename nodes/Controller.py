@@ -226,15 +226,36 @@ class Controller(Node):
         LOGGER.debug('NodeServer stopped.')
 
     def rest_start(self):
-        # 
-        # For now, must have our NSDATA
-        # TODO: Can ignore if we have secret
-        if self.handler_nsdata_st is None:
+
+        # use previously saved nsdata if necessary, in case of network glitch.
+        if self.client_id is None:
+            if 'client_id' in self.Data:
+                LOGGER.warning("Using previously saved client_id...")
+                self.client_id = self.Data['client_id']
+            elif 'client_id' in self.Params:
+                LOGGER.warning("Using Params client_id...")
+                self.client_id = self.Params['client_id']
+        if self.client_secret is None:
+            if 'client_secret' in self.Data:
+                LOGGER.warning("Using previously saved client_secret...")
+                self.client_secret = self.Data['client_secret']
+            elif 'client_secret' in self.Params:
+                LOGGER.warning("Using Params client_secret...")
+                self.client_secret = self.Params['client_secret']
+
+        if self.client_id is None or self.client_secret is None:
             msg = "Unable to start server, no NSDATA returned..."
             LOGGER.error(msg)
             self.Notices['rest_start'] = msg
             return False
         self.Notices.delete('rest_start')
+
+        # Save to data if necessary
+        if not 'client_id' in self.Data or self.Data['client_id'] != self.client_id:
+            self.Data['client_id'] = self.client_id
+        if not 'client_secret' in self.Data or self.Data['client_secret'] != self.client_secret:
+            self.Data['client_secret'] = self.client_secret
+
         #
         # Start it up...
         #
