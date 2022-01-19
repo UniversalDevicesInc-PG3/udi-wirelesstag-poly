@@ -311,7 +311,11 @@ class Controller(Node):
     def authorized(self,name):
         if self.wtServer is False or self.wtServer.oauth2_code is False:
             self.set_auth(False)
-            LOGGER.error("Not able to {0} oauth2_code={1}".format(name,self.wtServer.oauth2_code))
+            msg = f"Not able to {name}"
+            if self.wtServer is False:
+                msg += " Server is not running"
+            else:
+                msg += f" oauth2_code={self.wtServer.oauth2_code}"
             return False
         return True
 
@@ -354,15 +358,17 @@ class Controller(Node):
     #    LOGGER.debug(f'Data={self.Data}')
     def handler_nsdata(self, key, data):
         LOGGER.debug(f"key={key} data={data}")
-        if 'nsdata' in key:
-            LOGGER.info('Got nsdata update {}'.format(data))
-            # Temporary, should be fixed in next version of PG3
-            if data is None:
-                msg = "No NSDATA Returned by Polyglot"
+
+        # Temporary, should be fixed in next version of PG3
+        if key is None or data is None:
+                msg = f"No NSDATA Returned by Polyglot key={key} data={data}"
                 LOGGER.error(msg)
                 self.Notices['nsdata'] = msg
                 self.handler_nsdata_st = False
                 return
+
+        if 'nsdata' in key:
+            LOGGER.info('Got nsdata update {}'.format(data))
 
         self.Notices.delete('nsdata')
         try:

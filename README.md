@@ -280,6 +280,8 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
+  - 3.0.6: 01/18/2022
+    - More trapping of bad values from PG3
   - 3.0.5: 01/18/2022
     - Update to latest udi_interface 3.0.32
   - 3.0.4: 01/13/2022
