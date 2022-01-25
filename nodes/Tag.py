@@ -21,6 +21,7 @@ class Tag(Node):
          # So logger calls won't crash
         self.address = address
         self.id = 'wTag' # Until we figure out the uom
+        self.type = 'wTag'
         self.name = name
         self.is_new = is_new
         self.node_set_url = False

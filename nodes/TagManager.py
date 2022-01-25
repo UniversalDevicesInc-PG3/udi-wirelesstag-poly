@@ -21,6 +21,7 @@ class TagManager(Node):
         self.l_name = "{}:{}:{}".format(self.id,address,name)
         LOGGER.debug('start')
         self.controller = controller
+        self.type = self.id
         # Save the real mac before we legalize it.
         self.ready       = False
         self.do_discover = do_discover

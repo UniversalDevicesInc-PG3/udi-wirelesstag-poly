@@ -26,6 +26,7 @@ class Controller(Node):
         self.first_run = True
         # TODO: Always true, should read from customData and check profile version like PG2 version did?
         self.update_profile = True
+        self.type = self.id
         self.n_queue = []
         self.Notices         = Custom(poly, 'notices')
         self.Data            = Custom(poly, 'customdata')
@@ -294,16 +295,17 @@ class Controller(Node):
             LOGGER.error('tmgr_mac not in params? command={0} params={1}'.format(command,params))
             return False
         for node in self.poly.nodes():
-            if hasattr(node,'tag_id') and int(node.tag_id) == int(params['tagid']) and node.primary_n.mac == params['tmgr_mac']:
+            if node.type == 'wTag' and int(node.tag_id) == int(params['tagid']) and node.primary_n.mac == params['tmgr_mac']:
+                LOGGER.info(f"Update for Tag {node.name} {node.address} (node.tagid={node.tag_id} node.pmac={node.primary_n.mac})")
                 tnode = node
         if tnode is None:
             LOGGER.error("Did not find node for tag manager '{0}' with id '{1}'".format(params['tmgr_mac'],params['tagid']))
             for node in self.poly.nodes():
-                if hasattr(node,'tag_id'):
+                if node.id.type == 'wTag':
                     LOGGER.debug(' tmgr_mac={0} tagid={1}'.format(node.primary_n.mac,node.tag_id))
             return False
         #LOGGER.debug('calling node={0} command={1} params={2}'.format(node.address,command,params))
-        return node.get_handler(command,params)
+        return tnode.get_handler(command,params)
 
     """
      Misc funcs
