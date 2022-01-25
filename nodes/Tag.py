@@ -199,6 +199,9 @@ class Tag(Node):
             self.reportDrivers()
 
     def set_url_config(self,force=False):
+        if self.controller.wtServer is False:
+            LOGGER.error("Unable to set URL Config because main server was not started")
+            return False
         # If we haven't tried to set this nodes url's or it failed, the reset it.
         url = self.controller.wtServer.listen_url
         if not self.node_set_url or force:

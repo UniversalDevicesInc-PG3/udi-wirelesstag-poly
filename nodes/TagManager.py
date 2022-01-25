@@ -31,6 +31,7 @@ class TagManager(Node):
         self.discover_thread = None
         self.set_url_thread = None
         self.set_url_config_st = None
+        self.session = False
         LOGGER.debug('done')
 
     def handler_start(self):
@@ -191,11 +192,22 @@ class TagManager(Node):
     Wireless Tags API Communication functions
     """
     def start_session(self):
+        if self.controller.wtServer is False:
+            LOGGER.error("Unable to start TagManager session because main server was not started")
+            return False
         self.session = wtSession(self,LOGGER,self.controller.wtServer,self.mac)
 
+    def session_post(self,path,params):
+        if self.session is False:
+            LOGGER.error("TagManager session is not running")
+            self.controller.Notices['session_post'] = "TagManager session is not running"
+            return {'st': False}
+        self.controller.Notices.delete('session_post')
+        return self.session.api_post_d(path,params)
+    
     # http://wirelesstag.net/ethClient.asmx?op=GetTagList
     def GetTagList(self):
-        ret = self.session.api_post_d('ethClient.asmx/GetTagList',{})
+        ret = self.session_post('ethClient.asmx/GetTagList',{})
         self.set_st(ret)
         if ret: return ret
         LOGGER.error("Failed: st={}".format(ret))
@@ -203,31 +215,31 @@ class TagManager(Node):
 
     # http://wirelesstag.net/ethClient.asmx?op=LoadEventURLConfig
     def LoadEventURLConfig(self,params):
-        return self.session.api_post_d('ethClient.asmx/LoadEventURLConfig',params)
+        return self.session_post('ethClient.asmx/LoadEventURLConfig',params)
 
     # http://wirelesstag.net/ethClient.asmx?op=SaveEventURLConfig
     def SaveEventURLConfig(self,params):
-        return self.session.api_post_d('ethClient.asmx/SaveEventURLConfig',params)
+        return self.session_post('ethClient.asmx/SaveEventURLConfig',params)
 
     # http://wirelesstag.net/ethClient.asmx?op=LoadTempSensorConfig
     def LoadTempSensorConfig(self,params):
-        return self.session.api_post_d('ethClient.asmx/LoadTempSensorConfig',params)
+        return self.session_post('ethClient.asmx/LoadTempSensorConfig',params)
 
     # http://wirelesstag.net/ethClient.asmx?op=RequestImmediatePostback
     def RequestImmediatePostback(self,params):
-        return self.session.api_post_d('ethClient.asmx/RequestImmediatePostback',params)
+        return self.session_post('ethClient.asmx/RequestImmediatePostback',params)
 
     def RebootTagManager(self,tmgr_mac):
-        return self.session.api_post_d('ethClient.asmx/RebootTagManager',{})
+        return self.session_post('ethClient.asmx/RebootTagManager',{})
 
     def PingAllTags(self,tmgr_mac):
-        return self.session.api_post_d('ethClient.asmx/PingAllTags',{'autoRetry':True})
+        return self.session_post('ethClient.asmx/PingAllTags',{'autoRetry':True})
 
     def LightOn(self,tmgr_mac,id,flash):
-        return self.session.api_post_d('ethClient.asmx/LightOn',{'id': id, 'flash':flash})
+        return self.session_post('ethClient.asmx/LightOn',{'id': id, 'flash':flash})
 
     def LightOff(self,tmgr_mac,id):
-        return self.session.api_post_d('ethClient.asmx/LightOff',{'id': id})
+        return self.session_post('ethClient.asmx/LightOff',{'id': id})
 
     # TODO: Cache the temp sensor config's?
     def get_tag_temp_unit(self,tag_data):

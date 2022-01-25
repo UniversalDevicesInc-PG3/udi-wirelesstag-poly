@@ -99,7 +99,7 @@ class Controller(Node):
         # All good?
         #
         if self.wtServer is False:
-            self.Notices['auth'] = f"REST Server {self.wtServer} not running. check Log for ERROR"
+            self.Notices['auth'] = f"REST Server ({self.wtServer}) not running. check Log for ERROR"
         elif self.client_id is None:
             self.Notices['auth'] = "Unable to authorize, no client id returned in Node Server Data.  Check Log for ERROR"
         elif self.oauth2_code is False:
@@ -246,7 +246,7 @@ class Controller(Node):
                 self.client_secret = self.Params['client_secret']
 
         if self.client_id is None or self.client_secret is None:
-            msg = "Unable to start server, no NSDATA returned..."
+            msg = f"Unable to start server, no NSDATA returned client_id={self.client_id} client_secret={self.client_secret}"
             LOGGER.error(msg)
             self.Notices['rest_start'] = msg
             return False
