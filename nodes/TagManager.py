@@ -5,6 +5,7 @@ by JimBoCA jimboca3@gmail.com
 from udi_interface import Node,LOGGER
 import sys
 import time
+from copy import deepcopy
 import requests, json
 from threading import Thread
 from wtServer import wtSession
@@ -137,7 +138,10 @@ class TagManager(Node):
         if ret['st'] is False:
             return
         index = 0
-        for tag in ret['result']:
+        tags = deepcopy(ret['result'])
+        for tag in tags:
+            LOGGER.debug(f"Will add Tag: {tag['name']}")
+        for tag in tags:
             LOGGER.debug('Got Tag: {}'.format(tag))
             self.add_tag(tdata=tag, uom=self.get_tag_temp_unit(tag))
         self.reportDrivers() # Report now so they show up while set_url runs.

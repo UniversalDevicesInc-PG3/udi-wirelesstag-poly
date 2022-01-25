@@ -16,7 +16,7 @@ nodedef = 'node_def_id'
 class Controller(Node):
 
     def __init__(self, poly, primary, address, name):
-        LOGGER.info('HarmonyController: Initializing')
+        LOGGER.info('WirelessTag Controller: Initializing')
         super(Controller, self).__init__(poly, primary, address, name)
         # These start in threads cause they take a while
         self.ready = False
