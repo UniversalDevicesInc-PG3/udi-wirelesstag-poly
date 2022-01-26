@@ -68,22 +68,33 @@ class Controller(Node):
 
     def add_node(self,node):
         LOGGER.debug(f'adding node node={node.address} {node.name}')
+
+        # See if it's already being added or exists
         if self.n_queue.count(node.address) > 0:
             LOGGER.error(f"Already waiting for node {node.address} name={node.name} to be added.")
             return False
+        if self.poly.getNode(node.address):
+            LOGGER.error(f"Node {node.address} name={node.name} already exists.")
+            return False
+
+        # Queue it up and add it
         self.n_queue.append(node.address)
         anode = self.poly.addNode(node)
         LOGGER.debug(f'got {anode}')
         if anode is None:
-            LOGGER.error('Failed to add node address')
+            LOGGER.error(r'Failed to add {node.address} name={node.name}')
         else:
             cnt = 0
             while self.n_queue.count(node.address) > 0:
                 cnt += 1
-                if cnt > 50:
-                    LOGGER.warning(f"Waiting for {node.address} add to complete...")
-                    cnt = 0
+                # Warn every 5 seconds, and die after 60?
+                if cnt % 50 == 0:
+                    LOGGER.warning(f"Waiting for {node.address} add to complete. Queued for {cnt / 10} seconds...")
+                if cnt > 6000:
+                    LOGGER.error(f"TIMEOUT waiting for {node.address} add to complete...")
+                    return False
                 time.sleep(0.1)
+        LOGGER.debug(f'returning {node}')
         return anode
 
     def handler_start(self):
