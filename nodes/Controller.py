@@ -63,19 +63,27 @@ class Controller(Node):
     until it is fully created before we try to use it.
     '''
     def node_queue(self, data):
-        self.n_queue.append(data['address'])
-
-    def wait_for_node_done(self):
-        while len(self.n_queue) == 0:
-            time.sleep(0.1)
-        self.n_queue.pop()
+        LOGGER.debug(f'data={data}')
+        self.n_queue.remove(data['address'])
 
     def add_node(self,node):
+        LOGGER.debug(f'adding node node={node.address} {node.name}')
+        if self.n_queue.count(node.address) > 0:
+            LOGGER.error(f"Already waiting for node {node.address} name={node.name} to be added.")
+            return False
+        self.n_queue.append(node.address)
         anode = self.poly.addNode(node)
         LOGGER.debug(f'got {anode}')
-        self.wait_for_node_done()
         if anode is None:
             LOGGER.error('Failed to add node address')
+        else:
+            cnt = 0
+            while self.n_queue.count(node.address) > 0:
+                cnt += 1
+                if cnt > 50:
+                    LOGGER.warning(f"Waiting for {node.address} add to complete...")
+                    cnt = 0
+                time.sleep(0.1)
         return anode
 
     def handler_start(self):
