@@ -102,8 +102,8 @@ class Controller(Node):
                             LOGGER.error(f"TIMEOUT waiting for {node.address} add to complete...")
                             return False
                         time.sleep(0.1)
-        LOGGER.debug(f'returning {node}')
-        return anode
+        LOGGER.debug(f'returning {ret}')
+        return ret
 
     def handler_start(self):
         LOGGER.info('enter')
