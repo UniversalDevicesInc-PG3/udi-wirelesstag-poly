@@ -27,6 +27,7 @@ class Controller(Node):
         # TODO: Always true, should read from customData and check profile version like PG2 version did?
         self.update_profile = True
         self.type = self.id
+        self.queue_lock = Thread.Lock() # Lock for syncronizing acress threads
         self.n_queue = []
         self.Notices         = Custom(poly, 'notices')
         self.Data            = Custom(poly, 'customdata')
@@ -34,7 +35,7 @@ class Controller(Node):
         self.Notices         = Custom(poly, 'notices')
         #self.TypedParameters = Custom(poly, 'customtypedparams')
         #self.TypedData       = Custom(poly, 'customtypeddata')
-        poly.subscribe(poly.START,             self.handler_start, address) 
+        poly.subscribe(poly.START,             self.handler_start, address)
         poly.subscribe(poly.POLL,              self.handler_poll)
         poly.subscribe(poly.DISCOVER,          self.discover)
         poly.subscribe(poly.STOP,              self.handler_stop)
@@ -63,44 +64,51 @@ class Controller(Node):
     until it is fully created before we try to use it.
     '''
     def node_queue(self, data):
-        LOGGER.debug(f'data={data}')
+        LOGGER.debug(f'locking: data={data}')
+        self.queue_lock.acquire()
         self.n_queue.remove(data['address'])
+        self.queue_lock.release()
 
     def add_node(self,node):
         LOGGER.debug(f'adding node node={node.address} {node.name}')
+        self.queue_lock.acquire()
+        ret = False
 
         # See if it's already being added or exists
         if self.n_queue.count(node.address) > 0:
             LOGGER.error(f"Already waiting for node {node.address} name={node.name} to be added.")
-            return False
-        if self.poly.getNode(node.address):
-            LOGGER.error(f"Node {node.address} name={node.name} already exists.")
-            return False
-
-        # Queue it up and add it
-        self.n_queue.append(node.address)
-        anode = self.poly.addNode(node)
-        LOGGER.debug(f'got {anode}')
-        if anode is None:
-            LOGGER.error(r'Failed to add {node.address} name={node.name}')
+            self.queue_lock.release()
         else:
-            cnt = 0
-            while self.n_queue.count(node.address) > 0:
-                cnt += 1
-                # Warn every 5 seconds, and die after 60?
-                if cnt % 50 == 0:
-                    LOGGER.warning(f"Waiting for {node.address} add to complete. Queued for {cnt / 10} seconds...")
-                if cnt > 6000:
-                    LOGGER.error(f"TIMEOUT waiting for {node.address} add to complete...")
-                    return False
-                time.sleep(0.1)
+            ret = self.poly.getNode(node.address)
+            if ret is not None:
+                LOGGER.error(f"Node {node.address} name={node.name} already exists.")
+                self.queue_lock.release()
+            else:
+                # Queue it up and add it
+                self.n_queue.append(node.address)
+                self.queue_lock.relesae()
+                ret = self.poly.addNode(node)
+                LOGGER.debug(f'got {anode}')
+                if ret is None:
+                    LOGGER.error(r'Failed to add {node.address} name={node.name}')
+                else:
+                    cnt = 0
+                    while self.n_queue.count(node.address) > 0:
+                        cnt += 1
+                        # Warn every 5 seconds, and die after 60?
+                        if cnt % 50 == 0:
+                            LOGGER.warning(f"Waiting for {node.address} add to complete. Queued for {cnt / 10} seconds...")
+                        if cnt > 6000:
+                            LOGGER.error(f"TIMEOUT waiting for {node.address} add to complete...")
+                            return False
+                        time.sleep(0.1)
         LOGGER.debug(f'returning {node}')
         return anode
 
     def handler_start(self):
         LOGGER.info('enter')
         self.poly.Notices.clear()
-        # Start a heartbeat right away        
+        # Start a heartbeat right away
         self.hb = 0
         self.heartbeat()
 
@@ -115,7 +123,7 @@ class Controller(Node):
         # Always need to start the REST server
         #
         self.rest_start()
-        # 
+        #
         # All good?
         #
         if self.wtServer is False:
