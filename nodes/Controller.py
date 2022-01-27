@@ -1,7 +1,7 @@
 
 from udi_interface import Node,LOGGER,Custom,LOG_HANDLER
 import sys,time,logging,json
-from threading import Thread
+from threading import Thread,Lock
 from copy import deepcopy
 
 from nodes import TagManager
@@ -27,7 +27,7 @@ class Controller(Node):
         # TODO: Always true, should read from customData and check profile version like PG2 version did?
         self.update_profile = True
         self.type = self.id
-        self.queue_lock = Thread.Lock() # Lock for syncronizing acress threads
+        self.queue_lock = Lock() # Lock for syncronizing acress threads
         self.n_queue = []
         self.Notices         = Custom(poly, 'notices')
         self.Data            = Custom(poly, 'customdata')
@@ -66,7 +66,8 @@ class Controller(Node):
     def node_queue(self, data):
         LOGGER.debug(f'locking: data={data}')
         self.queue_lock.acquire()
-        self.n_queue.remove(data['address'])
+        if self.n_queue.count(data['address']) > 0:
+            self.n_queue.remove(data['address'])
         self.queue_lock.release()
 
     def add_node(self,node):
@@ -86,9 +87,9 @@ class Controller(Node):
             else:
                 # Queue it up and add it
                 self.n_queue.append(node.address)
-                self.queue_lock.relesae()
+                self.queue_lock.release()
                 ret = self.poly.addNode(node)
-                LOGGER.debug(f'got {anode}')
+                LOGGER.debug(f'got {ret}')
                 if ret is None:
                     LOGGER.error(r'Failed to add {node.address} name={node.name}')
                 else:
