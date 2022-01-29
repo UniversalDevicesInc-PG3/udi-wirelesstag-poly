@@ -44,8 +44,9 @@ class Controller(Node):
         #poly.subscribe(poly.CUSTOMTYPEDPARAMS, self.handler_typed_params)
         #poly.subscribe(poly.CUSTOMTYPEDDATA,   self.handler_typed_data)
         poly.subscribe(poly.LOGLEVEL,          self.handler_log_level)
+        poly.subscribe(poly.CONFIG,            self.handler_config)
         poly.subscribe(poly.CONFIGDONE,        self.handler_config_done)
-        poly.subscribe(poly.ADDNODEDONE,       self.node_queue)
+        poly.subscribe(poly.ADDNODEDONE,       self.node_dequeue)
         self.client_id              = None
         self.client_secret          = None
         self.handler_start_st       = None
@@ -63,12 +64,13 @@ class Controller(Node):
     will return before the node is fully created. Using this, we can wait
     until it is fully created before we try to use it.
     '''
-    def node_queue(self, data):
+    def node_dequeue(self, data):
         LOGGER.debug(f'locking: data={data}')
         self.queue_lock.acquire()
         if self.n_queue.count(data['address']) > 0:
             self.n_queue.remove(data['address'])
         self.queue_lock.release()
+        LOGGER.debug('lock released')
 
     def add_node(self,node):
         LOGGER.debug(f'adding node node={node.address} {node.name}')
@@ -91,12 +93,13 @@ class Controller(Node):
                 ret = self.poly.addNode(node)
                 LOGGER.debug(f'got {ret}')
                 if ret is None:
+                    self.node_dequeue({'address': node.address})
                     LOGGER.error(r'Failed to add {node.address} name={node.name}')
                 else:
                     cnt = 0
                     while self.n_queue.count(node.address) > 0:
                         cnt += 1
-                        # Warn every 5 seconds, and die after 60?
+                       # Warn every 5 seconds, and die after 60?
                         if cnt % 50 == 0:
                             LOGGER.warning(f"Waiting for {node.address} add to complete. Queued for {cnt / 10} seconds...")
                         if cnt > 6000:
@@ -116,7 +119,7 @@ class Controller(Node):
         LOGGER.info(f"Started WirelessTag NodeServer {self.poly.serverdata['version']}")
         cnt = 10
         while (self.handler_params_st is None or self.handler_config_done_st is None
-            or self.handler_nsdata_st or self.handler_data_st is None) and cnt > 0:
+            or self.handler_nsdata_st is None or self.handler_data_st is None) and cnt > 0:
             LOGGER.warning(f'Waiting for all to be loaded config={self.handler_config_done_st} params={self.handler_params_st} data={self.handler_data_st} nsdata={self.handler_nsdata_st}... cnt={cnt}')
             time.sleep(1)
             cnt -= 1
@@ -153,6 +156,11 @@ class Controller(Node):
         self.add_existing_tag_managers()
         self.query()
         self.ready = True
+        LOGGER.info('done')
+
+    def handler_config(self,data):
+        LOGGER.info(f'enter data={data}')
+        self.handler_config_st = True
         LOGGER.info('done')
 
     def handler_config_done(self):
