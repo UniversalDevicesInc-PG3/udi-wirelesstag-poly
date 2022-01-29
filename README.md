@@ -280,6 +280,8 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
+  - 3.0.13: 01/28/2022
+    - When use_tags is turned on, run the discover in a thread to not block node adds.
   - 3.0.12: 01/27/2022
     - Use thread locking for tracking addNode to throttle requests to ISY
   - 3.0.11: 01/26/2022

@@ -104,7 +104,7 @@ class TagManager(Node):
             ret = self.controller.wtServer.select_tag_manager(self.mac)
             self.set_st(ret)
 
-    def discover(self, thread=False):
+    def discover(self, thread=True):
         """
         Start the discover in a thread so we don't cause timeouts :(
         """
