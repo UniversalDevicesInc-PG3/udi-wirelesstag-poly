@@ -241,8 +241,8 @@ class TagManager(Node):
     def RebootTagManager(self,tmgr_mac):
         return self.session_post('ethClient.asmx/RebootTagManager',{})
 
-    def PingAllTags(self,tmgr_mac):
-        return self.session_post('ethClient.asmx/PingAllTags',{'autoRetry':True})
+    def PingAllTags(self):
+        return self.session_post('ethClient.asmx/PingAllTags2',{'mac': self.mac, 'autoRetry':True})
 
     def LightOn(self,tmgr_mac,id,flash):
         return self.session_post('ethClient.asmx/LightOn',{'id': id, 'flash':flash})
