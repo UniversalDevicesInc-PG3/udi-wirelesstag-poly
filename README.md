@@ -276,9 +276,15 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
 * 3.0.14: 02/xx/2022
+  * Fixed: []()
   * Fixed: [AttributeError: 'wtServer' object has no attribute 'SelectTagManager'](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/27)
   * Fixed: [PING_ALL_TAGS broken](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/30)
   * Fixed: [Remove bad characters from node name](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/44)
+  * Fixed: [Add command to delete all tags](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/46)
+  * Possible Fix: [Seconds since update resets when Out Of Range](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/47)
+    * I was unable to test this, but attempted to add a fix for it.
+  * Fixed: [ag queries or turn light on/off](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/43)
+    * Fixed first issue, created new issues for the other two
 * 3.0.13: 01/28/2022
   * When use_tags is turned on, run the discover in a thread to not block node adds.
 * 3.0.12: 01/27/2022
