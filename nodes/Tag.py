@@ -239,6 +239,8 @@ class Tag(Node):
         This is called by the controller get_handler after parsing the node_data
         """
         LOGGER.debug('command={} params={}'.format(command,params))
+        # Set set time for all, except out-of-range
+        set_time = True
         if command == '/update':
             #tagname=Garage Freezer&tagid=0&temp=-21.4213935329179&hum=0&lux=0&ts=2018-02-15T11:18:02+00:00 HTTP/1.1" 400 -
             pass
@@ -254,6 +256,7 @@ class Tag(Node):
             self.set_motion(2)
         elif command == '/oor':
             self.set_oor(1)
+            set_time = False
         elif command == '/back_in_range':
             self.set_oor(0)
         elif command == '/temp_normal':
@@ -316,7 +319,8 @@ class Tag(Node):
             self.set_zaxis(params['zaxis'])
         if 'batv' in params:
             self.set_batv(params['batv'])
-        self.set_time_now()
+        if set_time:
+            self.set_time_now()
         return True
 
     """
