@@ -175,6 +175,15 @@ class TagManager(Node):
         return self.controller.add_node(Tag(self.controller, self.address, address,
         name=name, tag_type=tag_type, uom=uom, tdata=tdata, is_new=is_new))
 
+    def delete_all_tags(self):
+        LOGGER.warning("Deleting all tags for this tag manager...")
+        # Make sure use_tags is off, then delete them all.
+        self.set_use_tags(0)
+        for node in self.controller.poly.nodes():
+            LOGGER.debug(f"my.address={self.address} node.address={node.address} node.primary={node.primary}")
+            if node.address != self.address and node.primary == self.address:
+                self.controller.del_node(node)
+
     """
     Misc functions
     """
@@ -347,28 +356,13 @@ class TagManager(Node):
     def cmd_ping_all_tags(self,command):
         self.PingAllTags()
 
+    def cmd_delete_all_tags(self,command):
+        LOGGER.debug('enter:')
+        self.delete_all_tags()
+        LOGGER.debug('exit:')
+
     def cmd_reboot(self,command):
         self.RebootTagManager(self.mac)
-
-    def cmd_set_on(self, command):
-        """
-        Example command received from ISY.
-        Set DON on MyNode.
-        Sets the ST (status) driver to 1 or 'True'
-        """
-        self.setDriver('ST', 1)
-
-    def cmd_set_off(self, command):
-        """
-        Example command received from ISY.
-        Set DOF on MyNode
-        Sets the ST (status) driver to 0 or 'False'
-        """
-        self.setDriver('ST', 0)
-
-    def cmd_test(self, command):
-        LOGGER.debug('just a test')
-        LOGGER.debug(str(self.controller.nodes['foo']))
 
     id = 'wTagManager'
     drivers = [
@@ -380,7 +374,7 @@ class TagManager(Node):
         'QUERY': query,
         'SET_URL_CONFIG': cmd_set_url_config,
         'PING_ALL_TAGS': cmd_ping_all_tags,
+        'DELETE_ALL_TAGS': cmd_delete_all_tags,
         'DISCOVER': discover,
         'REBOOT': cmd_reboot,
-        'TEST': cmd_test,
     }

@@ -10,7 +10,7 @@
     "longPoll": "600",
 	"logLevel": "DEBUG",
     "discover": true,
-    "profile_version": "3.0.2",
+    "profile_version": "3.0.14",
 	"customParams": {
 		"oauth2_code": false
 	},

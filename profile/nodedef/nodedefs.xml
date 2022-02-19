@@ -53,6 +53,7 @@
         </cmd>
         <cmd id="QUERY" />
         <cmd id="PING_ALL_TAGS" />
+        <cmd id="DELETE_ALL_TAGS" />
         <cmd id="SET_URL_CONFIG" />
         <cmd id="REBOOT" />
         <cmd id="DISCOVER" />
