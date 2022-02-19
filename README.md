@@ -103,14 +103,14 @@ http://wirelesstag.net/kumoapp/17/tags-kumosensors-kumostats
 
 The list at this time is in the following table, and support level is denoted
 with:
-  - 1 = I have one, so should be fully working
-  - 2 = I don't have one, hopefully it should work
-  - 3 = Has been verified by another user to be working
-  - 4 = No intention of supporting at this time
-  - 5 = New, have not determined if it will be supported
+  * 1 = I have one, so should be fully working
+  * 2 = I don't have one, hopefully it should work
+  * 3 = Has been verified by another user to be working
+  * 4 = No intention of supporting at this time
+  * 5 = New, have not determined if it will be supported
 
 | Name                                             | Type | Support |
-| ------------------------------------------------ | ---- | ------- |
+| -----------------------------------------------* | ---* | ------* |
 | Motion Sensor Tag (8-bit temperature)            | 12   | 1       |
 | Motion Sensor Tag (13-bit temperature+humidity)  | 13   | 2       |
 | Motion Sensor Tag Pro                            | 21   | 2       |
@@ -132,7 +132,7 @@ data is shown in the following table along with information passed back from the
 Tag 102 is the new external batter tag, which is currently not in their documentation
 
 | Driver   | NLS   | Name                 | 12 | 13 | 21 | 42 | 26 | 32 | 52 | 62 | 72 | 82 | 92 | 102 | 107 | Notes |
-| -------- | ----- | -------------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --- | --- | ----- |
+| -------* | ----* | -------------------* | -* | -* | -* | -* | -* | -* | -* | -* | -* | -* | -* | --* | --* | ----* |
 | UOM      | CORF  | degree               | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |  X  |  X  |       |
 | GPV      | INT   | tagType              | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |  X  |  X  |       |
 | GV1      | INT   | TagId (slaveId)      | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  | X  |  X  |  X  |       |
@@ -163,16 +163,16 @@ Tag 102 is the new external batter tag, which is currently not in their document
 | GV15     | FLOAT | chip temperature     |    |    |    | X  |    |    |    |    |    |    |    |     |     |       |
 
 
-  - NA1 = Not Applicable, since it's available in eventState?
-  - NS1 = Not Supported, likely to be added.
-  - NS2 = Not Supported, part of Kumostat, which nobody is using?
-  - N1 = Only updated on change, so not populated on restart
-  - N2 = Time is UNIX epoch time of last update, seconds since update is the number of seconds since an update was seen from the tag and is updated each shortPoll run. So it won't be updated if the nodeserver dies! (which of course never happens)
+  * NA1 = Not Applicable, since it's available in eventState?
+  * NS1 = Not Supported, likely to be added.
+  * NS2 = Not Supported, part of Kumostat, which nobody is using?
+  * N1 = Only updated on change, so not populated on restart
+  * N2 = Time is UNIX epoch time of last update, seconds since update is the number of seconds since an update was seen from the tag and is updated each shortPoll run. So it won't be updated if the nodeserver dies! (which of course never happens)
 
 #### NLS entries
 
 | Name | # | Text       |
-| ---- | - | ---------- |
+| ---* | * | ---------* |
 | CORF | 0 | Celsius    |
 |      | 1 | Fahrenheit |
 | EVST | 0 | Disarmed   |
@@ -260,192 +260,183 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 
 ## Upgrading
 
-### From the store
-
-1. Open the Polyglot web page, go to nodeserver store and click "Update" for "WirelessTags".
-    * You can always answer "No" when asked to install profile.  The nodeserver will handle this for you.
+1. Open the Polyglot web page
 2. Go to the WirelessTags Control Page, and click restart
-
-### The manual way
-
-1. ```cd ~/.polyglot/nodeservers/WirelessTag```
-2. ```git pull```
-3. ```./install.sh```
-4. Open the polyglot web page, and restart the node server
-5. If you had the Admin Console open, then close and re-open.
-
 
 ## Release Notes
 
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
-  - 3.0.13: 01/28/2022
-    - When use_tags is turned on, run the discover in a thread to not block node adds.
-  - 3.0.12: 01/27/2022
-    - Use thread locking for tracking addNode to throttle requests to ISY
-  - 3.0.11: 01/26/2022
-    - Fix node add queue to not lock up
-  - 3.0.10: 01/25/2022
-    - Fix isssue with setting values on the wrong tag caused during PG3 conversion
-  - 3.0.9: 01/25/2022
-    - Update udi_interface version
-  - 3.0.8: 01/24/2022
-    - Fix adding tags during discover
-  - 3.0.7: 01/24/2022
-    - A lot more error trapping when can't start server
-  - 3.0.6: 01/18/2022
-    - More trapping of bad values from PG3
-  - 3.0.5: 01/18/2022
-    - Update to latest udi_interface 3.0.32
-  - 3.0.4: 01/13/2022
-    - More checking that data is received from PG3, should work better now
-  - 3.0.3: 01/11/2022
-    - Change how client id and secret are received, can only test on production PG...
-  - 3.0.2  01/05/2022
-    - Add discover to PG settings so it shows up in PG UI
-    - Fix Connection status
-  - 3.0.1  01/05/2022
-    - Update to udi_interface 3.0.31
-    - Fix to use nsdata from PG3 database
-  - 3.0.0  01/05/2022
-    - First PG3 release
-  - 2.0.25 10/13/2020
-    - Try to avoid race condition on initial add and discover for nodes.  Can't confirm because I can't make it happen.
-  - 2.0.24 10/06/2020
-    - Fix Battery Voltage editor to show volts, and now it can be set to a variable. After updating nodeserver, restart then close admin console if you have it open first.  The variable should be set to Precision=3 and if you have any programs currently referencing Battery Voltage in the if/then/else you will need to Update that line and save it.  
-  - 2.0.23 09/30/2020
-    - Increase allowable lux to 100000
-  - 2.0.22 09/30/2020
-    - [Fix setting Battery Voltage from Tag Manager update command](https://github.com/jimboca/udi-wirelesstag-poly/issues/37)
-  - 2.0.21 08/10/2020
-    - Fix for not setting Out Of Range on startup.
-  - 2.0.20 08/09/2020
-    - Fixed crashed caused by "Set Light" command.
-  - 2.0.17: 06/11/2020
-    - Use hum from updates for [Add probe (tagType=42) chip temperature](https://github.com/jimboca/udi-wirelesstag-poly/issues/35)
-  - 2.0.16: 06/09/2020
-    - Blindly trying to get this working [Add probe (tagType=42) chip temperature](https://github.com/jimboca/udi-wirelesstag-poly/issues/35)
-  - 2.0.15: 06/08/2020
-    - [Add probe (tagType=42) chip temperature](https://github.com/jimboca/udi-wirelesstag-poly/issues/35)
-  - 2.0.14: 03/05/2020
-    - Fixed motion detection for tag type 26 ALS, which looks like a PIR
-\   - Motion timeout still not working
-  - 2.0.13: 12/23/2019
-    - Removed eventState from tags 102 and 107 since they don't support motion events
-    - Fixed moisture state to report for tags 107
-    - Added lightstate to 26 and 107
-  - 2.0.12: 12/21/2019
-    - Add new tag 107, untested since I don't have one yet
-  - 2.0.11: 10/28/2019
-    - Skip unknown params for now
-  - 2.0.10: 10/18/2019
-    - Fixed BATLVL not reporting
-  - 2.0.9: 09/14/2019
-    - Adding missing name for External Power Sensor
-  - 2.0.8: 09/12/2019
-    - First attempt at adding new External Battery Tag which I can't test.
-  - 2.0.7: 03/03/2019
-    - Fixed Tag 26 C nodedef
-  - 2.0.6  03/02/2019
-    - [Tags in Celcius still show temp in Fahrenheit](https://github.com/jimboca/udi-wirelesstag-poly/issues/32)
-    - [See Switching C or F Mode](#switching-c-or-f-mode)
-  - 2.0.5 07/22/2018
-    - Fix crash bug in shortPoll that only happens if tag manager is not properly selected the first try.
-  - 2.0.4  07/11/2018
-    - Add better icons from @xKing. Profile should automatically reload, but if you don't see the new icons then select the WirelessTagsConroller and "Install Profile" then restart admin console.
-  - 2.0.3  07/10/2018
-    - Changed from http to https, thanks @xKing for the change
-    - Increased post timeout from 15 to 60 for when the tag server is slow
-  - 2.0.2  05/03/2018
-    - Fix when query is run to report all nodes
-    - New version of polyinterface will fix issue with Notice's not going away
-    - Added Heartbeat https://github.com/jimboca/udi-wirelesstag-poly/issues/6
-  - 2.0.1  04/17/2018
-    - Fix initialization of Short Poll, Long Poll, Debug Mode, on controller, and Monitor Tags of TagManager nodes.
-  - 2.0.0  03/22/2018
-    - Why jump to 2.0.0?  Because it's Polyglot V2, should have started with that :)
-    - And the big addition of what should now be proper support for multiple Tag Managers https://github.com/jimboca/udi-wirelesstag-poly/issues/26
-    - Profile updates for Honeywell thermostats https://github.com/jimboca/udi-wirelesstag-poly/issues/14
-    - Add Set URL Config buttons https://github.com/jimboca/udi-wirelesstag-poly/issues/25
-    - Program Tag URL individually https://github.com/jimboca/udi-wirelesstag-poly/issues/23 and fix for PIR sensor type 72
-    - Typo in Wireless Tag type 62 in Wireless Tag node server https://github.com/jimboca/udi-wirelesstag-poly/issues/21
-    - Add carried_away and in_free_fall params https://github.com/jimboca/udi-wirelesstag-poly/issues/19
-    - Properly initialize params https://github.com/jimboca/udi-wirelesstag-poly/issues/22
-    - All driver values now persist https://github.com/jimboca/udi-wirelesstag-poly/issues/13
-  - 0.0.25 03/15/2018
-    - Add lock sending Tag Manager specific commands.  Seems to resolve all issues with multiple tag managers.
-    - Fix typo https://github.com/jimboca/udi-wirelesstag-poly/issues/21
-    - Add carried_away and in_free_fall https://github.com/jimboca/udi-wirelesstag-poly/issues/19
-  - 0.0.24 03/14/2018
-    - Tag 42 - Outdoor Probe/Thermocouple added.  Thanks to https://github.com/mayermd
-  - 0.0.23 03/12/2018
-    - Remove moisture from 26 and 52
-    - Fix lux for all
-    - Add tag id to device display for debugging
-  - 0.0.22 03/08/2018
-    - Bad bug in 0.0.21 causing infinite loop
-  - 0.0.21 03/08/2018
-    - Change eventState along with Motion, may get rid of Motion driver if this works properly.
-  - 0.0.20 03/08/2018
-    - Fix setting for Humidity, Out Of Range and Light for all Tags
-    - Change temperature to precision=2
-  - 0.0.19 03/07/2018
-    - Last Update Time and Seconds since update are properly tracked across nodeserver restarts using info from Tag Manager
-    - Tag Status is properly set based on 'alive' property from Tag Manager
-    - Aded signaldBm to all tags https://github.com/jimboca/udi-wirelesstag-poly/issues/16
-    - Simplified all get/set methods so changes can be tracked better in logs for debugging.
-  - 0.0.18 03/04/2018
-    - Another fix for get_network_ip that should now work on MacOS
-    - https://github.com/jimboca/udi-wirelesstag-poly/issues/14
-  - 0.0.17 03/04/2018
-    - Fixed bug where tag_id's don't get properly set. ALL USERS: Please select the WirelessTagsController and run a discover after updating and restarting the node server.
-    - Added more info to Tag Type 62
-    - Changed how to figure out the local IP address, thanks @xKing. See IP Address section above
-    - Changed Humidity to prec=1
-    - Profile Version: 0.0.17
-  - 0.0.16 03/03/2018
-    - Attempt to fix issue with restart for multiple Tag Managers
-    - https://github.com/jimboca/udi-wirelesstag-poly/issues/12
-    - Profile Version: 0.0.16
-  - 0.0.15 03/03/2018
-    - https://github.com/jimboca/udi-wirelesstag-poly/issues/11
-    - https://github.com/jimboca/udi-wirelesstag-poly/issues/12
-    - Profile Update: 0.0.15
-  - 0.0.14 03/03/2018
-    - https://github.com/jimboca/udi-wirelesstag-poly/issues/10
-  - 0.0.13 03/03/2018
-    - Fix race condition when starting up causing error in set_seconds
-    - Change URL's to not pass tag name since they are not properly encoded, adding passing of tag manager mac to identify tags on multiple tag managers.
-     - If you previously added tags that had spaces in the names, then delete them from inside the Polyglot -> WirelessTag -> Nodes page and run discover again.
-    - It should work much better with multiple tag managers, but there may still be some issues. Will review the code more and test further.
-  - 0.0.12 03/02/2018
-    - https://github.com/jimboca/udi-wirelesstag-poly/issues/1
-    - Added a lot to documentation
-    - Profile Update: 0.0.12
-  - 0.0.11 03/02/2018
-    - Add Seconds Since Update
-    - Fixed setting logging/debug moe
-    - Profile Update: 0.0.11
-  - 0.0.10 03/02/2018
-    - Really add "Last Update" to all tags
-    - Profile Update: 0.0.10
-  - 0.0.9 03/02/2018
-      - Add "Last Update" to all tags
-      - Profile Update: 0.0.9
-  - 0.0.8 03/01/2018
-    - Add "Last Update" seconds since epoch time of last update sent from the tag
-    - Allow hum to be a float
-    - Profile Update: 0.0.8
-  - 0.0.7 02/27/2018
-    - Catch missing tag id in node_data
-  - 0.0.6 02/27/2018
-    - Fixed initial Wet State to be Dry on startup if it's NA
-    - Added requests to requirements
-  - 0.0.5 02/27/2018
-    - Fixed BATLVL Editor so tag conditions show up in programs
-    - Added 'Set Light', but it doesn't actually work yet
-  - 0.0.4 02/27/2018
-    - First release
-  - 0.0.3 02/22/2018
-    - Still not released, see TODO list
+
+* 3.0.14: 02/xx/2022
+  * Fixed: [AttributeError: 'wtServer' object has no attribute 'SelectTagManager'](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/27)
+* 3.0.13: 01/28/2022
+  * When use_tags is turned on, run the discover in a thread to not block node adds.
+* 3.0.12: 01/27/2022
+  * Use thread locking for tracking addNode to throttle requests to ISY
+* 3.0.11: 01/26/2022
+  * Fix node add queue to not lock up
+* 3.0.10: 01/25/2022
+  * Fix isssue with setting values on the wrong tag caused during PG3 conversion
+* 3.0.9: 01/25/2022
+  * Update udi_interface version
+* 3.0.8: 01/24/2022
+  * Fix adding tags during discover
+* 3.0.7: 01/24/2022
+  * A lot more error trapping when can't start server
+* 3.0.6: 01/18/2022
+  * More trapping of bad values from PG3
+* 3.0.5: 01/18/2022
+  * Update to latest udi_interface 3.0.32
+* 3.0.4: 01/13/2022
+  * More checking that data is received from PG3, should work better now
+* 3.0.3: 01/11/2022
+  * Change how client id and secret are received, can only test on production PG...
+* 3.0.2  01/05/2022
+  * Add discover to PG settings so it shows up in PG UI
+  * Fix Connection status
+* 3.0.1  01/05/2022
+  * Update to udi_interface 3.0.31
+  * Fix to use nsdata from PG3 database
+* 3.0.0  01/05/2022
+  * First PG3 release
+* 2.0.25 10/13/2020
+  * Try to avoid race condition on initial add and discover for nodes.  Can't confirm because I can't make it happen.
+* 2.0.24 10/06/2020
+  * Fix Battery Voltage editor to show volts, and now it can be set to a variable. After updating nodeserver, restart then close admin console if you have it open first.  The variable should be set to Precision=3 and if you have any programs currently referencing Battery Voltage in the if/then/else you will need to Update that line and save it.  
+* 2.0.23 09/30/2020
+  * Increase allowable lux to 100000
+* 2.0.22 09/30/2020
+  * [Fix setting Battery Voltage from Tag Manager update command](https://github.com/jimboca/udi-wirelesstag-poly/issues/37)
+* 2.0.21 08/10/2020
+  * Fix for not setting Out Of Range on startup.
+* 2.0.20 08/09/2020
+  * Fixed crashed caused by "Set Light" command.
+* 2.0.17: 06/11/2020
+  * Use hum from updates for [Add probe (tagType=42) chip temperature](https://github.com/jimboca/udi-wirelesstag-poly/issues/35)
+* 2.0.16: 06/09/2020
+  * Blindly trying to get this working [Add probe (tagType=42) chip temperature](https://github.com/jimboca/udi-wirelesstag-poly/issues/35)
+* 2.0.15: 06/08/2020
+  * [Add probe (tagType=42) chip temperature](https://github.com/jimboca/udi-wirelesstag-poly/issues/35)
+* 2.0.14: 03/05/2020
+  * Fixed motion detection for tag type 26 ALS, which looks like a PIR
+\   * Motion timeout still not working
+* 2.0.13: 12/23/2019
+  * Removed eventState from tags 102 and 107 since they don't support motion events
+  * Fixed moisture state to report for tags 107
+  * Added lightstate to 26 and 107
+* 2.0.12: 12/21/2019
+  * Add new tag 107, untested since I don't have one yet
+* 2.0.11: 10/28/2019
+  * Skip unknown params for now
+* 2.0.10: 10/18/2019
+  * Fixed BATLVL not reporting
+* 2.0.9: 09/14/2019
+  * Adding missing name for External Power Sensor
+* 2.0.8: 09/12/2019
+  * First attempt at adding new External Battery Tag which I can't test.
+* 2.0.7: 03/03/2019
+  * Fixed Tag 26 C nodedef
+* 2.0.6  03/02/2019
+  * [Tags in Celcius still show temp in Fahrenheit](https://github.com/jimboca/udi-wirelesstag-poly/issues/32)
+  * [See Switching C or F Mode](#switching-c-or-f-mode)
+* 2.0.5 07/22/2018
+  * Fix crash bug in shortPoll that only happens if tag manager is not properly selected the first try.
+* 2.0.4  07/11/2018
+  * Add better icons from @xKing. Profile should automatically reload, but if you don't see the new icons then select the WirelessTagsConroller and "Install Profile" then restart admin console.
+* 2.0.3  07/10/2018
+  * Changed from http to https, thanks @xKing for the change
+  * Increased post timeout from 15 to 60 for when the tag server is slow
+* 2.0.2  05/03/2018
+  * Fix when query is run to report all nodes
+  * New version of polyinterface will fix issue with Notice's not going away
+  * Added Heartbeat https://github.com/jimboca/udi-wirelesstag-poly/issues/6
+* 2.0.1  04/17/2018
+  * Fix initialization of Short Poll, Long Poll, Debug Mode, on controller, and Monitor Tags of TagManager nodes.
+* 2.0.0  03/22/2018
+  * Why jump to 2.0.0?  Because it's Polyglot V2, should have started with that :)
+  * And the big addition of what should now be proper support for multiple Tag Managers https://github.com/jimboca/udi-wirelesstag-poly/issues/26
+  * Profile updates for Honeywell thermostats https://github.com/jimboca/udi-wirelesstag-poly/issues/14
+  * Add Set URL Config buttons https://github.com/jimboca/udi-wirelesstag-poly/issues/25
+  * Program Tag URL individually https://github.com/jimboca/udi-wirelesstag-poly/issues/23 and fix for PIR sensor type 72
+  * Typo in Wireless Tag type 62 in Wireless Tag node server https://github.com/jimboca/udi-wirelesstag-poly/issues/21
+  * Add carried_away and in_free_fall params https://github.com/jimboca/udi-wirelesstag-poly/issues/19
+  * Properly initialize params https://github.com/jimboca/udi-wirelesstag-poly/issues/22
+  * All driver values now persist https://github.com/jimboca/udi-wirelesstag-poly/issues/13
+* 0.0.25 03/15/2018
+  * Add lock sending Tag Manager specific commands.  Seems to resolve all issues with multiple tag managers.
+  * Fix typo https://github.com/jimboca/udi-wirelesstag-poly/issues/21
+  * Add carried_away and in_free_fall https://github.com/jimboca/udi-wirelesstag-poly/issues/19
+* 0.0.24 03/14/2018
+  * Tag 42 * Outdoor Probe/Thermocouple added.  Thanks to https://github.com/mayermd
+* 0.0.23 03/12/2018
+  * Remove moisture from 26 and 52
+  * Fix lux for all
+  * Add tag id to device display for debugging
+* 0.0.22 03/08/2018
+  * Bad bug in 0.0.21 causing infinite loop
+* 0.0.21 03/08/2018
+  * Change eventState along with Motion, may get rid of Motion driver if this works properly.
+* 0.0.20 03/08/2018
+  * Fix setting for Humidity, Out Of Range and Light for all Tags
+  * Change temperature to precision=2
+* 0.0.19 03/07/2018
+  * Last Update Time and Seconds since update are properly tracked across nodeserver restarts using info from Tag Manager
+  * Tag Status is properly set based on 'alive' property from Tag Manager
+  * Aded signaldBm to all tags https://github.com/jimboca/udi-wirelesstag-poly/issues/16
+  * Simplified all get/set methods so changes can be tracked better in logs for debugging.
+* 0.0.18 03/04/2018
+  * Another fix for get_network_ip that should now work on MacOS
+  * https://github.com/jimboca/udi-wirelesstag-poly/issues/14
+* 0.0.17 03/04/2018
+  * Fixed bug where tag_id's don't get properly set. ALL USERS: Please select the WirelessTagsController and run a discover after updating and restarting the node server.
+  * Added more info to Tag Type 62
+  * Changed how to figure out the local IP address, thanks @xKing. See IP Address section above
+  * Changed Humidity to prec=1
+  * Profile Version: 0.0.17
+* 0.0.16 03/03/2018
+  * Attempt to fix issue with restart for multiple Tag Managers
+  * https://github.com/jimboca/udi-wirelesstag-poly/issues/12
+  * Profile Version: 0.0.16
+* 0.0.15 03/03/2018
+  * https://github.com/jimboca/udi-wirelesstag-poly/issues/11
+  * https://github.com/jimboca/udi-wirelesstag-poly/issues/12
+  * Profile Update: 0.0.15
+* 0.0.14 03/03/2018
+  * https://github.com/jimboca/udi-wirelesstag-poly/issues/10
+* 0.0.13 03/03/2018
+  * Fix race condition when starting up causing error in set_seconds
+  * Change URL's to not pass tag name since they are not properly encoded, adding passing of tag manager mac to identify tags on multiple tag managers.
+    * If you previously added tags that had spaces in the names, then delete them from inside the Polyglot -> WirelessTag -> Nodes page and run discover again.
+  * It should work much better with multiple tag managers, but there may still be some issues. Will review the code more and test further.
+* 0.0.12 03/02/2018
+  * https://github.com/jimboca/udi-wirelesstag-poly/issues/1
+  * Added a lot to documentation
+  * Profile Update: 0.0.12
+* 0.0.11 03/02/2018
+  * Add Seconds Since Update
+  * Fixed setting logging/debug moe
+  * Profile Update: 0.0.11
+* 0.0.10 03/02/2018
+  * Really add "Last Update" to all tags
+  * Profile Update: 0.0.10
+* 0.0.9 03/02/2018
+    * Add "Last Update" to all tags
+    * Profile Update: 0.0.9
+* 0.0.8 03/01/2018
+  * Add "Last Update" seconds since epoch time of last update sent from the tag
+  * Allow hum to be a float
+  * Profile Update: 0.0.8
+* 0.0.7 02/27/2018
+  * Catch missing tag id in node_data
+* 0.0.6 02/27/2018
+  * Fixed initial Wet State to be Dry on startup if it's NA
+  * Added requests to requirements
+* 0.0.5 02/27/2018
+  * Fixed BATLVL Editor so tag conditions show up in programs
+  * Added 'Set Light', but it doesn't actually work yet
+* 0.0.4 02/27/2018
+  * First release
+* 0.0.3 02/22/2018
+  * Still not released, see TODO list

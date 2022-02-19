@@ -101,8 +101,12 @@ class TagManager(Node):
         if not self.ready: return False
         LOGGER.debug('...')
         if self.st is False:
-            ret = self.controller.wtServer.select_tag_manager(self.mac)
-            self.set_st(ret)
+            if self.controller.wtServer is False:
+                LOGGER.error("Unable to start TagManager session because main server was not started")
+                self.set_st(False)
+            else:
+                ret = self.controller.wtServer.select_tag_manager(self.mac)
+                self.set_st(ret)
 
     def discover(self, thread=True):
         """
