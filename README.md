@@ -86,6 +86,8 @@ There is one node create for each of your Tag Managers
   * Queries all Tags, but only requests the data Cached in the Tag Manager so it may not be the latest.
 * Ping All Tags
   * Request all Tags to report back their latest data, so only run when necessary since it will use Tag battery power.
+* Delete All Tags
+  * Delete all Tags in the ISY associated with this Tag Manager.  Currently due to a bug in PG3 you must restart the nodeserver to add them back.
 * Reboot Tag Manager
   * Only works with newer Tag Managers which are greater than version 6.
 * Discover
@@ -168,6 +170,10 @@ Tag 102 is the new external batter tag, which is currently not in their document
   * NS2 = Not Supported, part of Kumostat, which nobody is using?
   * N1 = Only updated on change, so not populated on restart
   * N2 = Time is UNIX epoch time of last update, seconds since update is the number of seconds since an update was seen from the tag and is updated each shortPoll run. So it won't be updated if the nodeserver dies! (which of course never happens)
+
+#### Updates
+
+Most of the driver updates are pushed from the tag manager to the nodeserver as they change, however the signaldBm is only sent on a full query so it will not always match the current value shown in the wirelesstags web app.  I've send a request to support to add periodic updates of signaldBm but have not heard back yet.
 
 #### NLS entries
 

@@ -109,6 +109,13 @@ class Controller(Node):
         LOGGER.debug(f'returning {ret}')
         return ret
 
+    def del_node(self,node):
+        LOGGER.debug(f'deleting node node={node.address} {node.name}')
+        if self.poly.getNode(node.address) is None:
+            LOGGER.error(f'Node {node.address} does not exist?')
+        else:
+            self.poly.delNode(node.address)
+
     def handler_start(self):
         LOGGER.info('enter')
         self.poly.Notices.clear()
@@ -405,10 +412,15 @@ class Controller(Node):
                 self.handler_nsdata_st = False
                 return
 
-        if 'nsdata' in key:
-            LOGGER.info('Got nsdata update {}'.format(data))
+        LOGGER.info('Got nsdata update type={} {}'.format(type(data),data))
 
         self.Notices.delete('nsdata')
+        if type(data) == str:
+            LOGGER.error(f"NSDATA is a string?  Are you running a local copy? data={data}")
+            self.Notices['nsdata'] = "NSDATA is a string?  Are you running a local copy?"
+            self.handler_nsdata_st = False
+            return
+
         try:
             #jdata = json.loads(data)
             self.client_id     = data['client_id']
