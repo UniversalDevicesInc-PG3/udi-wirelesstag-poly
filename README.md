@@ -271,6 +271,8 @@ If you have issues, please create an issue https://github.com/jimboca/udi-wirele
 
 * 3.0.14: 02/xx/2022
   * Fixed: [AttributeError: 'wtServer' object has no attribute 'SelectTagManager'](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/27)
+  * Fixed: [PING_ALL_TAGS broken](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/30)
+  * Fixed: [Remove bad characters from node name](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/44)
 * 3.0.13: 01/28/2022
   * When use_tags is turned on, run the discover in a thread to not block node adds.
 * 3.0.12: 01/27/2022
