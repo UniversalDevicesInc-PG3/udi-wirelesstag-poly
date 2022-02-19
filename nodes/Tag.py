@@ -507,13 +507,12 @@ class Tag(Node):
         self.set_seconds()
 
     def set_time(self,value,wincrap=False):
-        LOGGER.debug('{0},{1}'.format(value,wincrap))
+        LOGGER.debug(f'value={value},wincrap={wincrap}')
         value = int(value)
         if wincrap:
             # Convert windows timestamp to unix :(
-            # https://stackoverflow.com/questions/10411954/convert-windows-timestamp-to-date-using-php-on-a-linux-box
-            value = int(value / 10000000 - 11644477200)
-            LOGGER.debug('{0}'.format(value))
+            value = int(value / 10000000 - 11644473600)
+            LOGGER.debug(f'value={value}')
         self.time = value
         self.setDriver('GV13', self.time)
 
