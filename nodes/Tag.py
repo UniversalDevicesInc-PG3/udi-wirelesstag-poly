@@ -7,7 +7,7 @@ from udi_interface import Node,LOGGER
 import sys
 import time
 import re
-from wt_funcs import id_to_address,myfloat,CtoF
+from wt_funcs import id_to_address,myfloat,CtoF,get_valid_node_name
 from wt_params import wt_params
 
 DLEV = 0
@@ -160,6 +160,7 @@ class Tag(Node):
         self.id = 'wTag' + str(self.tag_type) + uomS
         self.address = address
         controller.poly.subscribe(controller.poly.START,             self.handler_start, address) 
+        name = get_valid_node_name(name)
         #LOGGER.info('super id={} controller{} primary={} address={} name={} type={} id={} uom={}'.format(Tag,controller,primary,address,name,self.tag_type,self.tag_id,self.tag_uom))
         super(Tag, self).__init__(controller.poly, primary, address, name)
         LOGGER.debug('done')

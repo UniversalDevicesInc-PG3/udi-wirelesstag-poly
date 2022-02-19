@@ -23,7 +23,7 @@ def str_d(value):
 # Removes invalid charaters for ISY Node description
 def get_valid_node_name(name):
     # Remove <>`~!@#$%^&*(){}[]?/\;:"'` characters from name
-    return re.sub(r"[<>`~!@#$%^&*(){}[\]?/\\;:\"']+", "", str_d(name).lower())
+    return re.sub(r"[<>`~!@#$%^&*(){}[\]?/\\;:\"']+", "", str_d(name))
 
 def get_server_data(logger):
     # Read the SERVER info from the json.

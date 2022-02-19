@@ -171,6 +171,7 @@ class TagManager(Node):
         self.set_url_config()
 
     def add_tag(self, address=None, name=None, tag_type=None, uom=None, tdata=None, is_new=True):
+        LOGGER.info(f"Adding tag: address={address} name={name} tag_type={tag_type} uom={uom} tdata={tdata} is_new={is_new}")
         return self.controller.add_node(Tag(self.controller, self.address, address,
         name=name, tag_type=tag_type, uom=uom, tdata=tdata, is_new=is_new))
 
