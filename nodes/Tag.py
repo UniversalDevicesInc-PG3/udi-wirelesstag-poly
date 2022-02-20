@@ -118,17 +118,17 @@ class Tag(Node):
         dv.append({'driver': 'BATLVL',  'value': 0, 'uom': 51})
         self.has_batp = True
         if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26
-            or tag_type == 32 or tag_type == 52 or tag_type == 62 or
+            or tag_type == 32 or tag_type == 34 or tag_type == 52 or tag_type == 62 or
             tag_type == 72):
             # evst: Event State
-            dv.append({'driver': 'ALARM',   'value': 0, 'uom': 25})
+            dv.append({'driver': 'AsLARM',   'value': 0, 'uom': 25})
             self.has_evst = True
         if (tag_type == 13 or tag_type == 26 or tag_type == 107):
             # lux:    Lux (36=lux)
             dv.append({'driver': 'LUMIN',   'value': 0, 'uom': 36})
             self.has_lux = True
         if (tag_type == 13 or tag_type == 21 or tag_type == 26 or tag_type == 32
-            or tag_type == 52 or tag_type == 62 or tag_type == 72
+            or tag_type == 34 or tag_type == 52 or tag_type == 62 or tag_type == 72
             or tag_type == 102 or tag_type == 107):
             # hum:    Humidity (21 = absolute humidity)
             dv.append({'driver': 'CLIHUM',  'value': 0, 'uom': 22})
@@ -146,14 +146,14 @@ class Tag(Node):
             # zaxis:  Z-Axis
             dv.append({'driver': 'GV6',     'value': 0, 'uom': 56})
         if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26
-            or tag_type == 32 or tag_type == 52 or tag_type == 72
+            or tag_type == 32 or tag_type == 34 or tag_type == 52 or tag_type == 72
             or tag_type == 102 or tag_type == 107):
             # oor:    OutOfRange
             dv.append({'driver': 'GV8',     'value': 0, 'uom':  2})
             # signaldBm:
             dv.append({'driver': 'CC',     'value': 0, 'uom':  56})
         if (tag_type == 13 or tag_type == 21 or tag_type == 26
-            or tag_type == 32 or tag_type == 52 or tag_type == 62
+            or tag_type == 32 or tag_type == 34 or tag_type == 52 or tag_type == 62
             or tag_type == 72 or tag_type == 107):
             # moisture(cap)State:
             dv.append({'driver': 'GV10',    'value': 0, 'uom': 25})
@@ -162,7 +162,7 @@ class Tag(Node):
             # lightState:
             dv.append({'driver': 'GV11',    'value': 0, 'uom': 25})
             self.has_lit = True
-        if (tag_type == 32):
+        if (tag_type == 32 or tag_type == 34 ):
             # TODO: Only 32 has water sensor?
             dv.append({'driver': 'GV12',  'value': 1, 'uom': 25})
         if (tag_type == 42):
