@@ -9,7 +9,7 @@ MIT license.
 
 ## Support
 
-This is discussed on the [Polglot Ve CAO Wireless Tags Nodeserver SubForum](https://forum.universal-devices.com/forum/306-wirelesstag/)  You can ask questions on that forum, or file an issue here on github if you like https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues
+This is discussed on the [Polglot V3 CAO Wireless Tags Nodeserver SubForum](https://forum.universal-devices.com/forum/306-wirelesstag/)  You can ask questions on that forum, or file an issue here on github if you like https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues
 
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/rXAGk9)
 
