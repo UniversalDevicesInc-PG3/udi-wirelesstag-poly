@@ -15,7 +15,7 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 ## Moving from PG2
 
-The best way to move from PG2 to PG3 is to backup on PG2 and restore on PG3, but if you can't or don't want to then you can delete the NS on PG2 and install on the same slot on PG2.  If the nodes are in a scene you will have to add them back.  All your programs should work after doing an update and save on each one, or rebooting the ISY.  Especially any using the Controller node since it's ST value has changed.
+The best way to move from PG2 to PG3 is to backup on PG2 and restore on PG3, but if you can't or don't want to then you can delete the NS on PG2 and install on the same slot on PG3.  If the nodes are in a scene you will have to add them back.  All your programs should work after doing an update and save on each one, or rebooting the ISY.  Especially any using the Controller node since it's ST value has changed.
 
 ## How it works
 
