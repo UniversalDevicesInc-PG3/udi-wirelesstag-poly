@@ -76,6 +76,7 @@ class Tag(Node):
         self.tdata = tdata
         self.tag_id = tag_id
         self.tag_type = tag_type
+        self.pfx = f'{tag_id}:{tag_type}:{address}:{name}:'
         LOGGER.info('type={} uom={} id={} address={} name={}'.format(self.tag_type,self.tag_uom,self.tag_id,address,name))
         #
         # C or F?
@@ -106,22 +107,32 @@ class Tag(Node):
             # seconds since update
             {'driver': 'GV14',     'value': 0, 'uom': 25},
         ]
-        if (not (tag_type == 102 or tag_type == 107)):
-            # batp:   Battery percent (51=percent)
-            dv.append({'driver': 'BATLVL',  'value': 0, 'uom': 51})
+        self.has_lux = False
+        self.has_hum = False
+        self.has_lit = False
+        self.has_capst = False
+        self.has_batp = False
+        self.has_evst = False
+        #if (not (tag_type == 102 or tag_type == 107)):
+        # batp:   Battery percent (51=percent)
+        dv.append({'driver': 'BATLVL',  'value': 0, 'uom': 51})
+        self.has_batp = True
         if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26
             or tag_type == 32 or tag_type == 52 or tag_type == 62 or
             tag_type == 72):
             # evst: Event State
             dv.append({'driver': 'ALARM',   'value': 0, 'uom': 25})
+            self.has_evst = True
         if (tag_type == 13 or tag_type == 26 or tag_type == 107):
             # lux:    Lux (36=lux)
             dv.append({'driver': 'LUMIN',   'value': 0, 'uom': 36})
+            self.has_lux = True
         if (tag_type == 13 or tag_type == 21 or tag_type == 26 or tag_type == 32
             or tag_type == 52 or tag_type == 62 or tag_type == 72
             or tag_type == 102 or tag_type == 107):
             # hum:    Humidity (21 = absolute humidity)
             dv.append({'driver': 'CLIHUM',  'value': 0, 'uom': 22})
+            self.has_hum = True
         if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26):
             # motion:
             dv.append({'driver': 'GV2',     'value': 0, 'uom': 25})
@@ -146,9 +157,11 @@ class Tag(Node):
             or tag_type == 72 or tag_type == 107):
             # moisture(cap)State:
             dv.append({'driver': 'GV10',    'value': 0, 'uom': 25})
-        if (tag_type == 13 or tag_type == 26 or tag_type == 107):
+            self.has_capst = True
+        if (tag_type == 12 or tag_type == 13 or tag_type == 21 or tag_type == 26 or tag_type == 102 or tag_type == 107):
             # lightState:
             dv.append({'driver': 'GV11',    'value': 0, 'uom': 25})
+            self.has_lit = True
         if (tag_type == 32):
             # TODO: Only 32 has water sensor?
             dv.append({'driver': 'GV12',  'value': 1, 'uom': 25})
@@ -219,7 +232,7 @@ class Tag(Node):
                         if key in wt_params:
                             param = wt_params[key]
                         else:
-                            LOGGER.error("Unknown tag param '{0}' it will be ignored".format(key))
+                            LOGGER.error(f"{self.pfx} Unknown tag param '{key}' it will be ignored")
                             param = False
                         # Just skip for now
                         if param is not False:
@@ -231,6 +244,7 @@ class Tag(Node):
                             value['url'] = '{0}/{1}?tmgr_mac={2}&{3}'.format(url,key,self.primary_n.mac,param)
                             value['nat'] = True
                             newconfig[key] = value
+                LOGGER.debug(f'{self.pfx} config={newconfig}')
                 res = self.primary_n.SaveEventURLConfig({'id':self.tag_id, 'config': newconfig, 'applyAll': False})
                 self.node_set_url = res['st']
 
@@ -381,38 +395,43 @@ class Tag(Node):
     # This is the tag_type number, we don't really need to show it, but
     # we need the info when recreating the tags from the config.
     def set_tag_type(self,value):
-        LOGGER.debug('GV1 to {0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.tag_type = value
         self.setDriver('GV1', value)
 
     def set_tag_id(self,value):
-        LOGGER.debug('GPV to {0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.tag_id = value
         self.setDriver('GPV', value)
 
     def set_tag_uom(self,value):
-        LOGGER.debug('UOM to {0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.tag_uom = value
         self.setDriver('UOM', value)
 
     def set_alive(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('ST', int(value))
 
     def set_temp(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('CLITEMP', myfloat(value,1))
 
     def set_chip_temp(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('GV15', myfloat(value,1))
 
     def set_hum(self,value):
-        LOGGER.debug('{0}'.format(value))
+        # The API will send lux of zero even if this tag doesn't have lux
+        if not self.has_hum:
+            if myfloat(value,2) > 0:
+                LOGGER.error(f'{self.pfx} does not have humidity but was sent {value}')
+            return False
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('CLIHUM', myfloat(value,1))
 
     def set_lit(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('GV7', int(value))
 
     def get_lit(self):
@@ -420,28 +439,37 @@ class Tag(Node):
         return self.getDriver('GV7')
 
     def set_fan(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('GV7', int(value))
 
     def set_lux(self,value):
-        LOGGER.debug('{0}'.format(value))
+        # The API will send lux of zero even if this tag doesn't have lux
+        if not self.has_lux:
+            if myfloat(value,2) > 0:
+                LOGGER.error(f'{self.pfx} does not have lux but was sent {value}')
+            return False
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('LUMIN', myfloat(value,2))
 
     def set_batp(self,value,force=False):
-        LOGGER.debug('{0}'.format(value))
-        self.setDriver('BATLVL', myfloat(value,2))
+        LOGGER.debug(f'{self.pfx} {value}')
+        if self.has_batp:
+            self.setDriver('BATLVL', myfloat(value,2))
+        else:
+            LOGGER.error(f'{self.pfx} Is not configured to hold battery level let the author know it is needed value={value}')
 
     def set_batv(self,value):
         LOGGER.debug('{0}'.format(myfloat(value,3)))
         self.setDriver('CV', myfloat(value,3))
 
     def set_batl(self,value,force=False):
+        LOGGER.warning(f'{self.pfx} {value} (not implemented)')
         # TODO: Implement battery low!
         return
         self.setDriver('CV', value)
 
     def set_motion(self,value=None):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         value = int(value)
         # Not all have motion, but that's ok, just sent it.
         self.setDriver('GV2', value)
@@ -457,50 +485,60 @@ class Tag(Node):
             self.set_evst(4,andMotion=False) # Closed
 
     def set_orien(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('GV3', myfloat(value,1))
 
     def set_xaxis(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('GV4', int(value))
 
     def set_yaxis(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('GV5', int(value))
 
     def set_zaxis(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('GV6', int(value))
 
     def set_evst(self,value,andMotion=True):
-        LOGGER.debug('{0}'.format(value))
-        self.setDriver('ALARM', int(value))
+        LOGGER.debug(f'{self.pfx} {value}')
+        if self.has_evst:
+            self.setDriver('ALARM', int(value))
+        else:
+            if int(value) > 0:
+                LOGGER.error(f'{self.pfx} Is not configured for event state, let the author know it is needed value={value}')
         # eventState 1=Armed, so no more motion
         if andMotion and int(value) == 1:
             self.set_motion(0)
 
     def set_oor(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('GV8', int(value))
 
     def set_signaldbm(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('CC', int(value))
 
     def set_tmst(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('GV9', int(value))
 
     def set_cpst(self,value):
-        LOGGER.debug('{0}'.format(value))
-        self.setDriver('GV10', int(value))
+        LOGGER.debug(f'{self.pfx} {value}')
+        if self.has_capst:
+            self.setDriver('GV10', int(value))
+        else:
+            LOGGER.error(f'{self.pfx} Is not configured for moisture state, I have submitted a support ticket to find out why this state is being sent value={value}')
 
     def set_list(self,value):
-        LOGGER.debug('{0}'.format(value))
-        self.setDriver('GV11', int(value))
+        LOGGER.debug(f'{self.pfx} {value}')
+        if self.has_lit:
+            self.setDriver('GV11', int(value))
+        else:
+            LOGGER.error(f'{self.pfx} Is not configured for light state, let the author know it is needed value={value}')
 
     def set_wtst(self,value):
-        LOGGER.debug('{0}'.format(value))
+        LOGGER.debug(f'{self.pfx} {value}')
         # Force to 1, Dry state on initialization since polyglot ignores the init value
         value = int(value)
         if value == 0: value = 1
@@ -511,7 +549,7 @@ class Tag(Node):
         self.set_seconds()
 
     def set_time(self,value,wincrap=False):
-        LOGGER.debug(f'value={value},wincrap={wincrap}')
+        LOGGER.debug(f'{self.pfx} value={value},wincrap={wincrap}')
         value = int(value)
         if wincrap:
             # Convert windows timestamp to unix :(
@@ -522,6 +560,7 @@ class Tag(Node):
 
     def set_seconds(self,force=True):
         if not hasattr(self,"time"): return False
+        LOGGER.debug(f'{self.pfx}')
         time_now = int(time.time())
         if DLEV > 0: LOGGER.debug('time_now    {}'.format(time_now))
         if DLEV > 0: LOGGER.debug('last_time - {}'.format(self.time))

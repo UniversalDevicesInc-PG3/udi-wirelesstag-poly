@@ -119,6 +119,8 @@ class Controller(Node):
     def handler_start(self):
         LOGGER.info('enter')
         self.poly.Notices.clear()
+        # Current interface is not updated profile as needed, so just do it always :(
+        self.poly.installprofile()
         # Start a heartbeat right away
         self.hb = 0
         self.heartbeat()

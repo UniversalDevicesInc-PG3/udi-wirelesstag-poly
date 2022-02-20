@@ -99,4 +99,10 @@ wt_params = {
     # In Free Fall
     # No doc?  Not in WebUI? {0}: Tag name, {1}: Tag ID, {2}: timestamp
     'in_free_fall': 'name={0}&tagid={1}&ts={2}',
+
+    # VOC No docs for these either
+    'voc_normal': 'name={0}&tagid={1}&2={2}&3={3}&4={4}&5={5}&6={6}',
+    'too_smelly': 'name={0}&tagid={1}&2={2}&3={3}&4={4}&5={5}&6={6}',
+    'too_fresh':  'name={0}&tagid={1}&2={2}&3={3}&4={4}&5={5}&6={6}'
+
  }

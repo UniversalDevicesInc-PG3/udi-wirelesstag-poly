@@ -275,8 +275,11 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
-* 3.0.14: 02/xx/2022
-  * Fixed: []()
+* 3.0.15: 02/19/2022
+  * Add support for [Support new voc params](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/33)
+    * But need more documentation or a log from a user who has a tag that supports it
+  * Added missing BATLVL for the External Power Sensor Tags 102 and 107
+* 3.0.14: 02/19/2022
   * Fixed: [AttributeError: 'wtServer' object has no attribute 'SelectTagManager'](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/27)
   * Fixed: [PING_ALL_TAGS broken](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/30)
   * Fixed: [Remove bad characters from node name](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/44)
