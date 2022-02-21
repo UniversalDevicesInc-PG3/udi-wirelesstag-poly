@@ -276,6 +276,7 @@ If you are going to purchase a Tag Manager or Tags, please use [My Referral Link
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
 
 * 3.1.1: 02/21/2022:
+  * Fixed a profile issue for [Quad Water Leak Sensor](https://store.wirelesstag.net/products/quad-water-leak-sensor)
   * Fixed: [Fix query and add query all](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/49)
 * 3.1.0: 02/20/2022
   * Add support for [Quad Water Leak Sensor](https://store.wirelesstag.net/products/quad-water-leak-sensor)
