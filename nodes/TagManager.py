@@ -63,6 +63,17 @@ class TagManager(Node):
         mgd = self.GetTagList()
         if mgd['st']:
             self.set_st(True)
+        else:
+            self.set_st(False)
+        self.reportDrivers()
+
+    def query_all(self):
+        if self.use_tags == 0:
+            LOGGER.debug('use_tags={}'.format(self.use_tags))
+            return
+        mgd = self.GetTagList()
+        if mgd['st']:
+            self.set_st(True)
             for tag in mgd['result']:
                 tag_o = self.get_tag_by_id(tag['slaveId'])
                 if tag_o is None:
@@ -372,6 +383,7 @@ class TagManager(Node):
     commands = {
         'SET_USE_TAGS': cmd_set_use_tags,
         'QUERY': query,
+        'QUERY_ALL': query_all,
         'SET_URL_CONFIG': cmd_set_url_config,
         'PING_ALL_TAGS': cmd_ping_all_tags,
         'DELETE_ALL_TAGS': cmd_delete_all_tags,

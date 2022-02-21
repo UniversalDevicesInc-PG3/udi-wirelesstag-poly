@@ -120,7 +120,7 @@ class Controller(Node):
         LOGGER.info('enter')
         self.poly.Notices.clear()
         # Current interface is not updated profile as needed, so just do it always :(
-        self.poly.installprofile()
+        self.poly.updateProfile()
         # Start a heartbeat right away
         self.hb = 0
         self.heartbeat()
@@ -217,6 +217,11 @@ class Controller(Node):
             self.hb = 0
 
     def query(self):
+        if not self.authorized('query') : return False
+        self.is_signed_in()
+        self.reportDrivers();
+
+    def query_all(self):
         if not self.authorized('query') : return False
         self.is_signed_in()
         self.reportDrivers();
@@ -556,7 +561,7 @@ class Controller(Node):
 
     def cmd_install_profile(self,command):
         LOGGER.info("installing...")
-        self.poly.installprofile()
+        self.poly.updateProfile()
 
     """
     Node Definitions
@@ -566,6 +571,7 @@ class Controller(Node):
         'SET_SHORTPOLL': cmd_set_short_poll,
         'SET_LONGPOLL':  cmd_set_long_poll,
         'QUERY': query,
+        'QUERY_ALL': query_all,
         'DISCOVER': discover,
         'INSTALL_PROFILE': cmd_install_profile
     }
