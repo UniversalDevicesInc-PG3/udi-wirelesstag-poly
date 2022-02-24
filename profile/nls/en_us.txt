@@ -3,6 +3,7 @@
 CMD-TEST-NAME = Test
 CMD-DISCOVER-NAME = Discover
 CMD-QUERY-NAME = Query
+CMD-QUERY_ALL-NAME = Query All
 CMD-PING_ALL_TAGS-NAME = Ping All Tags
 CMD-DELETE_ALL_TAGS-NAME = Delete All Tags
 CMD-REBOOT-NAME = Reboot Tag Manager

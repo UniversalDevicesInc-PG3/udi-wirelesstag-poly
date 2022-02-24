@@ -121,7 +121,7 @@ class Tag(Node):
             or tag_type == 32 or tag_type == 34 or tag_type == 52 or tag_type == 62 or
             tag_type == 72):
             # evst: Event State
-            dv.append({'driver': 'AsLARM',   'value': 0, 'uom': 25})
+            dv.append({'driver': 'ALARM',   'value': 0, 'uom': 25})
             self.has_evst = True
         if (tag_type == 13 or tag_type == 26 or tag_type == 107):
             # lux:    Lux (36=lux)
