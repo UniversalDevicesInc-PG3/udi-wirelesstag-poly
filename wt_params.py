@@ -10,7 +10,8 @@ wt_params = {
 
     # When tag sends a temperature/humidity/brightness update -
     # {0}: Tag name, {1}: Tag ID, {2}: temperature in °C, {3}: humidity/moisture (%), {4}: brightness (lux), {5}: timestamp
-    'update': 'name={0}&tagid={1}&temp={2}&hum={3}&lux={4}&ts={5}&batv={6}',
+    # {7}: signal strength (dBm), {8}: transmit power (1~255)"
+    'update': 'name={0}&tagid={1}&temp={2}&hum={3}&lux={4}&ts={5}&batv={6}&signaldBm={7}&txpwr={8}',
 
     # When lost link to a tag -
     # {0}: Tag name, {1}: Time since last update, {2}: Tag ID, {3}: timestamp

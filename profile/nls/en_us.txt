@@ -123,6 +123,7 @@ ST-GV12-NAME = Wet State
 ST-GV13-NAME = Last Update Time
 ST-GV14-NAME = Seconds Since Update
 ST-GV15-NAME = Chip Temperature
+ST-GV16-NAME = Transmit Power
 
 ST-tag62-GV7-NAME = Fan
 FAN-0 = Auto

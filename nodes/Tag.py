@@ -152,6 +152,8 @@ class Tag(Node):
             dv.append({'driver': 'GV8',     'value': 0, 'uom':  2})
             # signaldBm:
             dv.append({'driver': 'CC',     'value': 0, 'uom':  56})
+            # txpwr:
+            dv.append({'driver': 'GV16',     'value': 0, 'uom':  56})
         if (tag_type == 13 or tag_type == 21 or tag_type == 26
             or tag_type == 32 or tag_type == 34 or tag_type == 52 or tag_type == 62
             or tag_type == 72 or tag_type == 107):
@@ -333,6 +335,10 @@ class Tag(Node):
             self.set_zaxis(params['zaxis'])
         if 'batv' in params:
             self.set_batv(params['batv'])
+        if 'signaldBm' in params:
+            self.set_signaldbm(params['signaldBm'])
+        if 'txpwr' in params:
+            self.set_txpwr(params['txpwr'])
         if set_time:
             self.set_time_now()
         return True
@@ -381,6 +387,8 @@ class Tag(Node):
             self.set_oor(tdata['oor'])
         if 'signaldBm' in tdata:
             self.set_signaldbm(tdata['signaldBm'])
+        if 'txpwr' in tdata:
+            self.set_txpwr(tdata['txpwr'])
         if 'tempEventState' in tdata:
             self.set_tmst(tdata['tempEventState'])
         if 'capEventState' in tdata:
@@ -518,6 +526,10 @@ class Tag(Node):
     def set_signaldbm(self,value):
         LOGGER.debug(f'{self.pfx} {value}')
         self.setDriver('CC', int(value))
+
+    def set_txpwr(self,value):
+        LOGGER.debug(f'{self.pfx} {value}')
+        self.setDriver('GV16', int(value))
 
     def set_tmst(self,value):
         LOGGER.debug(f'{self.pfx} {value}')
