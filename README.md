@@ -274,7 +274,8 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
-
+* 3.1.4: 03/08/2022
+  * Stop calls rest stop and poly stop
 * 3.1.3: 02/26/2022
   * Fix: [signaldBm doesn't show current value](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/45)
     * Now have signaldBm and Transmit Power on the tags.

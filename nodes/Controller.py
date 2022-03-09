@@ -276,7 +276,10 @@ class Controller(Node):
         LOGGER.info('Oh God I\'m being deleted. Nooooooooooooooooooooooooooooooooooooooooo.')
 
     def handler_stop(self):
-        LOGGER.debug('NodeServer stopped.')
+        LOGGER.debug('NodeServer stopping')
+        self.rest_stop()
+        LOGGER.debug('NodeServer stopped')
+        self.poly.stop()
 
     def rest_start(self):
 
@@ -323,9 +326,12 @@ class Controller(Node):
             self.set_port(-1)
         return
 
-    def rest_restart(self):
+    def rest_stop(self):
         if self.wtServer is not False and self.wtServer.st:
             self.wtServer.stop()
+
+    def rest_restart(self):
+        self.rest_stop()
         self.rest_start()
 
     """
