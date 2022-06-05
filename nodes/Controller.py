@@ -24,6 +24,7 @@ class Controller(Node):
         self.discover_thread = None
         self.wtServer = False
         self.first_run = True
+        self.tag_managers_by_mac = dict()
         # TODO: Always true, should read from customData and check profile version like PG2 version did?
         self.update_profile = True
         self.type = self.id
@@ -198,14 +199,15 @@ class Controller(Node):
     def longPoll(self):
         LOGGER.debug('ready={}'.format(self.ready))
         if not self.ready: return False
+        self.heartbeat()
         # For now just pinging the server to make sure it's alive
         self.is_signed_in()
         if not self.comm: return self.comm
+        self.set_tag_managers_st()
         # Call long poll on the tags managers
         for node in self.poly.nodes():
             if node.id == 'wTagManager':
                 node.longPoll()
-        self.heartbeat()
 
     def heartbeat(self):
         LOGGER.debug('hb={}'.format(self.hb))
@@ -216,10 +218,25 @@ class Controller(Node):
             self.reportCmd("DOF",2)
             self.hb = 0
 
+    def set_tag_managers_st(self):
+       # Check tag manager online status?
+        mgd = self.get_tag_managers()
+        LOGGER.debug("TagManagers={0}".format(mgd))
+        for node in self.poly.nodes():
+            if node.id == 'wTagManager':
+                st = False
+                # Find this one in the list
+                if mgd['st']:
+                    for mgr in mgd['result']:
+                        if node.address == mgr['mac'].lower():
+                            st = mgr['online']
+                node.set_st(st)
+
     def query(self):
         if not self.authorized('query') : return False
         self.is_signed_in()
-        self.reportDrivers();
+        self.set_tag_managers_st()
+        self.reportDrivers()
 
     def query_all(self):
         if not self.authorized('query') : return False
@@ -242,6 +259,7 @@ class Controller(Node):
                     self.add_node(TagManager(self, address, node['name'], address.upper(), node_data=node))
             else:
                 LOGGER.error('node has no {0}? node={1}'.format(nodedef,node))
+        self.set_tag_managers_st()
 
     def discover(self, *args, **kwargs):
         """
@@ -267,9 +285,10 @@ class Controller(Node):
                 address = mgr['mac'].lower()
                 node = self.get_node(address)
                 if node is None:
-                    self.add_node(TagManager(self, address, mgr['name'], mgr['mac'], do_discover=True))
+                    node = self.add_node(TagManager(self, address, mgr['name'], mgr['mac'], mgr['online'], online=mgr['online'], do_discover=True))
                 else:
                     LOGGER.info('Running discover on {0}'.format(node))
+                    node.set_st(mgr['online'])
                     node.discover(thread=False)
 
     def delete(self):
@@ -417,13 +436,8 @@ class Controller(Node):
     def handler_nsdata(self, key, data):
         LOGGER.debug(f"key={key} data={data}")
 
-        # Temporary, should be fixed in next version of PG3
-        if key is None or data is None:
-                msg = f"No NSDATA Returned by Polyglot key={key} data={data}"
-                LOGGER.error(msg)
-                self.Notices['nsdata'] = msg
-                self.handler_nsdata_st = False
-                return
+        if key != 'nsdata':
+            return
 
         LOGGER.info('Got nsdata update type={} {}'.format(type(data),data))
 

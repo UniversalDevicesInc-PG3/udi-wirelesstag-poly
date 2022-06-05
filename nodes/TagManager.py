@@ -16,12 +16,13 @@ from nodes import Tag
 DEBUG_LEVEL=1
 
 class TagManager(Node):
-    def __init__(self, controller, address, name, mac, node_data=False, do_discover=False):
+    def __init__(self, controller, address, name, mac, online=False, node_data=False, do_discover=False):
         # Fpr our logger lines
         self.l_name = "{}:{}:{}".format(self.id,address,name)
         LOGGER.debug('start')
         self.controller = controller
         self.type = self.id
+        self.online = online # Only used on initialization
         # Save the real mac before we legalize it.
         self.ready       = False
         self.do_discover = do_discover
@@ -38,7 +39,7 @@ class TagManager(Node):
 
     def handler_start(self):
         LOGGER.info('...')
-        self.set_st(True)
+        self.set_st(self.online)
         self.set_use_tags(self.get_use_tags())
         self.start_session()
         #LOGGER.info('{0} {1}'.format(self._drivers,self.use_tags))
@@ -48,23 +49,15 @@ class TagManager(Node):
         if self.do_discover:
             self.discover(thread=False)
         else:
+            self.query() # To get latest tag info.
             if self.use_tags == 1:
                 LOGGER.info('Call add_existing_tags because use_tags={0}'.format(self.use_tags))
                 self.add_existing_tags()
                 #self.discover() # Needed to fix tag_id's
-                self.query() # To get latest tag info.
         self.reportDrivers()
         LOGGER.info('done')
 
     def query(self):
-        if self.use_tags == 0:
-            LOGGER.debug('use_tags={}'.format(self.use_tags))
-            return
-        mgd = self.GetTagList()
-        if mgd['st']:
-            self.set_st(True)
-        else:
-            self.set_st(False)
         self.reportDrivers()
 
     def query_all(self):
@@ -84,7 +77,6 @@ class TagManager(Node):
         else:
             self.set_st(False)
         self.reportDrivers()
-
 
     def shortPoll(self):
         if not self.ready: return False
@@ -115,9 +107,7 @@ class TagManager(Node):
             if self.controller.wtServer is False:
                 LOGGER.error("Unable to start TagManager session because main server was not started")
                 self.set_st(False)
-            else:
-                ret = self.controller.wtServer.select_tag_manager(self.mac)
-                self.set_st(ret)
+                return
 
     def discover(self, thread=True):
         """
@@ -238,7 +228,6 @@ class TagManager(Node):
     # http://wirelesstag.net/ethClient.asmx?op=GetTagList
     def GetTagList(self):
         ret = self.session_post('ethClient.asmx/GetTagList',{})
-        self.set_st(ret)
         if ret: return ret
         LOGGER.error("Failed: st={}".format(ret))
         return ret
@@ -330,13 +319,16 @@ class TagManager(Node):
         self.set_st(params['online'])
 
     def set_st(self,value,force=False):
-        LOGGER.debug("{},{}".format(value,force))
+        LOGGER.debug(f"{self.l_name} value={value} force={force}")
         if not force and hasattr(self,"st") and self.st == value:
             return True
         self.st = value
-        if value:
+        if value is True:
             self.setDriver('ST', 1)
+        elif value is False:
+            self.setDriver('ST', 0)
         else:
+            LOGGER.error(f'{self.l_name} Unknown Value "{value}"', )
             self.setDriver('ST', 0)
 
     def get_use_tags(self):
