@@ -285,7 +285,7 @@ class Controller(Node):
                 address = mgr['mac'].lower()
                 node = self.get_node(address)
                 if node is None:
-                    node = self.add_node(TagManager(self, address, mgr['name'], mgr['mac'], mgr['online'], online=mgr['online'], do_discover=True))
+                    node = self.add_node(TagManager(self, address, mgr['name'], mgr['mac'], online=mgr['online'], do_discover=True))
                 else:
                     LOGGER.info('Running discover on {0}'.format(node))
                     node.set_st(mgr['online'])
