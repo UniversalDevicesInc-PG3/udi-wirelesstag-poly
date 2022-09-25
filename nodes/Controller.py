@@ -186,7 +186,7 @@ class Controller(Node):
 
     def shortPoll(self):
         if self.discover_thread is not None:
-            if self.discover_thread.isAlive():
+            if self.discover_thread.is_alive():
                 LOGGER.debug('discover thread still running...')
             else:
                 LOGGER.debug('discover thread is done...')
@@ -238,7 +238,7 @@ class Controller(Node):
         self.set_tag_managers_st()
         self.reportDrivers()
 
-    def query_all(self):
+    def query_all(self,cmd=None):
         if not self.authorized('query') : return False
         self.is_signed_in()
         self.reportDrivers();

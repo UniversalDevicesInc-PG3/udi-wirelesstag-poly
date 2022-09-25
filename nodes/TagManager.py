@@ -60,7 +60,7 @@ class TagManager(Node):
     def query(self):
         self.reportDrivers()
 
-    def query_all(self):
+    def query_all(self,cmd=None):
         if self.use_tags == 0:
             LOGGER.debug('use_tags={}'.format(self.use_tags))
             return
@@ -81,13 +81,13 @@ class TagManager(Node):
     def shortPoll(self):
         if not self.ready: return False
         if self.discover_thread is not None:
-            if self.discover_thread.isAlive():
+            if self.discover_thread.is_alive():
                 LOGGER.debug('discover thread still running...')
             else:
                 LOGGER.debug('discover thread is done...')
                 self.discover_thread = None
         if self.set_url_thread is not None:
-            if self.set_url_thread.isAlive():
+            if self.set_url_thread.is_alive():
                 LOGGER.debug('set_url thread still running...')
             else:
                 LOGGER.debug('set_url thread is done...')
