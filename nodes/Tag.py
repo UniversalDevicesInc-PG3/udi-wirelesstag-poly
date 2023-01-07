@@ -22,6 +22,7 @@ class Tag(Node):
         self.address = address
         self.id = 'wTag' # Until we figure out the uom
         self.type = 'wTag'
+        self.driver = {}
         self.name = name
         self.is_new = is_new
         self.node_set_url = False
@@ -399,6 +400,24 @@ class Tag(Node):
         if 'lastComm' in tdata:
             self.set_time(tdata['lastComm'],wincrap=True)
             self.set_seconds()
+
+    # Override the setDriver to use our values and trap errors.
+    def setDriver(self,driver,value):
+        self.driver[driver] = value
+        try:
+            super().setDriver(driver,value)
+        except:
+            LOGGER.error(f'getDriver: failed',exc_info=True)
+        return
+
+    def getDriver(self,driver):
+        if not driver in self.driver:
+            try:
+                self.driver[driver] = super().getDriver(driver)
+            except:
+                LOGGER.error(f'getDriver: failed',exc_info=True)
+                return
+        return self.driver[driver]
 
     # This is the tag_type number, we don't really need to show it, but
     # we need the info when recreating the tags from the config.

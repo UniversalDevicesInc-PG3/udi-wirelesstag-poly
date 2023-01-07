@@ -274,10 +274,12 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
+* 3.1.8: 01/07/2023
+  * Add try/except around get/set driver calls to try not failing for https://github.com/UniversalDevicesInc/pg3/issues/175
 * 3.1.7: 09/24/2022
   * Fix: Crash due to change in Python version due to isAlive change to is_alive.
 * 3.1.6: 06/20/2022
-  * Fix: [Crash in latest version when discovering new tag manager]()https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/58
+  * Fix: [Crash in latest version when discovering new tag manager](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/58)
 * 3.1.5: 06/05/2022
   * Fix: [ERROR Controller:handler_nsdata: NSDATA is a string](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/56)
   * Fix: [Tag Manager offline not reflected in node](https://github.com/UniversalDevicesInc-PG3/udi-wirelesstag-poly/issues/57)
