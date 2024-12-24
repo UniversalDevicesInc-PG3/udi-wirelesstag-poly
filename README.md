@@ -42,6 +42,13 @@ The code tries to figure out the machines IP address for starting the local REST
 This should always work, unless you have multiple network interfaces.  We will need to
 allow users to set the IP Address manually if this happens.
 
+## Configuration
+
+The only user configrations are on the PG3 Configuration Page
+
+* change_node_names 
+  * Setting this to true will change the node names in PG3/IoX to match what are configured in the app.  Tag Manager names are only changed when you run "discover" on the controller node.  Tag names are changed when any device updates come in.
+
 # Node Types
 
 ## WirelessTagsController
@@ -274,6 +281,8 @@ See [Github Issues](https://github.com/jimboca/udi-wirelesstag-poly/issues)
 If you are going to purchase a Tag Manager or Tags, please use [My Referral Link](https://goo.gl/XVcSKZ)
 
 If you have issues, please create an issue https://github.com/jimboca/udi-wirelesstag-poly/issues  If you have questions please use the forum.
+* 3.1.9: 12/01/2024
+  * Add ability to rename nodes, off by default.  See [Configuration](#configuration)
 * 3.1.8: 01/07/2023
   * Add try/except around get/set driver calls to try not failing for https://github.com/UniversalDevicesInc/pg3/issues/175
 * 3.1.7: 09/24/2022

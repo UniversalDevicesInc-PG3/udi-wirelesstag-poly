@@ -21,6 +21,7 @@ class TagManager(Node):
         self.l_name = "{}:{}:{}".format(self.id,address,name)
         LOGGER.debug('start')
         self.controller = controller
+        self.poly = controller.poly # Because udi_inteface/reportDriver needs it
         self.type = self.id
         self.online = online # Only used on initialization
         # Save the real mac before we legalize it.
@@ -67,7 +68,7 @@ class TagManager(Node):
         mgd = self.GetTagList()
         if mgd['st']:
             self.set_st(True)
-            for tag in mgd['result']:
+            for tag in mgd['data']:
                 tag_o = self.get_tag_by_id(tag['slaveId'])
                 if tag_o is None:
                     LOGGER.error('No tag with id={0}'.format(tag['slaveId']))
@@ -144,7 +145,7 @@ class TagManager(Node):
         if ret['st'] is False:
             return
         index = 0
-        tags = deepcopy(ret['result'])
+        tags = deepcopy(ret['data'])
         for tag in tags:
             LOGGER.debug(f"Will add Tag: {tag['name']}")
         for tag in tags:
@@ -223,12 +224,14 @@ class TagManager(Node):
             self.controller.Notices['session_post'] = "TagManager session is not running"
             return {'st': False}
         self.controller.Notices.delete('session_post')
-        return self.session.api_post_d(path,params)
+        ret = self.session.api_post_d(path,params)
+        LOGGER.debug(f'ret={ret}')
+        return ret
     
     # http://wirelesstag.net/ethClient.asmx?op=GetTagList
     def GetTagList(self):
         ret = self.session_post('ethClient.asmx/GetTagList',{})
-        if ret: return ret
+        if ret['st']: return ret
         LOGGER.error("Failed: st={}".format(ret))
         return ret
 
@@ -267,7 +270,7 @@ class TagManager(Node):
         """
         mgd = self.LoadTempSensorConfig({'id':tag_data['slaveId']})
         if mgd['st']:
-            return mgd['result']['temp_unit']
+            return mgd['data']['temp_unit']
         else:
             return -1
 

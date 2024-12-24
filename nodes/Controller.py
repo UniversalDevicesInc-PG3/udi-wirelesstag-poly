@@ -25,6 +25,7 @@ class Controller(Node):
         self.wtServer = False
         self.first_run = True
         self.tag_managers_by_mac = dict()
+        self.warnings = dict()
         # TODO: Always true, should read from customData and check profile version like PG2 version did?
         self.update_profile = True
         self.type = self.id
@@ -85,7 +86,8 @@ class Controller(Node):
         else:
             ret = self.poly.getNode(node.address)
             if ret is not None:
-                LOGGER.error(f"Node {node.address} name={node.name} already exists.")
+                # This happens when discover is run, so not an error
+                LOGGER.debug(f"Node {node.address} name={node.name} already exists.")
                 self.queue_lock.release()
             else:
                 # Queue it up and add it
@@ -107,11 +109,41 @@ class Controller(Node):
                             LOGGER.error(f"TIMEOUT waiting for {node.address} add to complete...")
                             return False
                         time.sleep(0.1)
+                        # See if we need to check for node name changes
+                        cname = self.poly.getNodeNameFromDb(node.address)
+                        if cname is not None and cname != node.name:
+                            self.rename_node(node,cname)
+
         LOGGER.debug(f'returning {ret}')
         return ret
 
+    def rename_node(self,node,cname):
+        LOGGER.debug(f"enter: node.name={node.name} cname={cname}")
+        ret = False
+        if self.change_node_names:
+            LOGGER.warning(f"Existing node name '{node.name}' for {node.address} does not match requested name '{cname}', changing to match")
+            try:
+                self.poly.renameNode(node.address,cname)
+            except:
+                LOGGER.error(f'renameNode error, which is a known issue with PG3x Version <= 3.2.7', exc_info=True)
+                ret = True
+            if node.name in self.warnings:
+                del self.warnings[node.name]
+        else:
+            if not node.name in self.warnings:
+                LOGGER.warning(f"Existing node name '{cname}' for {node.address} does not match requested name '{node.name}', NOT changing to match. Set change_node_names=true to enable")
+                self.warnings[node.name] = True
+        LOGGER.debug(f'returning {ret}')
+        return ret
+
+    def delete_node(self,node):
+        if self.delete_nodes:
+            self.del_node(node)
+        else:
+            LOGGER.warning(f"Not deleting node set Configuration to true will make it happen on next query")
+
     def del_node(self,node):
-        LOGGER.debug(f'deleting node node={node.address} {node.name}')
+        LOGGER.warning(f'deleting node node={node.address} {node.name}')
         if self.poly.getNode(node.address) is None:
             LOGGER.error(f'Node {node.address} does not exist?')
         else:
@@ -121,6 +153,7 @@ class Controller(Node):
         LOGGER.info('enter')
         self.poly.Notices.clear()
         # Current interface is not updated profile as needed, so just do it always :(
+        LOGGER.debug("updating profile...")
         self.poly.updateProfile()
         # Start a heartbeat right away
         self.hb = 0
@@ -133,6 +166,12 @@ class Controller(Node):
             LOGGER.warning(f'Waiting for all to be loaded config={self.handler_config_done_st} params={self.handler_params_st} data={self.handler_data_st} nsdata={self.handler_nsdata_st}... cnt={cnt}')
             time.sleep(1)
             cnt -= 1
+        if cnt == 0:
+            LOGGER.error(f'Timed out waiting for all to be loaded config={self.handler_config_done_st} params={self.handler_params_st} data={self.handler_data_st} nsdata={self.handler_nsdata_st}... cnt={cnt}')
+            exit
+        elif cnt < 10:
+            # Tell them it's all ok since above warning can cause confusion.
+            LOGGER.warning('All config data loaded, continuing...')
         #
         # Always need to start the REST server
         #
@@ -227,7 +266,7 @@ class Controller(Node):
                 st = False
                 # Find this one in the list
                 if mgd['st']:
-                    for mgr in mgd['result']:
+                    for mgr in mgd['data']:
                         if node.address == mgr['mac'].lower():
                             st = mgr['online']
                 node.set_st(st)
@@ -261,14 +300,14 @@ class Controller(Node):
                 LOGGER.error('node has no {0}? node={1}'.format(nodedef,node))
         self.set_tag_managers_st()
 
-    def discover(self, *args, **kwargs):
+    def discover(self, do_discover=True):
         """
         Start the discover in a thread so we don't cause timeouts :(
         """
-        self.discover_thread = Thread(target=self._discover)
+        self.discover_thread = Thread(target=self._discover(do_discover))
         self.discover_thread.start()
 
-    def _discover(self):
+    def _discover(self,do_discover=True):
         """
         Example
         Do discovery here. Does not have to be called discovery. Called from example
@@ -276,20 +315,45 @@ class Controller(Node):
         """
         if not self.authorized('discover') : return False
         self.set_auth(True)
-        mgd = self.get_tag_managers()
         if not 'macs' in self.Data:
             self.Data['macs'] = dict()
-        if mgd['st']:
-            for mgr in mgd['result']:
-                LOGGER.debug("TagManager={0}".format(mgr))
-                address = mgr['mac'].lower()
-                node = self.get_node(address)
-                if node is None:
-                    node = self.add_node(TagManager(self, address, mgr['name'], mgr['mac'], online=mgr['online'], do_discover=True))
-                else:
-                    LOGGER.info('Running discover on {0}'.format(node))
-                    node.set_st(mgr['online'])
-                    node.discover(thread=False)
+        #
+        # Get the tag managers
+        #
+        mgd = self.get_tag_managers()
+        if not mgd['st']: return False
+        mgrs = mgd['data']
+        #
+        # Do cleanup first
+        #
+        #LOGGER.warning("delete_nodes={0}".format(self.delete_nodes))
+        #if self.delete_nodes:
+        #    LOGGER.warning("Checking for nodes to delete...")
+        #    macs = dict()
+        #    for mgr in mgrs:
+        #        macs[mgr['mac'].lower()] = mgr
+        #    # First look for Tag Managers that no longer exist
+        #    for node in self.poly.getNodesFromDb():
+        #        if 'nodeDefId' in node:
+        #            if node['nodeDefId'] == 'wTagManager' and not node['address'] in macs:
+        #                LOGGER.warning("Need to delete TagManager node name {0} address {1}".format(node.name,node.address))
+        #
+        # Add what we found
+        #
+        for mgr in mgrs:
+            LOGGER.debug("TagManager={0}".format(mgr))
+            address = mgr['mac'].lower()
+            # See if it already exists
+            node = self.get_node(address)
+            if node is None:
+                node = self.add_node(TagManager(self, address, mgr['name'], mgr['mac'], online=mgr['online'], do_discover=do_discover))
+            else:
+                node.set_st(mgr['online'])
+                # See if we need to check for node name changes
+                if mgr['name'] != node.name:
+                    self.rename_node(node,mgr['name'])
+                LOGGER.info('Running discover on {0}'.format(node))
+                node.discover(thread=False)
 
     def delete(self):
         LOGGER.info('Oh God I\'m being deleted. Nooooooooooooooooooooooooooooooooooooooooo.')
@@ -400,8 +464,8 @@ class Controller(Node):
         if not self.authorized('is_signed_in'):
             return False
         mgd = self.wtServer.IsSignedIn()
-        if 'result' in mgd:
-            st = mgd['result']
+        if 'data' in mgd:
+            st = mgd['data']
             self.set_comm(True)
         else:
             st = False
@@ -473,6 +537,17 @@ class Controller(Node):
         # Assume it's good unless it's not
         st = True
         #
+        # Make sure params exist
+        #
+        defaults = {
+            "change_node_names": "false",
+            #"delete_nodes": "false",
+        }
+        for param in defaults:
+            if params is None or not param in params:
+                self.Params[param] = defaults[param]
+                return
+        #
         # Check for oauth2_code
         #
         if 'oauth2_code' in self.Params.keys():
@@ -497,6 +572,22 @@ class Controller(Node):
         if not self.first_run:
             self.rest_restart()
         self.first_run = True
+
+        #
+        # Change Node Names
+        #
+        #if self.Params['delete_nodes'] == "true":
+        #    self.delete_nodes = True
+        #else:
+        #    self.delete_nodes = False
+
+        #
+        # Change Node Names
+        #
+        if self.Params['change_node_names'] == "true":
+            self.change_node_names = True
+        else:
+            self.change_node_names = False
 
         self.handler_params_st = st
         LOGGER.debug(f'exit: st={st}')
@@ -580,7 +671,7 @@ class Controller(Node):
 
 
     def cmd_install_profile(self,command):
-        LOGGER.info("installing...")
+        LOGGER.warning("updating...")
         self.poly.updateProfile()
 
     """

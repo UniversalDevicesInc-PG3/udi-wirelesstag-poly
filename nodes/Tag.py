@@ -28,6 +28,7 @@ class Tag(Node):
         self.node_set_url = False
         # Have to set this to call getDriver
         self.controller = controller
+        self.poly = controller.poly # Because udi_inteface/reportDriver needs it
         self.primary_n = controller.poly.getNode(primary)
         if is_new:
             # It's a new tag.
@@ -211,10 +212,20 @@ class Tag(Node):
         there is a need.
         """
         # This askes for the sensor to report
+        LOGGER.debug(f"{self.tag_id}")
         mgd = self.primary_n.RequestImmediatePostback({'id':self.tag_id})
         if mgd['st']:
-            self.set_from_tag_data(mgd['result'])
+            self.set_alive(1)
+            self.set_from_tag_data(mgd['data'])
             self.reportDrivers()
+        else:
+            self.set_alive(0)
+            LOGGER.warning(f"{self.tag_id} returned: {mgd}")
+            if int(mgd['code']) == 500 and mgd['message']['ExceptionType'] == "MyTagList.TagNotFoundFromDBException":
+                LOGGER.warning(f"Code {mgd['code']} indicates removed device message: {mgd['message']['Message']}")
+                self.controller.delete_node(self)
+            elif int(mgd['code']) == 408:
+                LOGGER.warning(f"Timeout requesting status of '{self.name}'")
 
     def set_url_config(self,force=False):
         if self.controller.wtServer is False:
@@ -224,18 +235,18 @@ class Tag(Node):
         url = self.controller.wtServer.listen_url
         if not self.node_set_url or force:
             mgd = self.primary_n.LoadEventURLConfig({'id':self.tag_id})
-            LOGGER.debug('{0}'.format(mgd))
+            #LOGGER.warning('{0}'.format(mgd))
             if mgd['st'] is False:
                 self.node_set_url = False
             else:
                 #{'in_free_fall': {'disabled': True, 'nat': False, 'verb': None, 'url': 'http://', 'content': None}
                 newconfig = dict()
-                for key, value in mgd['result'].items():
+                for key, value in mgd['data'].items():
                     if key != '__type':
                         if key in wt_params:
                             param = wt_params[key]
                         else:
-                            LOGGER.error(f"{self.pfx} Unknown tag param '{key}' it will be ignored")
+                            LOGGER.error(f"{self.pfx} Unknown tag param '{key}' it will be ignored from: {mgd}")
                             param = False
                         # Just skip for now
                         if param is not False:
@@ -249,6 +260,7 @@ class Tag(Node):
                             newconfig[key] = value
                 LOGGER.debug(f'{self.pfx} config={newconfig}')
                 res = self.primary_n.SaveEventURLConfig({'id':self.tag_id, 'config': newconfig, 'applyAll': False})
+                #LOGGER.warning("set_url_config: res={0}".format(res))
                 self.node_set_url = res['st']
 
     def get_handler(self,command,params):
@@ -256,6 +268,9 @@ class Tag(Node):
         This is called by the controller get_handler after parsing the node_data
         """
         LOGGER.debug('command={} params={}'.format(command,params))
+        self.set_alive(1)
+        if 'name' in params and params['name'] != self.name:
+            self.controller.rename_node(self,params['name'])
         # Set set time for all, except out-of-range
         set_time = True
         if command == '/update':
@@ -349,6 +364,9 @@ class Tag(Node):
     """
     def set_from_tag_data(self,tdata):
         LOGGER.debug('{}'.format(tdata))
+        if 'name' in tdata:
+            if tdata['name'] != self.name:
+                self.controller.rename_node(self,tdata['name'])
         if 'alive' in tdata:
             self.set_alive(tdata['alive'])
         if 'temperature' in tdata:
@@ -620,7 +638,7 @@ class Tag(Node):
         elif value == 2:
             ret = self.primary_n.LightOn(self.primary_n.mac,self.tag_id,True)
         if ret['st']:
-            self.set_from_tag_data(ret['result'])
+            self.set_from_tag_data(ret['data'])
         else:
             # Command failed, restore status
             self.set_lit(slit)

@@ -164,7 +164,7 @@ class wtServer():
         """
         This is passed the incoming http get's to processes
         """
-        self.l_debug('get_handler','command={}'.format(command))
+        self.l_debug('get_handler','command={} params={}'.format(command,params))
         # This is from the oauth2 redirect with our code.
         if command == "/code":
             code = 200
@@ -212,12 +212,13 @@ class wtServer():
                               }, use_token=False)
         # This gives us:
         # {'token_type': 'Bearer', 'access_token': '...', 'expires_in': 9999999}
-        if aret == False:
+        self.l_debug('start',f'aret={aret}')
+        if aret['st'] == False:
             self.l_error('pull_access_token','Failed')
             self.access_token = aret
             return aret
-        self.access_token = aret['access_token']
-        self.token_type   = aret['token_type']
+        self.access_token = aret['data']['access_token']
+        self.token_type   = aret['data']['token_type']
         self.l_debug('start',"token_type={} access_token={}".format(self.token_type,self.access_token))
 
     def get_access_token(self):
@@ -299,28 +300,36 @@ class wtSession():
             )
         # This is supposed to catch all request excpetions.
         except requests.exceptions.RequestException as e:
-            self.l_error('post',"Connection error for %s: %s" % (url, e))
-            return False
+            self.l_error('post',"Connection error for %s: %s data=%s" % (url, e, payload))
+            return { 'st': False, 'code': 408 }
         self.l_debug('post',' Got: code=%s' % (response.status_code))
         if response.status_code == 200:
             #self.l_debug('http_post',"Got: text=%s" % response.text)
             try:
-                d = json.loads(response.text)
+                data = json.loads(response.text)
             except (Exception) as err:
-                self.l_error('http_post','Failed to convert to json {0}: {1}'.format(response.text,err), exc_info=True)
+                self.l_error('post','Failed to convert response to json {0}: {1}'.format(response.text,err), exc_info=True)
                 return False
-            return d
+            if 'd' in data:
+                return { 'st': True, 'data': data['d']}
+            return { 'st': True, 'data': data}
         elif response.status_code == 400:
-            self.l_error('post',"Bad request: %s" % (url) )
+            msg = "Bad request"
         elif response.status_code == 404:
-            self.l_error('post',"Not Found: %s" % (url) )
+            msg = "Not Found"
         elif response.status_code == 401:
-            # Authentication error
-            self.l_error('post',
-                "Failed to authenticate, please check your username and password")
+            msg = "Failed to authenticate, please check your username and password"
+        elif response.status_code == 500:
+            msg = "Server error"
         else:
-            self.l_error('post',"Unknown response %s: %s %s" % (response.status_code, url, response.text) )
-        return False
+            msg = "Unknown response"
+        try:
+            message = json.loads(response.text)
+        except (Exception) as err:
+            self.l_error('post','Failed to convert response to json {0}: {1}'.format(response.text,err), exc_info=True)
+            message = dict()
+        self.l_error('post','%s code=%s url=%s response=%s' % (msg, response.status_code, url, message))
+        return { 'st': False, 'code': response.status_code, 'message': message }
 
     def api_post_d(self,path,payload,dump=True):
         """
@@ -337,14 +346,12 @@ class wtSession():
         """
         if dump:
             payload = json.dumps(payload)
-        aret = self.post(path,payload)
-        self.l_debug('post','path={0} got={1}'.format(path,aret))
-        if aret == False or not 'd' in aret:
-            mret = { 'st': False }
-        else:
-            mret = { 'st': True, 'result': aret['d'] }
-        self.l_debug('post','ret={0}'.format(mret))
-        return mret
+        ret = self.post(path,payload)
+        self.l_debug('api_post_dn','path={0} got={1}'.format(path,ret))
+        if ret is False:
+            ret = { 'st': False }
+        self.l_debug('api_post_dn','ret={0}'.format(ret))
+        return ret
 
     def l_info(self, name, string):
         self.logger.info("%s:%s: %s" %  (self.parent.l_name,name,string))
@@ -352,8 +359,8 @@ class wtSession():
     def l_error(self, name, string, exc_info=False):
         self.logger.error("%s:%s: %s" % (self.parent.l_name,name,string), exc_info=exc_info)
 
-    def l_warning(self, name, string):
-        self.logger.warning("%s:%s: %s" % (self.parent.l_name,name,string))
+    def l_warning(self, name, string, exc_info=False):
+        self.logger.warning("%s:%s: %s" % (self.parent.l_name,name,string), exc_info=exc_info)
 
     def l_debug(self, name, string):
         self.logger.debug("%s:%s: %s" % (self.parent.l_name,name,string))
@@ -387,7 +394,7 @@ if __name__ == '__main__':
     #    time.sleep(10)
     mgrs = obj.GetTagManagers()
     if mgrs['st']:
-        obj.SelectTagManager(mgrs['result'][0]['mac'])
+        obj.SelectTagManager(mgrs['data'][0]['mac'])
     obj.GetTagList()
     try:
         while True:
